@@ -49,20 +49,18 @@ router.post('/login', (req, res, next) => {
       // jwt.sign จะต้องผ่านพารามิเตอร์ 3 ค่าเข้าไป
       const token = jwt.sign(
         { email: fetchedUser.email, userId: fetchedUser._id },
-        '093ESS448_love53pui53!',
+        'dsfgsfgsdfgsdfgsdfgsdfgvbaZBOo0876dfgsdfgsdfgsdjA0JKrfgsdE29gsdfgsdfguytDsdfgsdfgsdfewrtwretwertw',
         { expiresIn: '1h'}
       );
-
-      console.log(token);
       res.status(200).json({
         token: token
-      })
+      });
 
     }).catch(err => {
       return res.status(401).json({
         message: 'Auth failed จาก bcrypt'
       });
-    })
-})
+    });
+});
 
 module.exports = router;
