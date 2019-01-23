@@ -1,0 +1,30 @@
+<div *ngIf="isLoading" class="text-center"><img src="../../../assets/spinner.gif"></div>
+<form [formGroup]="form" (ngSubmit)="onSavePost()">
+    <div class="form-group">
+      <label for="title">Title</label>
+      <input type="text" class="form-control" id="title" formControlName="title" aria-describedby="titleHelp" placeholder="Enter Title">
+      <small
+        *ngIf="!form.get('title').valid && form.get('title').touched"
+        id="titleHelp" class="form-text text-muted">please fill title at least 3 characters</small>
+    </div>
+    <div class="form-group">
+      <label for="content">Content</label>
+      <input type="text" class="form-control" id="content" formControlName="content" aria-describedby="contentHelp" placeholder="Fill the content here">
+      <small
+      *ngIf="!form.get('content').valid && form.get('content').touched"
+      id="contentHelp" class="form-text text-muted">please fill Content</small>
+    </div>
+    <div class="custom-file" id="customFile" lang="th">
+        <input type="file" class="custom-file-input" id="exampleInputFile" aria-describedby="fileHelp" (change)="onImagePicked($event)">
+        <label class="custom-file-label" for="exampleInputFile">
+           เลือกไฟล์...
+        </label>
+
+    </div>
+    <div class="image-preview" *ngIf="imagePreview !== '' && imagePreview && form.get('image').valid">
+        <img class="img-thumbnail" [src]="imagePreview" [alt]="form.value.title">
+      </div>
+    <div class="form-group mt-3">
+        <button type="submit" class="btn btn-primary" [disabled]="!form.valid?'disabled':''">Submit</button>
+    </div>
+  </form>
