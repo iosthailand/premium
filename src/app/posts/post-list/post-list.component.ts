@@ -5,6 +5,7 @@ import { Post } from '../post.model';
 import { PostsService } from '../posts.service';
 import 'hammerjs'; // use for mat-paginator
 import { PageEvent } from '@angular/material';
+import { AuthService } from 'src/app/auth/auth.service';
 
 @Component({
   selector: 'app-post-list',
@@ -23,19 +24,28 @@ export class PostListComponent implements OnInit, OnDestroy {
   postsPerPage = 5;
   currentPage = 1;
   pageSizeOptions = [5, 10, 15];
+  userIsAuthenticated = false;
   private postsSub: Subscription;
+  private authStatusSub: Subscription;
 
-  constructor(public postsService: PostsService) {}
+  constructor(public postsService: PostsService, private authService: AuthService) {}
 
   ngOnInit() {
     // this.posts = this.postsService.getPosts();
     this.isLoading = true;
     this.postsService.getPosts(this.postsPerPage, this.currentPage);
-    this.postsSub = this.postsService.getPostUpdateListener()
+    this.postsSub = this.postsService
+      .getPostUpdateListener()
       .subscribe(( postData: { posts: Post[], postCounts: number }) => {
         this.isLoading = false;
         this.totalPosts = postData.postCounts;
         this.posts = postData.posts;
+      });
+    this.userIsAuthenticated = this.authService.getIsAuth(); // กรณีเข้ามาครั้งแรกจะต้องทราบสถานะว่าล็อกอินอยู่หรือไม่
+    this.authStatusSub = this.authService
+      .getAuthStatusListener()
+      .subscribe(isAuthenticated => {
+        this.userIsAuthenticated = isAuthenticated; // การเปลี่ยนแปลงเมื่อผู้ใช้ล็อกอิน
       });
   }
 
@@ -47,6 +57,7 @@ export class PostListComponent implements OnInit, OnDestroy {
   }
   ngOnDestroy() {
     this.postsSub.unsubscribe();
+    this.authStatusSub.unsubscribe();
   }
   onChangedPage(pageData: PageEvent) {
     this.isLoading = true;
