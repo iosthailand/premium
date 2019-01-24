@@ -15,6 +15,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   private authListenerSubs: Subscription;
   constructor(private authService: AuthService) {}
   ngOnInit() {
+    this.userIsAuthenticated = this.authService.getIsAuth();
     this.searchForm = new FormGroup({
       'search': new FormControl(null)
     });
