@@ -33,10 +33,12 @@ router.post('',
   checkAuth,
   multer({'storage': storage}).single('image'), (req, res, next) => {
   const url = req.protocol + '://' + req.get('host');
+  // userData {email, userId} เป็นข้อมูลที่ส่งมาจาก checkAuth Middleware
   const post = new Post({
     title: req.body.title,
     content: req.body.content,
-    imagePath: url + '/images/' + req.file.filename
+    imagePath: url + '/images/' + req.file.filename,
+    creator: req.userData.userId
   });
   post.save().then((createdPost) => {
     res.status(201);
@@ -74,14 +76,20 @@ router.put(
         _id: req.body.id,
         title: req.body.title,
         content: req.body.content,
-        imagePath: imagePath
+        imagePath: imagePath,
+        creator: req.userData.userId
       }
     );
     //console.log(post);
-  Post.updateOne({_id: req.params.id }, post)
+  Post.updateOne({ _id: req.params.id, creator: req.userData.userId }, post)
     .then(result => {
-      //console.log(result);
-      res.status(200).json({ messages: 'Update Successfull'});
+      if (result.nModified > 0 ) { // ตรวจสอบสถานะการอัพเดท
+        //console.log(result);
+        res.status(200).json({ messages: 'Update Successfull'});
+      } else {
+        res.status(401).json({ messages: 'User Not Authorize edit other posts'});
+      }
+
     });
 });
 
@@ -122,10 +130,16 @@ router.get('/:id', (req, res, next) => {
     });
 })
 router.delete('/:id', checkAuth, (req, res, next) => {
-  Post.deleteOne({_id: req.params.id })
+  Post.deleteOne({_id: req.params.id, creator: req.userData.userId })
     .then((result) => {
-      console.log(result);
-      res.status(200).json({ messages: 'Post deleted already!'});
+      // console.log(result);
+      // ตรวจสอบ n สำหรับ ลบ ตรวจสอบ nModified สำหรับการแก้ไข
+      if (result.n > 0 ) { // ตรวจสอบสถานะการอัพเดท
+        //console.log(result);
+        res.status(200).json({ messages: 'Post deleted already!'});
+      } else {
+        res.status(401).json({ messages: 'User Not Authorize to delete other posts'});
+      }
     });
 })
 

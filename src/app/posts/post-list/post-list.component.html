@@ -14,7 +14,7 @@
                 <div class="post-image">
                   <img [src]="post.imagePath" [alt]="post.title" class="img-thumbnail">
                 </div>
-                <div class="row" *ngIf="userIsAuthenticated">
+                <div class="row" *ngIf="userIsAuthenticated && userId == post.creator">
                   <div class="col-12">
                       <a class="btn btn-sm btn-primary" [routerLink]="['/edit', post.id]" routerLinkActive="router-link-active">EDIT</a>
                       <button class="btn btn-sm btn-warning"  (click)="onDelete(post.id)">DELETE</button>

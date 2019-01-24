@@ -22,13 +22,19 @@ export class PostsService {
             id: post._id,
             title: post.title,
             content: post.content,
-            imagePath: post.imagePath
+            imagePath: post.imagePath,
+            creator: post.creator
           };
-        }), maxPosts: postData.maxPosts };
-      }))
+        }),
+        maxPosts: postData.maxPosts };
+      })
+      )
       .subscribe((transformPost) => {
         this.posts = transformPost.posts;  // Transform form { id, title, content } to { _id, title, content }
-        this.postsUpdated.next({posts: [...this.posts], postCounts: transformPost.maxPosts});
+        this.postsUpdated.next({
+          posts: [...this.posts],
+          postCounts: transformPost.maxPosts
+        });
       });
   }
 
@@ -38,8 +44,13 @@ export class PostsService {
 
   getPost(id: string) {
     // return {...this.posts.find(post => post.id === id)};
-    return this.http.get<{ _id: string, title: string, content: string, imagePath: string }>(
-      'http://localhost:3000/api/posts/' + id);
+    return this.http.get<{
+      _id: string,
+      title: string,
+      content: string,
+      imagePath: string,
+      creator: string
+    }>('http://localhost:3000/api/posts/' + id);
   }
 
 // mongodb+srv://tsubasa:DBkesa_m007@jeerawuth007-5duea.mongodb.net/test?retryWrites=true
@@ -72,7 +83,8 @@ export class PostsService {
         id: id,
         title: title,
         content: content,
-        imagePath: image
+        imagePath: image,
+        creator: null
       };
     }
     this.http
