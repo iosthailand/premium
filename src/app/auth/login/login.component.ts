@@ -1,25 +1,35 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormGroup, FormControl, Validators, NgForm } from '@angular/forms';
 import { AuthService } from '../auth.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
-export class LoginComponent implements OnInit {
-  // loginForm: FormGroup;
+export class LoginComponent implements OnInit, OnDestroy {
   isLoading = false;
+  private authStatusSub: Subscription;
+
   constructor(public authService: AuthService) { }
   ngOnInit() {
-    // this.loginForm = new FormGroup({
-    //   'email': new FormControl(null, [Validators.required, Validators.email]),
-    //   'password': new FormControl(null, [Validators.required, Validators.minLength(8)])
-    // });
+    this.authStatusSub = this.authService
+    .getAuthStatusListener()
+    .subscribe(
+      authStatus => {
+        this.isLoading = false;
+      }
+    );
   }
+
   onLogin(form: NgForm) {
     if (form.invalid) {
       return;
     }
+    this.isLoading = true;  // แสดงสปินเนอร์เมื่อเริ่มล็อกอิน
     this.authService.login(form.value.email, form.value.password);
+  }
+  ngOnDestroy() {
+    this.authStatusSub.unsubscribe();
   }
 }

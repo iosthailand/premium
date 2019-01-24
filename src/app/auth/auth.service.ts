@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
 
 import { AuthData } from './auth-data.model';
+import { errorHandler } from '@angular/platform-browser/src/browser';
 
 
 @Injectable({ providedIn: 'root'})
@@ -35,7 +36,9 @@ export class AuthService {
     const authData: AuthData = { email: email, password: password };
     this.http.post('http://localhost:3000/api/user/signup', authData)
     .subscribe(response => {
-      console.log(response);
+      this.router.navigate(['/']);
+    }, error => {
+      this.authStatusListener.next(false);
     });
   }
 
@@ -59,12 +62,10 @@ export class AuthService {
         const now = new Date();
         const expirationDate = new Date(now.getTime() + expiresInDuration);
         this.saveAuthData(token, expirationDate, this.userId);
-        // console.log(expirationDate);
-        // this.tokenTimer = setTimeout(() => {
-        //   this.logout();
-        // }, expiresInDuration);
         this.router.navigate(['/']);
       }
+    }, error => {
+      this.authStatusListener.next(false);
     });
   }
 

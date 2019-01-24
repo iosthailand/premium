@@ -1,26 +1,36 @@
-import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormControl, Validators, NgForm } from '@angular/forms';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { NgForm } from '@angular/forms';
 import { AuthService } from '../auth.service';
+import { Subscription } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Component({
   templateUrl: './signup.component.html',
   styleUrls: ['./signup.component.css']
 })
-export class SignupComponent implements OnInit {
+export class SignupComponent implements OnInit, OnDestroy {
   // loginForm: FormGroup;
   isLoading = false;
-  constructor(public authService: AuthService) { }
+  private authStatusSub: Subscription;
 
+  constructor(public authService: AuthService, private router: Router) { }
   ngOnInit() {
-    // this.loginForm = new FormGroup({
-    //   'email': new FormControl(null, [Validators.required, Validators.email]),
-    //   'password': new FormControl(null, [Validators.required, Validators.minLength(8)])
-    // });
+    this.authStatusSub = this.authService
+    .getAuthStatusListener()
+    .subscribe(
+      authStatus => {
+        this.isLoading = false;
+      }
+    );
   }
   onSignup(form: NgForm) {
     if (form.invalid) {
       return;
     }
+    this.isLoading = true;
     this.authService.createUser(form.value.email, form.value.password);
+  }
+  ngOnDestroy() {
+    this.authStatusSub.unsubscribe();
   }
 }
