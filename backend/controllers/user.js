@@ -49,7 +49,7 @@ exports.userLogin = (req, res, next) => {
       // jwt.sign จะต้องผ่านพารามิเตอร์ 3 ค่าเข้าไป
       const token = jwt.sign(
         { email: fetchedUser.email, userId: fetchedUser._id },
-        'dsfgsfgsdfgsdfgsdfgsdfgvbaZBOo0876dfgsdfgsdfgsdjA0JKrfgsdE29gsdfgsdfguytDsdfgsdfgsdfewrtwretwertw',
+        process.env.JWT_KEY,
         { expiresIn: '1h'}
       );
       res.status(200).json({

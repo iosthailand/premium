@@ -6,8 +6,7 @@ const postRoutes = require('./routes/posts');
 const userRoutes = require('./routes/user');
 
 const app = express();
-
-mongoose.connect('mongodb+srv://tsubasa:DBkesa_m007@jeerawuth007-5duea.mongodb.net/node-angular?retryWrites=true', { useNewUrlParser: true, useCreateIndex: true })
+mongoose.connect('mongodb+srv://tsubasa:' + process.env.MONGO_ATLAS_PW + '@jeerawuth007-5duea.mongodb.net/node-angular?retryWrites=true', { useNewUrlParser: true, useCreateIndex: true })
 .then(() => {
     console.log('Database Connected!');
   })
