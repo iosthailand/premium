@@ -55,6 +55,10 @@ router.post('',
       //   id: createdPost._id
       // }
     });
+  }).catch(error => {
+    res.status(500).json({
+      messages: 'Create a post failed!'
+    })
   });
 });
 
@@ -90,6 +94,11 @@ router.put(
         res.status(401).json({ messages: 'User Not Authorize edit other posts'});
       }
 
+    })
+    .catch(error => {
+      res.status(500).json({
+        messages: 'Could not update post'
+      })
     });
 });
 
@@ -115,7 +124,9 @@ router.get('', (req, res, next)=>{
       });
     })
     .catch((err) => {
-      console.log(err);
+      res.status(500).json({
+        message: 'Fetching posts failed!'
+      })
     });
 });
 router.get('/:id', (req, res, next) => {
@@ -127,8 +138,13 @@ router.get('/:id', (req, res, next) => {
       } else {
         res.status(404).json({ messages: 'Post not found'});
       }
+    })
+    .catch((err) => {
+      res.status(500).json({
+        message: 'Fetching posts failed!'
+      })
     });
-})
+});
 router.delete('/:id', checkAuth, (req, res, next) => {
   Post.deleteOne({_id: req.params.id, creator: req.userData.userId })
     .then((result) => {
@@ -140,7 +156,12 @@ router.delete('/:id', checkAuth, (req, res, next) => {
       } else {
         res.status(401).json({ messages: 'User Not Authorize to delete other posts'});
       }
+    })
+    .catch((err) => {
+      res.status(500).json({
+        message: 'Deleting posts failed!'
+      })
     });
-})
+});
 
 module.exports = router;
