@@ -1,0 +1,17 @@
+{
+  "name": "tesco-premium",
+  "version": "0.0.0",
+  "private": true,
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "bootstrap": "^4.2.1",
+    "express": "^4.16.4",
+    "hammerjs": "^2.0.8",
+    "jquery": "^3.3.1",
+    "jsonwebtoken": "^8.4.0",
+    "mongoose": "^5.4.6",
+    "mongoose-unique-validator": "^2.0.2",
+    "multer": "^1.4.1",
+    "popper.js": "^1.14.6"
+  }
+}
