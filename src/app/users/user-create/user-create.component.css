@@ -1,0 +1,18 @@
+mat-form-field,
+textarea {
+  width: 100%;
+}
+mat-spinner {
+  margin: auto;
+}
+input.ng-invalid.ng-touched {
+  border: 1px solid red;
+}
+
+.image-preview {
+  width: 30%;
+  margin: 1em 0;
+}
+.image-preview img {
+  width: 100%;
+}

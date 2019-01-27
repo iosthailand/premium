@@ -1,0 +1,35 @@
+  <div *ngIf="isLoading" class="text-center"><img src="../../../assets/spinner.gif"></div>
+  <div *ngIf="!isLoading">
+    <div class="row mt-1" *ngFor="let post of posts" >
+      <div class="col-12">
+          <div class="card round-0">
+            <div class="card-header" data-toggle="collapse" [attr.data-target]="'#p-'+post.id" aria-expanded="false" [attr.aria-controls]="post.id">
+              {{ post.title }}
+            </div>
+            <ul class="list-group list-group-flush collapse" [id]="'p-'+post.id">
+              <li class="list-group-item">
+                <div class="row">
+                    <div class="col-12"> {{ post.content }} </div>
+                </div>
+                <div class="post-image">
+                  <img [src]="post.imagePath" [alt]="post.title" class="img-thumbnail">
+                </div>
+                <div class="row" *ngIf="userIsAuthenticated && userId == post.creator">
+                  <div class="col-12">
+                      <a class="btn btn-sm btn-primary" [routerLink]="['/edit', post.id]" routerLinkActive="router-link-active">EDIT</a>
+                      <button class="btn btn-sm btn-warning"  (click)="onDelete(post.id)">DELETE</button>
+                  </div>
+                </div>
+              </li>
+            </ul>
+          </div>
+      </div>
+    </div>
+  </div>
+  <mat-paginator [length]="totalPosts" [pageSize]="postsPerPage" [pageSizeOptions]="pageSizeOptions" (page)="onChangedPage($event)" *ngIf="posts.length > 0"></mat-paginator>
+  <div class="row" *ngIf="posts.length <= 0 && !isLoading">
+    <div class="col"><div class="text-center alert-warning mt-1 pt-5 pb-5">ไม่มีรายการสินค้าในระบบ</div></div>
+  </div>
+
+
+

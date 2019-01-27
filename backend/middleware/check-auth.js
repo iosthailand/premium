@@ -9,7 +9,8 @@ module.exports = (req, res, next) => {
     // add req to next middleware ในกรณีนี้เราจะผ่านค่า email และ id ของผู้ใช้
     req.userData = {
       email: decodedToken.email,
-      userId: decodedToken.userId
+      userId: decodedToken.userId,
+      userPermission: decodedToken.userPermission
     };
     next();
   } catch (error) {
