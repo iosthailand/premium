@@ -1,9 +1,8 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { UsersService } from '../users.service';
-import { ActivatedRoute, ParamMap } from '@angular/router';
+import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { User } from '../user.model';
-import { mineType } from './mine-type.validator';
 import { Subscription } from 'rxjs';
 import { AuthService } from 'src/app/auth/auth.service';
 
@@ -16,9 +15,12 @@ export class UserCreateComponent implements OnInit, OnDestroy {
   enteredTitle = '';
   enteredContent = '';
   private mode = 'create';
+  public emailEditable = false;
   private userId: string;
   private authStatusSub: Subscription;
   public user: User;
+  public permissionLists = ['DH Staff', 'Chauffeur', 'Storage Manager', 'Manager', 'Admin'];
+  private router: Router;
   isLoading = false;
   form: FormGroup;
   imagePreview: string;
@@ -36,13 +38,17 @@ export class UserCreateComponent implements OnInit, OnDestroy {
         this.isLoading = false;
       });
     this.form = new FormGroup({
-      'title': new FormControl(null, [ Validators.required, Validators.minLength(3)]),
-      'content': new FormControl(null, [Validators.required, Validators.minLength(3)]),
-      'image': new FormControl(null, Validators.required, mineType)
+      'email': new FormControl(null, [ Validators.required, Validators.email]),
+      'password': new FormControl(null, [ Validators.required, Validators.minLength(3)]),
+      'content': new FormControl(null),
+      'permission': new FormControl(null, Validators.required),
+      'status': new FormControl(false)
+
     });
     this.route.paramMap.subscribe((paramMap: ParamMap) => {
       if (paramMap.has('userId')) {
         this.mode = 'edit';
+        this.emailEditable = false;
         this.userId = paramMap.get('userId');
         this.isLoading = true;
         this.usersService.getUser(this.userId)
@@ -51,20 +57,23 @@ export class UserCreateComponent implements OnInit, OnDestroy {
             // console.log(userData);
             this.user = {
               id: userData._id,
-              title: userData.title,
+              email: userData.email,
               content: userData.content,
-              imagePath: userData.imagePath,
-              creator: userData.creator
+              password: userData.password,
+              permission: userData.permission,
+              status: userData.status
             };
             this.form.setValue({
-              'title': this.user.title,
+              'email': this.user.email,
               'content': this.user.content,
-              'image': this.user.imagePath
+              'password': this.user.password,
+              'permission': this.user.permission,
+              'status': this.user.status
             });
-            this.imagePreview = userData.imagePath; // แสดงรูปตอนแก้ไข
           });
       } else {
         this.mode = 'create';
+        this.emailEditable = true;
         this.userId = null;
       }
     });
@@ -77,34 +86,27 @@ export class UserCreateComponent implements OnInit, OnDestroy {
     this.isLoading = true;
     if (this.mode === 'create') {
       this.usersService.addUser(
-        this.form.value.title,
+        this.form.value.email,
         this.form.value.content,
-        this.form.value.image
+        this.form.value.password,
+        this.form.value.permission,
+        this.form.value.status
       );
     } else {
       this.usersService.updateUser(
         this.userId,
-        this.form.value.title,
+        this.form.value.email,
         this.form.value.content,
-        this.form.value.image
+        this.form.value.password,
+        this.form.value.permission,
+        this.form.value.status
       );
     }
     this.form.reset();
   }
-
-  onImagePicked(event: Event) {
-    const file = (event.target as HTMLInputElement).files[0];
-    if (file !== null) { // ตรวจสอบว่า มีการยกเลิกตอนเลือกไฟล์หรือไม่
-      this.form.patchValue({image: file}); // กำหนดค่าให้กับ formControl
-      this.form.get('image').updateValueAndValidity(); // อัพเดทค่าให้กับ fromControl
-      const reader = new FileReader();
-      reader.onload = () => {
-        this.imagePreview = reader.result as string;
-      };
-      reader.readAsDataURL(file);
-    }
+  onCancel() {
+    this.router.navigate(['/']);
   }
-
   ngOnDestroy() {
     this.authStatusSub.unsubscribe();
   }

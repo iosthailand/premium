@@ -3,6 +3,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const postRoutes = require('./routes/posts');
+const authRoutes = require('./routes/auth');
 const userRoutes = require('./routes/user');
 
 const app = express();
@@ -13,7 +14,6 @@ mongoose.connect('mongodb+srv://tsubasa:' + process.env.MONGO_ATLAS_PW + '@jeera
   .catch(() => {
     console.log('Can not Connect to Database!!!!');
   });
-
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -32,6 +32,7 @@ app.use((req, res, next) => {
 });
 
 app.use('/api/posts', postRoutes);
-app.use('/api/user', userRoutes);
+app.use('/api/users', userRoutes);
+app.use('/api/auth', authRoutes);
 
 module.exports = app;

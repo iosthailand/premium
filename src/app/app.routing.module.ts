@@ -13,9 +13,9 @@ const routes: Routes = [
   { path: 'create', component: PostCreateComponent, canActivate: [AuthGuard] },
   { path: 'edit/:postId', component: PostCreateComponent, canActivate: [AuthGuard] },
   { path: 'auth', loadChildren: './auth/auth.module#AuthModule'},
-  { path: 'user', component: UserListComponent },
-  { path: 'user/create', component: UserCreateComponent },
-  { path: 'user/edit/:userId', component: UserCreateComponent, canActivate: [AuthGuard] },
+  { path: 'users', component: UserListComponent },
+  { path: 'users/create', component: UserCreateComponent },
+  { path: 'users/edit/:userId', component: UserCreateComponent, canActivate: [AuthGuard] },
   { path: 'product', component: ProductListComponent },
   { path: 'product/create', component: ProductCreateComponent },
   { path: 'product/edit/:productId', component: ProductCreateComponent, canActivate: [AuthGuard] }

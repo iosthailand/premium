@@ -14,9 +14,9 @@ import { AuthService } from 'src/app/auth/auth.service';
 })
 export class UserListComponent implements OnInit, OnDestroy {
   // users = [
-  //   { title: "First User", content: "This is the first user's content" },
-  //   { title: "Second User", content: "This is the second user's content" },
-  //   { title: "Third User", content: "This is the third user's content" }
+  //   { email: "First User", content: "This is the first user's content" },
+  //   { email: "Second User", content: "This is the second user's content" },
+  //   { email: "Third User", content: "This is the third user's content" }
   // ];
   users: User[] = [];
   isLoading = false;

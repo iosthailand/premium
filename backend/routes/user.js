@@ -1,9 +1,12 @@
 const express = require('express');
-
-const UserController = require('../controllers/user');
-
+const usersController = require('../controllers/users');
+const checkAdmin = require('../middleware/check-admin');
 const router = express.Router();
-router.post('/signup', UserController.createUser);
-router.post('/login', UserController.userLogin);
+
+router.post('', checkAdmin, usersController.createUser);
+router.put('/:id', checkAdmin, usersController.editUser);
+router.get('', usersController.getUsers);
+router.get('/:id', usersController.getUser );
+router.delete('/:id', checkAdmin, usersController.deleteUser );
 
 module.exports = router;

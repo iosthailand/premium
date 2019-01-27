@@ -1,7 +1,8 @@
 export interface User {
   id: string;
-  title: string;
+  email: string;
   content: string;
-  imagePath: string;
-  creator: string;
+  password: string;
+  permission: string;
+  status: boolean;
 }

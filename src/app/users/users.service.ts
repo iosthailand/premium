@@ -24,17 +24,18 @@ export class UsersService {
         return { users: userData.users.map((user) => { // map _id from database to id same as in model
           return {
             id: user._id,
-            title: user.title,
+            email: user.email,
             content: user.content,
-            imagePath: user.imagePath,
-            creator: user.creator
+            password: user.password,
+            permission: user.permission,
+            status: user.status
           };
         }),
         maxUsers: userData.maxUsers };
       })
       )
       .subscribe((transformUser) => {
-        this.users = transformUser.users;  // Transform form { id, title, content } to { _id, title, content }
+        this.users = transformUser.users;  // Transform form { id, email, content } to { _id, email, content }
         this.usersUpdated.next({
           users: [...this.users],
           userCounts: transformUser.maxUsers
@@ -50,19 +51,23 @@ export class UsersService {
     // return {...this.users.find(user => user.id === id)};
     return this.http.get<{
       _id: string,
-      title: string,
+      email: string,
       content: string,
-      imagePath: string,
-      creator: string
+      password: string,
+      permission: string,
+      status: boolean
     }>(BACKEND_URL + id);
   }
 
 // mongodb+srv://tsubasa:DBkesa_m007@jeerawuth007-5duea.mongodb.net/test?retryWrites=true
-  addUser(title: string, content: string, image: File) {
-    const userData = new FormData(); // แบบฟอร์มที่สามารถมีข้อความ และข้อมูลไฟล์ได้
-    userData.append('title', title);
-    userData.append('content', content);
-    userData.append('image', image, title);
+  addUser(email: string, content: string, password: string, permission: string, status: boolean) {
+    const userData = {
+      email: email,
+      content: content,
+      password: password,
+      permission: permission,
+      status: status
+    };
 
     this.http
       .post<{ message: string, user: User }>(
@@ -74,23 +79,16 @@ export class UsersService {
     });
   }
 
-  updateUser(id: string, title: string, content: string, image: File | string) {
+  updateUser(id: string, email: string, content: string, password: string, permission: string, status: boolean) {
     let userData: User | FormData;
-    if (typeof image === 'object') {
-      userData = new FormData();
-      userData.append('id', id);
-      userData.append('title', title);
-      userData.append('content', content);
-      userData.append('image', image, title);
-    } else {
-      userData = {
-        id: id,
-        title: title,
-        content: content,
-        imagePath: image,
-        creator: null
-      };
-    }
+    userData = {
+      id: id,
+      email: email,
+      content: content,
+      password: password,
+      permission: permission,
+      status: status
+    };
     this.http
       .put(BACKEND_URL + id, userData)
       .subscribe((response) => {
