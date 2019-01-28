@@ -4,12 +4,12 @@
       <div class="col-12">
           <div class="card round-0">
             <div class="card-header" data-toggle="collapse" [attr.data-target]="'#p-'+product.id" aria-expanded="false" [attr.aria-controls]="product.id">
-              {{ product.title }}
+              {{ product.productSku }}
             </div>
             <ul class="list-group list-group-flush collapse" [id]="'p-'+product.id">
               <li class="list-group-item">
                 <div class="row">
-                    <div class="col-12"> {{ product.content }} </div>
+                    <div class="col-12"> {{ product.productName }} </div>
                 </div>
                 <div class="product-image">
                   <img [src]="product.imagePath" [alt]="product.title" class="img-thumbnail">

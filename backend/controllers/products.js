@@ -5,8 +5,10 @@ exports.createProduct = (req, res, next) => {
   const url = req.protocol + '://' + req.get('host');
   // userData {email, userId} เป็นข้อมูลที่ส่งมาจาก checkAuth Middleware
   const product = new Product({
-    title: req.body.title,
-    content: req.body.content,
+    productSku: req.body.productSku,
+    productName: req.body.productName,
+    productDetails: req.body.productDetails,
+    productCategory: req.body.productCategory,
     imagePath: url + '/images/' + req.file.filename,
     creator: req.userData.userId
   });
@@ -16,8 +18,10 @@ exports.createProduct = (req, res, next) => {
       messages: 'Product added Successfully',
       product: {
         id: createdProduct._id,
-        title: createdProduct.title,
-        content: createdProduct.content,
+        productSku: createdProduct.productSku,
+        productName: createdProduct.productName,
+        productDetails: createdProduct.productDetails,
+        productCategory: createdProduct.productCategory,
         imagePath: createdProduct.imagePath
       }
       // product: {
@@ -42,8 +46,10 @@ exports.editProduct =   (req, res, next) => {
   const product = new Product(
     {
       _id: req.body.id,
-      title: req.body.title,
-      content: req.body.content,
+      productSku: req.body.productSku,
+      productName: req.body.productName,
+      ProductDetails: req.body.ProductDetails,
+      productCategory: req.body.productCategory,
       imagePath: imagePath,
       creator: req.userData.userId
     }

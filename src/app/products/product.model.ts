@@ -1,7 +1,9 @@
 export interface Product {
   id: string;
-  title: string;
-  content: string;
+  productSku: string;
+  productName: string;
+  productDetails: string;
+  productCategory: string;
   imagePath: string;
   creator: string;
 }

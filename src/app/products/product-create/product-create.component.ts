@@ -36,8 +36,10 @@ export class ProductCreateComponent implements OnInit, OnDestroy {
         this.isLoading = false;
       });
     this.form = new FormGroup({
-      'title': new FormControl(null, [ Validators.required, Validators.minLength(3)]),
-      'content': new FormControl(null, [Validators.required, Validators.minLength(3)]),
+      'productSku': new FormControl(null, [ Validators.required, Validators.minLength(13)]),
+      'productName': new FormControl(null, [Validators.required, Validators.minLength(3)]),
+      'productDetails': new FormControl(null, [ Validators.required]),
+      'productCategory': new FormControl(null, [Validators.required]),
       'image': new FormControl(null, Validators.required, mineType)
     });
     this.route.paramMap.subscribe((paramMap: ParamMap) => {
@@ -51,14 +53,18 @@ export class ProductCreateComponent implements OnInit, OnDestroy {
             // console.log(productData);
             this.product = {
               id: productData._id,
-              title: productData.title,
-              content: productData.content,
+              productSku: productData.productSku,
+              productName: productData.productName,
+              productDetails: productData.productDetails,
+              productCategory: productData.productCategory,
               imagePath: productData.imagePath,
               creator: productData.creator
             };
             this.form.setValue({
-              'title': this.product.title,
-              'content': this.product.content,
+              'productSku': this.product.productSku,
+              'productName': this.product.productName,
+              'productDetails': this.product.productDetails,
+              'productCategory': this.product.productCategory,
               'image': this.product.imagePath
             });
             this.imagePreview = productData.imagePath; // แสดงรูปตอนแก้ไข
@@ -77,15 +83,19 @@ export class ProductCreateComponent implements OnInit, OnDestroy {
     this.isLoading = true;
     if (this.mode === 'create') {
       this.productsService.addProduct(
-        this.form.value.title,
-        this.form.value.content,
+        this.form.value.productSku,
+        this.form.value.productName,
+        this.form.value.productDetails,
+        this.form.value.productCategory,
         this.form.value.image
       );
     } else {
       this.productsService.updateProduct(
         this.productId,
-        this.form.value.title,
-        this.form.value.content,
+        this.form.value.productSku,
+        this.form.value.productName,
+        this.form.value.productDetails,
+        this.form.value.productCategory,
         this.form.value.image
       );
     }
