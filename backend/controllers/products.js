@@ -5,7 +5,6 @@ exports.createProduct = (req, res, next) => {
   const url = req.protocol + '://' + req.get('host');
   // userData {email, userId} เป็นข้อมูลที่ส่งมาจาก checkAuth Middleware
   const product = new Product({
-    sku: req.body.sku,
     title: req.body.title,
     content: req.body.content,
     imagePath: url + '/images/' + req.file.filename,
@@ -17,7 +16,6 @@ exports.createProduct = (req, res, next) => {
       messages: 'Product added Successfully',
       product: {
         id: createdProduct._id,
-        sku: createdProduct.sku,
         title: createdProduct.title,
         content: createdProduct.content,
         imagePath: createdProduct.imagePath
@@ -44,7 +42,6 @@ exports.editProduct =   (req, res, next) => {
   const product = new Product(
     {
       _id: req.body.id,
-      sku: req.body.sku,
       title: req.body.title,
       content: req.body.content,
       imagePath: imagePath,
@@ -91,7 +88,7 @@ exports.getProducts = (req, res, next)=>{
     })
     .catch((err) => {
       res.status(500).json({
-        message: 'Fetching Products failed!'
+        message: 'Fetching products failed!'
       })
     });
   }

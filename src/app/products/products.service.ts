@@ -70,7 +70,7 @@ export class ProductsService {
       productData
       )
     .subscribe((responseData) => {
-      this.router.navigate(['/']);
+      this.router.navigate(['/products']);
     });
   }
 
@@ -94,7 +94,7 @@ export class ProductsService {
     this.http
       .put(BACKEND_URL + id, productData)
       .subscribe((response) => {
-          this.router.navigate(['/']);
+          this.router.navigate(['/products']);
       });
   }
   deleteProduct(productId: string) {

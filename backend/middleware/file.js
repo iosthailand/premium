@@ -8,7 +8,7 @@ const MIME_TYPE_MAP = {
 }
 
 
-const checkAuth = require('../middleware/check-auth');
+// const checkAuth = require('../middleware/check-auth');
 
 // กำหนดค่า config ให้กับ multer สำหรับสั่งให้เซฟไฟล์
 const storage = multer.diskStorage({

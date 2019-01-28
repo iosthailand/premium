@@ -4,10 +4,10 @@ const checkAuth = require('../middleware/check-auth');
 const extractFile = require('../middleware/file');
 const router = express.Router();
 
-router.post('/product', checkAuth, extractFile, productsController.createProduct);
-router.put('/product/:id', checkAuth, extractFile, productsController.editProduct);
-router.get('/product', productsController.getProducts);
-router.get('/product/:id', productsController.getProduct );
-router.delete('/product/:id', checkAuth, productsController.deleteProduct );
+router.post('', checkAuth, extractFile, productsController.createProduct);
+router.put('/:id', checkAuth, extractFile, productsController.editProduct);
+router.get('', productsController.getProducts);
+router.get('/:id', productsController.getProduct );
+router.delete('/:id', checkAuth, productsController.deleteProduct );
 
 module.exports = router;
