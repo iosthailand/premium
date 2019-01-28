@@ -99,6 +99,7 @@ export class ProductCreateComponent implements OnInit, OnDestroy {
         this.form.value.image
       );
     }
+    this.isLoading = false;
     this.form.reset();
   }
 

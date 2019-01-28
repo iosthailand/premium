@@ -49,18 +49,22 @@ exports.userLogin = (req, res, next) => {
           message: 'Auth failed รหัสผ่านไม่ตรงนะ'
         });
       }
-      // jwt.sign จะต้องผ่านพารามิเตอร์ 3 ค่าเข้าไป
-      const token = jwt.sign(
-        { email: fetchedUser.email, userId: fetchedUser._id, userPermission: fetchedUser.permission },
-        process.env.JWT_KEY,
-        { expiresIn: '1h'}
-      );
-      res.status(200).json({
-        token: token,
-        expiresIn: 3600,
-        userId: fetchedUser._id,
-        userPermission: fetchedUser.permission
+      // เข้ารหัส permission แล้วผ่านค่าเข้าไปใน token แล้วเซฟใน local storage ของบราวเซอร์
+      bcrypt.hash(fetchedUser.permission, 10).then((permissionHash) => {
+        // jwt.sign จะต้องผ่านพารามิเตอร์ 3 ค่าเข้าไป
+        const token = jwt.sign(
+          { email: fetchedUser.email, userId: fetchedUser._id, userPermission: permissionHash },
+          process.env.JWT_KEY,
+          { expiresIn: '1h'}
+        );
+        res.status(200).json({
+          token: token,
+          expiresIn: 3600,
+          userId: fetchedUser._id,
+          userPermission: permissionHash
+        });
       });
+
 
     }).catch(err => {
       return res.status(401).json({
