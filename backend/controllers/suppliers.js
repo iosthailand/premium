@@ -48,8 +48,9 @@ exports.editSupplier =   (req, res, next) => {
       creator: req.userData.userId
     }
   );
-  //console.log(supplier);
-  Supplier.updateOne({ _id: req.params.id, creator: req.userData.userId }, supplier)
+  // ยกเลิกการอัพเดทเฉพาะไอดีเดิม
+  // Supplier.updateOne({ _id: req.params.id, creator: req.userData.userId }, supplier)
+  Supplier.updateOne({ _id: req.params.id }, supplier)
     .then(result => {
       if (result.n > 0 ) { // ตรวจสอบสถานะการอัพเดท
         //console.log(result);
@@ -111,7 +112,9 @@ exports.getSupplier = (req, res, next) => {
   }
 
 exports.deleteSupplier = (req, res, next) => {
-  Supplier.deleteOne({_id: req.params.id, creator: req.userData.userId })
+  // ยกเลิกการลบเมื่อเป็นไอดีเดิม
+  // Supplier.deleteOne({_id: req.params.id, creator: req.userData.userId })
+  Supplier.deleteOne({_id: req.params.id })
     .then((result) => {
       // console.log(result);
       // ตรวจสอบ n สำหรับ ลบ ตรวจสอบ nModified สำหรับการแก้ไข

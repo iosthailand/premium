@@ -49,7 +49,7 @@ exports.editCategory =   (req, res, next) => {
     }
   );
   //console.log(category);
-  Category.updateOne({ _id: req.params.id, creator: req.userData.userId }, category)
+  Category.updateOne({ _id: req.params.id }, category)
     .then(result => {
       if (result.n > 0 ) { // ตรวจสอบสถานะการอัพเดท
         //console.log(result);
@@ -111,7 +111,7 @@ exports.getCategory = (req, res, next) => {
   }
 
 exports.deleteCategory = (req, res, next) => {
-  Category.deleteOne({_id: req.params.id, creator: req.userData.userId })
+  Category.deleteOne({ _id: req.params.id })
     .then((result) => {
       // console.log(result);
       // ตรวจสอบ n สำหรับ ลบ ตรวจสอบ nModified สำหรับการแก้ไข
