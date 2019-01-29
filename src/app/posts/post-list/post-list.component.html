@@ -16,7 +16,7 @@
                 </div>
                 <div class="row" *ngIf="userIsAuthenticated && userId == post.creator">
                   <div class="col-12">
-                      <a class="btn btn-sm btn-primary" [routerLink]="['/edit', post.id]" routerLinkActive="router-link-active">EDIT</a>
+                      <a class="btn btn-sm btn-primary mr-1" [routerLink]="['/edit', post.id]" routerLinkActive="router-link-active">EDIT</a>
                       <button class="btn btn-sm btn-warning"  (click)="onDelete(post.id)">DELETE</button>
                   </div>
                 </div>
@@ -28,7 +28,7 @@
   </div>
   <mat-paginator [length]="totalPosts" [pageSize]="postsPerPage" [pageSizeOptions]="pageSizeOptions" (page)="onChangedPage($event)" *ngIf="posts.length > 0"></mat-paginator>
   <div class="row" *ngIf="posts.length <= 0 && !isLoading">
-    <div class="col"><div class="text-center alert-warning mt-1 pt-5 pb-5">ไม่มีรายการสินค้าในระบบ</div></div>
+    <div class="col"><div class="text-center alert-warning mt-1 pt-5 pb-5">ไม่มีรายการส่งของในระบบ</div></div>
   </div>
 
 

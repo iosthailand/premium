@@ -70,6 +70,8 @@ export class UserCreateComponent implements OnInit, OnDestroy {
               'permission': this.user.permission,
               'status': this.user.status
             });
+          }, error => {
+            this.isLoading = false;
           });
       } else {
         this.mode = 'create';
@@ -103,6 +105,7 @@ export class UserCreateComponent implements OnInit, OnDestroy {
       );
     }
     this.form.reset();
+    this.isLoading = false;
   }
   onCancel() {
     this.router.navigate(['/']);

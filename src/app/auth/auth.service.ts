@@ -18,6 +18,7 @@ export class AuthService {
   private userPermission: string;
   private isAuthenticated = false;
   private authStatusListener = new Subject<boolean>();
+  private userStatusListener = new Subject<string>();
   constructor(private http: HttpClient, private router: Router) {}
 
   getToken() {
@@ -35,13 +36,16 @@ export class AuthService {
   getUserPermission() {
     return this.userPermission;
   }
-
+  // get user type
+  getStatus() {
+    return this.userStatusListener.asObservable();
+  }
   getAuthStatusListener() {
     return this.authStatusListener.asObservable();
   }
 
   createUser(email: string, password: string) {
-    const authData: AuthData = { email: email, password: password, permission: 'general', status: false };
+    const authData: AuthData = { email: email, password: password, permission: 'DH staff', status: false };
     this.http.post(BACKEND_URL + '/signup', authData)
     .subscribe(response => {
       this.router.navigate(['/']);
@@ -51,9 +55,9 @@ export class AuthService {
   }
 
   login(email: string, password: string) {
-    const authData: AuthData = { email: email, password: password, permission: null, status: false };
+    const authData: AuthData = { email: email, password: password, permission: null, status: null };
     this.http
-    .post<{token: string, expiresIn: number, userId: string, userPermission: string}>(
+    .post<{token: string, expiresIn: number, userId: string, userPermission: string, status: string}>(
       BACKEND_URL + '/login',
       authData
       )
@@ -68,6 +72,7 @@ export class AuthService {
         this.userId = response.userId;
         this.userPermission = response.userPermission;
         this.authStatusListener.next(true);
+        this.userStatusListener.next(response.status);
         const now = new Date();
         const expirationDate = new Date(now.getTime() + expiresInDuration);
         this.saveAuthData(token, expirationDate, this.userId, this.userPermission);
@@ -75,6 +80,7 @@ export class AuthService {
       }
     }, error => {
       this.authStatusListener.next(false);
+      this.userStatusListener.next('');
     });
   }
 
