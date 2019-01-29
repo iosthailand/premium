@@ -11,7 +11,7 @@ module.exports = (req, res, next) => {
       email: decodedToken.email,
       userId: decodedToken.userId,
       userPermission: decodedToken.userPermission,
-      status: decodedToken.status
+      userType: decodedToken.status
     };
     next();
   } catch (error) {

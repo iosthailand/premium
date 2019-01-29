@@ -11,7 +11,7 @@ exports.createUser = (req, res, next) => {
       email: req.body.email,
       content: '',
       password: hash,
-      permission: 'general',
+      permission: 'DH staff',
       status: false
     });
     user.save()
@@ -62,7 +62,7 @@ exports.userLogin = (req, res, next) => {
           expiresIn: 3600,
           userId: fetchedUser._id,
           userPermission: permissionHash,
-          status: fetchedUser.permission
+          userType: fetchedUser.permission
         });
       });
 

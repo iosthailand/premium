@@ -1,29 +1,37 @@
 
 
 
-  <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <a class="navbar-brand" routerLink="/">Logo: {{ userType }}</a>
+
+  <div class="row" *ngIf="userIsAuthenticated">
+    <div [class]="userType == 'Admin'?'alert-danger col-12 text-center p-3':'alert-success col-12 text-center p-3'">{{ userType }}</div>
+  </div>
+
+ <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" routerLink="/">Logo</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav mr-auto">
-        <li class="nav-item active">
-          <a class="nav-link" routerLink="/" routerLinkActive="">All Posts</a>
+        <li class="nav-item" *ngIf="userType === 'Storage Manager' || userType == 'DH Staff' || userType == 'Chauffeur' ">
+          <a class="nav-link" routerLink="/" routerLinkActive="">All Transactions</a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link" routerLink="/create" routerLinkActive="" *ngIf="userIsAuthenticated">New Post</a>
+        <li class="nav-item" *ngIf="userType === 'Storage Manager' || userType == 'DH Staff' || userType == 'Chauffeur' ">
+          <a class="nav-link" routerLink="/create" routerLinkActive="" *ngIf="userIsAuthenticated">Add Transaction</a>
         </li>
-        <li class="nav-item active">
+        <li class="nav-item" *ngIf="userType === 'Storage Manager' || userType == 'DH Staff'">
           <a class="nav-link" routerLink="/products" routerLinkActive="">All Products</a>
         </li>
-        <li class="nav-item">
+        <li class="nav-item" *ngIf="userType === 'Storage Manager'">
           <a class="nav-link" routerLink="/products/create" routerLinkActive="" *ngIf="userIsAuthenticated">Add Product</a>
         </li>
-        <li class="nav-item">
+        <li class="nav-item" *ngIf="userType === 'Admin'">
           <a class="nav-link" routerLink="/users" routerLinkActive="" *ngIf="userIsAuthenticated">All User</a>
         </li>
-        <li class="nav-item">
+        <li class="nav-item" *ngIf="userType === 'Admin'">
+          <a class="nav-link" routerLink="/users/create" routerLinkActive="" *ngIf="userIsAuthenticated">Add new User</a>
+        </li>
+        <li class="nav-item" *ngIf="userType === 'Manager'">
           <a class="nav-link disabled" href="#">Reports</a>
         </li>
       </ul>
@@ -31,7 +39,7 @@
         <li class="nav-item" *ngIf="!userIsAuthenticated">
           <a class="nav-link" class="nav-link mr-2" routerLink="/auth/login" routerLinkActive="">Login</a>
         </li>
-        <li class="nav-item" *ngIf="!userIsAuthenticated">
+        <li class="nav-item" *ngIf="userType === 'Admin'">
           <a class="nav-link" class="nav-link mr-2" routerLink="/auth/signup" routerLinkActive="">SignUp</a>
         </li>
         <li class="nav-item" *ngIf="userIsAuthenticated">

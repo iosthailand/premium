@@ -55,9 +55,9 @@ export class AuthService {
   }
 
   login(email: string, password: string) {
-    const authData: AuthData = { email: email, password: password, permission: null, status: null };
+    const authData: AuthData = { email: email, password: password, permission: null, status: false };
     this.http
-    .post<{token: string, expiresIn: number, userId: string, userPermission: string, status: string}>(
+    .post<{token: string, expiresIn: number, userId: string, userPermission: string, userType: string}>(
       BACKEND_URL + '/login',
       authData
       )
@@ -72,7 +72,7 @@ export class AuthService {
         this.userId = response.userId;
         this.userPermission = response.userPermission;
         this.authStatusListener.next(true);
-        this.userStatusListener.next(response.status);
+        this.userStatusListener.next(response.userType);
         const now = new Date();
         const expirationDate = new Date(now.getTime() + expiresInDuration);
         this.saveAuthData(token, expirationDate, this.userId, this.userPermission);
@@ -106,6 +106,7 @@ export class AuthService {
     this.token = null;
     this.isAuthenticated = false;
     this.authStatusListener.next(false);
+    this.userStatusListener.next('');
     this.userId = null;
     this.userPermission = null;
     clearTimeout(this.tokenTimer);
