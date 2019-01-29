@@ -83,7 +83,7 @@ exports.getCategories = (req, res, next)=>{
       res.status(200).json({
         messages: 'Category fetch successfully.',
         categories: fetchCategories,
-        maxCategorys: count
+        maxCategories: count
       });
     })
     .catch((err) => {

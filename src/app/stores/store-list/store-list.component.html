@@ -1,0 +1,35 @@
+  <div *ngIf="isLoading" class="text-center"><img src="../../../assets/spinner.gif"></div>
+  <div *ngIf="!isLoading">
+    <div class="row mt-1" *ngFor="let store of stores" >
+      <div class="col-12">
+          <div class="card round-0">
+            <div class="card-header" data-toggle="collapse" [attr.data-target]="'#p-'+store.id" aria-expanded="false" [attr.aria-controls]="store.id">
+              {{ store.storeName }}
+            </div>
+            <ul class="list-group list-group-flush collapse" [id]="'p-'+store.id">
+              <li class="list-group-item">
+                <div class="row">
+                    <div class="col-12"> {{ store.storeDetails }} </div>
+                </div>
+                <div class="store-image">
+                  <img [src]="store.imagePath" [alt]="store.title" class="img-thumbnail">
+                </div>
+                <div class="row mt-3" *ngIf="userIsAuthenticated">
+                  <div class="col-12">
+                      <a class="btn btn-sm btn-primary mr-1" [routerLink]="['edit', store.id]" routerLinkActive="router-link-active">EDIT</a>
+                      <button class="btn btn-sm btn-warning"  (click)="onDelete(store.id)">DELETE</button>
+                  </div>
+                </div>
+              </li>
+            </ul>
+          </div>
+      </div>
+    </div>
+  </div>
+  <mat-paginator [length]="totalStores" [pageSize]="storesPerPage" [pageSizeOptions]="pageSizeOptions" (page)="onChangedPage($event)" *ngIf="stores.length > 0"></mat-paginator>
+  <div class="row" *ngIf="stores.length <= 0 && !isLoading">
+    <div class="col"><div class="text-center alert-warning mt-1 pt-5 pb-5">ยังไม่ได้กรอกข้อมูลสาขาในระบบ</div></div>
+  </div>
+
+
+

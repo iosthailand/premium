@@ -24,10 +24,8 @@ export class SuppliersService {
         return { suppliers: supplierData.suppliers.map((supplier) => { // map _id from database to id same as in model
           return {
             id: supplier._id,
-            supplierSku: supplier.supplierSku,
             supplierName: supplier.supplierName,
             supplierDetails: supplier.supplierDetails,
-            supplierSupplier: supplier.supplierSupplier,
             imagePath: supplier.imagePath,
             creator: supplier.creator
           };
@@ -52,10 +50,8 @@ export class SuppliersService {
     // return {...this.suppliers.find(supplier => supplier.id === id)};
     return this.http.get<{
       _id: string,
-      supplierSku: string,
       supplierName: string,
       supplierDetails: string,
-      supplierSupplier: string,
       imagePath: string,
       creator: string
     }>(BACKEND_URL + id);

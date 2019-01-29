@@ -34,6 +34,12 @@
           <a class="nav-link" routerLink="/suppliers/create" routerLinkActive="" *ngIf="userIsAuthenticated">Add Supplier</a>
         </li>
         <li class="nav-item" *ngIf="userType === 'Admin'">
+          <a class="nav-link" routerLink="/stores" routerLinkActive="" *ngIf="userIsAuthenticated">All Stores</a>
+        </li>
+        <li class="nav-item" *ngIf="userType === 'Admin'">
+          <a class="nav-link" routerLink="/stores/create" routerLinkActive="" *ngIf="userIsAuthenticated">Add Store</a>
+        </li>
+        <li class="nav-item" *ngIf="userType === 'Admin'">
           <a class="nav-link" routerLink="/users" routerLinkActive="" *ngIf="userIsAuthenticated">All User</a>
         </li>
         <li class="nav-item" *ngIf="userType === 'Admin'">

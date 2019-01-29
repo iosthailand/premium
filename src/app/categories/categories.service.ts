@@ -24,10 +24,8 @@ export class CategoriesService {
         return { categories: categoryData.categories.map((category) => { // map _id from database to id same as in model
           return {
             id: category._id,
-            categorySku: category.categorySku,
             categoryName: category.categoryName,
             categoryDetails: category.categoryDetails,
-            categoryCategory: category.categoryCategory,
             imagePath: category.imagePath,
             creator: category.creator
           };
@@ -52,10 +50,8 @@ export class CategoriesService {
     // return {...this.categories.find(category => category.id === id)};
     return this.http.get<{
       _id: string,
-      categorySku: string,
       categoryName: string,
       categoryDetails: string,
-      categoryCategory: string,
       imagePath: string,
       creator: string
     }>(BACKEND_URL + id);

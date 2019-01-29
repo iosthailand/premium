@@ -11,6 +11,8 @@ import { CategoryListComponent } from './categories/category-list/category-list.
 import { CategoryCreateComponent } from './categories/category-create/category-create.component';
 import { SupplierListComponent } from './suppliers/supplier-list/supplier-list.component';
 import { SupplierCreateComponent } from './suppliers/supplier-create/supplier-create.component';
+import { StoreListComponent } from './stores/store-list/store-list.component';
+import { StoreCreateComponent } from './stores/store-create/store-create.component';
 
 const routes: Routes = [
   { path: '', component: PostListComponent },
@@ -28,7 +30,10 @@ const routes: Routes = [
   { path: 'categories/edit/:categoryId', component: CategoryCreateComponent, canActivate: [AuthGuard] },
   { path: 'suppliers', component: SupplierListComponent },
   { path: 'suppliers/create', component: SupplierCreateComponent },
-  { path: 'suppliers/edit/:supplierId', component: SupplierCreateComponent, canActivate: [AuthGuard] }
+  { path: 'suppliers/edit/:supplierId', component: SupplierCreateComponent, canActivate: [AuthGuard] },
+  { path: 'stores', component: StoreListComponent },
+  { path: 'stores/create', component: StoreCreateComponent },
+  { path: 'stores/edit/:storeId', component: StoreCreateComponent, canActivate: [AuthGuard] }
 ];
 
 @NgModule({
