@@ -25,6 +25,18 @@
         <li class="nav-item" *ngIf="userType === 'Storage Manager'">
           <a class="nav-link" routerLink="/products/create" routerLinkActive="" *ngIf="userIsAuthenticated">Add Product</a>
         </li>
+        <li class="nav-item" *ngIf="userType === 'Storage Manager' || userType == 'DH Staff'">
+          <a class="nav-link" routerLink="/categories" routerLinkActive="">All Categories</a>
+        </li>
+        <li class="nav-item" *ngIf="userType === 'Storage Manager'">
+          <a class="nav-link" routerLink="/categories/create" routerLinkActive="" *ngIf="userIsAuthenticated">Add Category</a>
+        </li>
+        <li class="nav-item" *ngIf="userType === 'Storage Manager' || userType == 'DH Staff'">
+          <a class="nav-link" routerLink="/suppliers" routerLinkActive="">All Suppliers</a>
+        </li>
+        <li class="nav-item" *ngIf="userType === 'Storage Manager'">
+          <a class="nav-link" routerLink="/suppliers/create" routerLinkActive="" *ngIf="userIsAuthenticated">Add Supplier</a>
+        </li>
         <li class="nav-item" *ngIf="userType === 'Admin'">
           <a class="nav-link" routerLink="/users" routerLinkActive="" *ngIf="userIsAuthenticated">All User</a>
         </li>

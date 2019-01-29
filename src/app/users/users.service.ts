@@ -75,7 +75,7 @@ export class UsersService {
       userData
       )
     .subscribe((responseData) => {
-      this.router.navigate(['/']);
+      this.router.navigate(['users']);
     });
   }
 
@@ -92,7 +92,7 @@ export class UsersService {
     this.http
       .put(BACKEND_URL + id, userData)
       .subscribe((response) => {
-          this.router.navigate(['/']);
+          this.router.navigate(['users']);
       });
   }
   deleteUser(userId: string) {

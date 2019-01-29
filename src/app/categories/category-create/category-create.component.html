@@ -1,0 +1,30 @@
+<div *ngIf="isLoading" class="text-center"><img src="../../../assets/spinner.gif"></div>
+<form [formGroup]="form" (ngSubmit)="onSaveCategory()">
+    <div class="form-group">
+      <label for="categoryName">Category Name</label>
+      <input type="text" class="form-control" id="categoryName" formControlName="categoryName" aria-describedby="categoryNameHelp" placeholder="Fill the category Name here">
+      <small
+      *ngIf="!form.get('categoryName').valid && form.get('categoryName').touched"
+      id="categoryNameHelp" class="form-text text-muted">please fill Category Name</small>
+    </div>
+    <div class="form-group">
+      <label for="categoryDetails">Category Details</label>
+      <input type="text" class="form-control" id="categoryDetails" formControlName="categoryDetails" aria-describedby="categoryDetailsHelp" placeholder="Enter Category Detail">
+      <small
+        *ngIf="!form.get('categoryDetails').valid && form.get('categoryDetails').touched"
+        id="categoryDetailsHelp" class="form-text text-muted">please fill Category Details at least 3 characters</small>
+    </div>
+    <div class="custom-file" id="customFile" lang="th">
+        <input type="file" class="custom-file-input" id="exampleInputFile" aria-describedby="fileHelp" (change)="onImagePicked($event)">
+        <label class="custom-file-label" for="exampleInputFile">
+           เลือกไฟล์...
+        </label>
+
+    </div>
+    <div class="image-preview" *ngIf="imagePreview !== '' && imagePreview && form.get('image').valid">
+        <img class="img-thumbnail" [src]="imagePreview" [alt]="form.value.title">
+      </div>
+    <div class="form-group mt-3">
+        <button type="submit" class="btn btn-primary" [disabled]="!form.valid?'disabled':''">Submit</button>
+    </div>
+  </form>

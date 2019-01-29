@@ -1,0 +1,35 @@
+  <div *ngIf="isLoading" class="text-center"><img src="../../../assets/spinner.gif"></div>
+  <div *ngIf="!isLoading">
+    <div class="row mt-1" *ngFor="let category of categories" >
+      <div class="col-12">
+          <div class="card round-0">
+            <div class="card-header" data-toggle="collapse" [attr.data-target]="'#p-'+category.id" aria-expanded="false" [attr.aria-controls]="category.id">
+              {{ category.categoryName }}
+            </div>
+            <ul class="list-group list-group-flush collapse" [id]="'p-'+category.id">
+              <li class="list-group-item">
+                <div class="row">
+                    <div class="col-12"> {{ category.categoryDetails }} </div>
+                </div>
+                <div class="category-image">
+                  <img [src]="category.imagePath" [alt]="category.title" class="img-thumbnail">
+                </div>
+                <div class="row mt-3" *ngIf="userIsAuthenticated && userId == category.creator">
+                  <div class="col-12">
+                      <a class="btn btn-sm btn-primary mr-1" [routerLink]="['edit', category.id]" routerLinkActive="router-link-active">EDIT</a>
+                      <button class="btn btn-sm btn-warning"  (click)="onDelete(category.id)">DELETE</button>
+                  </div>
+                </div>
+              </li>
+            </ul>
+          </div>
+      </div>
+    </div>
+  </div>
+  <mat-paginator [length]="totalCategories" [pageSize]="categoriesPerPage" [pageSizeOptions]="pageSizeOptions" (page)="onChangedPage($event)" *ngIf="categories.length > 0"></mat-paginator>
+  <div class="row" *ngIf="categories.length <= 0 && !isLoading">
+    <div class="col"><div class="text-center alert-warning mt-1 pt-5 pb-5">ไม่มีประเภทสินค้าอยู่ในระบบ</div></div>
+  </div>
+
+
+

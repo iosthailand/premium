@@ -6,6 +6,8 @@ const postRoutes = require('./routes/posts');
 const authRoutes = require('./routes/auth');
 const userRoutes = require('./routes/user');
 const productRoutes = require('./routes/products');
+const categoryRoutes = require('./routes/categories');
+const supplierRoutes = require('./routes/suppliers');
 
 const app = express();
 mongoose.connect('mongodb+srv://tsubasa:' + process.env.MONGO_ATLAS_PW + '@jeerawuth007-5duea.mongodb.net/node-angular?retryWrites=true', { useNewUrlParser: true, useCreateIndex: true })
@@ -35,6 +37,8 @@ app.use((req, res, next) => {
 app.use('/api/posts', postRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/products', productRoutes);
+app.use('/api/categories', categoryRoutes);
+app.use('/api/suppliers', supplierRoutes);
 app.use('/api/auth', authRoutes);
 
 module.exports = app;

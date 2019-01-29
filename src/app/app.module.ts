@@ -13,6 +13,8 @@ import { MyAngularMaterialModule } from './my-angular-material.module';
 import { UsersModule } from './users/users.module';
 import { PostsModule } from './posts/posts.module';
 import { ProductsModule } from './products/products.module';
+import { CategoriesModule } from './categories/categories.module';
+import { SuppliersModule } from './suppliers/suppliers.module';
 
 @NgModule({
   declarations: [
@@ -29,7 +31,9 @@ import { ProductsModule } from './products/products.module';
     MyAngularMaterialModule,
     UsersModule,
     PostsModule,
-    ProductsModule
+    ProductsModule,
+    CategoriesModule,
+    SuppliersModule
   ],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true},
