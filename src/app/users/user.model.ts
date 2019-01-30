@@ -4,5 +4,6 @@ export interface User {
   content: string;
   password: string;
   permission: string;
-  status: boolean;
+  storeId?: string;
+  status?: boolean;
 }

@@ -9,6 +9,7 @@ exports.createProduct = (req, res, next) => {
     productName: req.body.productName,
     productDetails: req.body.productDetails,
     productCategory: req.body.productCategory,
+    productSupplier: req.body.productSupplier,
     imagePath: url + '/images/' + req.file.filename,
     creator: req.userData.userId
   });
@@ -22,6 +23,7 @@ exports.createProduct = (req, res, next) => {
         productName: createdProduct.productName,
         productDetails: createdProduct.productDetails,
         productCategory: createdProduct.productCategory,
+        productSupplier: createdProduct.productSupplier,
         imagePath: createdProduct.imagePath
       }
       // product: {
@@ -50,6 +52,7 @@ exports.editProduct =   (req, res, next) => {
       productName: req.body.productName,
       ProductDetails: req.body.ProductDetails,
       productCategory: req.body.productCategory,
+      productSupplier: req.body.productSupplier,
       imagePath: imagePath,
       creator: req.userData.userId
     }

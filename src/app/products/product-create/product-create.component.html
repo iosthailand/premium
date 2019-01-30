@@ -22,12 +22,18 @@
         id="productDetailsHelp" class="form-text text-muted">please fill Product Details at least 3 characters</small>
     </div>
     <div class="form-group">
-      <label for="productCategory">Product Category</label>
-      <input type="text" class="form-control" id="productCategory" formControlName="productCategory" aria-describedby="productCategoryHelp" placeholder="Fill the Category here">
-      <small
-      *ngIf="!form.get('productCategory').valid && form.get('productCategory').touched"
-      id="productCategoryHelp" class="form-text text-muted">please fill Category Content</small>
+        <label for="storeId">Select Category:</label>
+        <select formControlName="productCategory" id="productCategory" name="productCategory" class="form-control">
+          <option *ngFor="let item of categoryLists" [value]="item.id">{{item.categoryName}}</option>
+        </select>
     </div>
+    <div class="form-group">
+        <label for="storeId">Select Supplier:</label>
+        <select formControlName="productSupplier" id="productSupplier" name="productSupplier" class="form-control">
+          <option *ngFor="let item of supplierLists" [value]="item.id">{{item.supplierName}}</option>
+        </select>
+    </div>
+
     <div class="custom-file" id="customFile" lang="th">
         <input type="file" class="custom-file-input" id="exampleInputFile" aria-describedby="fileHelp" (change)="onImagePicked($event)">
         <label class="custom-file-label" for="exampleInputFile">

@@ -6,6 +6,7 @@ const userSchema = mongoose.Schema({
   content: { type: String, required: false },
   password: { type: String, required: true },
   permission: { type: String, required: true },
+  storeId: { type: String, required: true },
   status: { type: Boolean, required: false }
 });
 

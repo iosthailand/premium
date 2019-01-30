@@ -4,6 +4,7 @@ export interface Product {
   productName: string;
   productDetails: string;
   productCategory: string;
+  productSupplier: string;
   imagePath: string;
   creator: string;
 }

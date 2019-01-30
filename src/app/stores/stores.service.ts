@@ -13,7 +13,7 @@ const BACKEND_URL = environment.apiUrl + '/stores/';
 export class StoresService {
   private stores: Store[] = [];
   private storesUpdated = new Subject<{stores: Store[], storeCounts: number} >();
-
+  private storesOuterSub = new Subject<Store[]>();
   constructor(private http: HttpClient, private router: Router) {}
 
   getStores(pageSize: number, currentPage: number) {
@@ -47,15 +47,15 @@ export class StoresService {
   getStoreUpdateListener() {
     return this.storesUpdated.asObservable();
   }
-
+  getStoreOuterListener() {
+    return this.storesOuterSub.asObservable();
+  }
   getStore(id: string) {
     // return {...this.stores.find(store => store.id === id)};
     return this.http.get<{
       _id: string,
-      storeSku: string,
       storeName: string,
       storeDetails: string,
-      storeStore: string,
       imagePath: string,
       creator: string
     }>(BACKEND_URL + id);
@@ -105,5 +105,21 @@ export class StoresService {
   }
   deleteStore(storeId: string) {
     return this.http.delete(BACKEND_URL + storeId);
+  }
+  getAllCurrentStoresOutside() {
+    return this.http
+      .get<{message: string, stores: any[]}>(BACKEND_URL)
+      .pipe(map((storeData) => {  // map result only get store content not include message
+        return { stores: storeData.stores.map((store) => { // map _id from database to id same as in model
+          return {
+            id: store._id,
+            storeName: store.storeName,
+            storeDetails: store.storeDetails,
+            imagePath: store.imagePath,
+            creator: store.creator
+          };
+        })};
+      })
+    );
   }
 }

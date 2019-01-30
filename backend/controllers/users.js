@@ -12,6 +12,7 @@ exports.createUser = (req, res, next) => {
       content: req.body.content,
       password: hash,
       permission: req.body.permission,
+      storeId: req.body.storeId,
       status: req.body.status
     });
     user.save()
@@ -37,6 +38,7 @@ exports.editUser =   (req, res, next) => {
       content: req.body.content,
       password: req.body.password,
       permission: req.body.permission,
+      storeId: req.body.storeId,
       status: req.body.status
     }
   );

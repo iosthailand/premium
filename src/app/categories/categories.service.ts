@@ -102,4 +102,20 @@ export class CategoriesService {
   deleteCategory(categoryId: string) {
     return this.http.delete(BACKEND_URL + categoryId);
   }
+
+  getAllCategoriesOutside() {
+    return this.http
+      .get<{message: string, categories: any, maxCategories: number}>(BACKEND_URL)
+      .pipe(map((categoryData) => {  // map result only get category content not include message
+        return { categories: categoryData.categories.map((category) => { // map _id from database to id same as in model
+          return {
+            id: category._id,
+            categoryName: category.categoryName,
+            categoryDetails: category.categoryDetails,
+            imagePath: category.imagePath,
+            creator: category.creator
+          };
+      })};
+    }));
+  }
 }

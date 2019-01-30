@@ -28,6 +28,7 @@ export class UsersService {
             content: user.content,
             password: user.password,
             permission: user.permission,
+            storeId: user.storeId,
             status: user.status
           };
         }),
@@ -55,17 +56,19 @@ export class UsersService {
       content: string,
       password: string,
       permission: string,
+      storeId: string,
       status: boolean
     }>(BACKEND_URL + id);
   }
 
 // mongodb+srv://tsubasa:DBkesa_m007@jeerawuth007-5duea.mongodb.net/test?retryWrites=true
-  addUser(email: string, content: string, password: string, permission: string, status: boolean) {
+  addUser(email: string, content: string, password: string, permission: string,  storeId: string, status: boolean) {
     const userData = {
       email: email,
       content: content,
       password: password,
       permission: permission,
+      storeId: storeId,
       status: status
     };
 
@@ -79,7 +82,7 @@ export class UsersService {
     });
   }
 
-  updateUser(id: string, email: string, content: string, password: string, permission: string, status: boolean) {
+  updateUser(id: string, email: string, content: string, password: string, permission: string, storeId: string, status: boolean) {
     let userData: User | FormData;
     userData = {
       id: id,
@@ -87,6 +90,7 @@ export class UsersService {
       content: content,
       password: password,
       permission: permission,
+      storeId: storeId,
       status: status
     };
     this.http

@@ -14,7 +14,7 @@ const BACKEND_URL = environment.apiUrl + '/products/';
 export class ProductsService {
   private transactionMode = false;
   private products: Product[] = [];
-  private productsTransaction: ProductItem[] = [];
+  private productsTransaction: ProductItem[];
   private productsUpdated = new Subject<{products: Product[], productCounts: number} >();
   private productsCounted = new Subject<number>();
   private productsTransactionSub = new Subject<ProductItem[]>();
@@ -32,6 +32,7 @@ export class ProductsService {
             productName: product.productName,
             productDetails: product.productDetails,
             productCategory: product.productCategory,
+            productSupplier: product.productSupplier,
             imagePath: product.imagePath,
             creator: product.creator
           };
@@ -79,18 +80,21 @@ export class ProductsService {
       productName: string,
       productDetails: string,
       productCategory: string,
+      productSupplier: string,
       imagePath: string,
       creator: string
     }>(BACKEND_URL + id);
   }
 
 // mongodb+srv://tsubasa:DBkesa_m007@jeerawuth007-5duea.mongodb.net/test?retryWrites=true
-  addProduct(productSku: string, productName: string, productDetails: string, productCategory: string, image: File) {
+  addProduct(productSku: string, productName: string, productDetails: string,
+    productCategory: string, productSupplier: string, image: File) {
     const productData = new FormData(); // แบบฟอร์มที่สามารถมีข้อความ และข้อมูลไฟล์ได้
     productData.append('productSku', productSku);
     productData.append('productName', productName);
     productData.append('productDetails', productDetails);
     productData.append('productCategory', productCategory);
+    productData.append('productSupplier', productSupplier);
     productData.append('image', image, productSku);
 
     this.http
@@ -104,7 +108,8 @@ export class ProductsService {
   }
 
   updateProduct(
-    id: string, productSku: string, productName: string, productDetails: string, productCategory: string, image: File | string
+    id: string, productSku: string, productName: string, productDetails: string,
+    productCategory: string, productSupplier: string, image: File | string
     ) {
     let productData: Product | FormData;
     if (typeof image === 'object') {
@@ -114,6 +119,7 @@ export class ProductsService {
       productData.append('productName', productName);
       productData.append('productDetails', productDetails);
       productData.append('productCategory', productCategory);
+      productData.append('productSupplier', productSupplier);
       productData.append('image', image, productSku);
     } else {
       productData = {
@@ -122,6 +128,7 @@ export class ProductsService {
         productName: productName,
         productDetails: productDetails,
         productCategory: productCategory,
+        productSupplier: productSupplier,
         imagePath: image,
         creator: null
       };

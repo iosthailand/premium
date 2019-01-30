@@ -1,5 +1,5 @@
 <div *ngIf="isLoading" class="text-center"><img src="../../../assets/spinner.gif"></div>
-<form [formGroup]="form" (ngSubmit)="onSaveUser()">
+<form [formGroup]="form" (ngSubmit)="onSaveUser()" *ngIf="!isLoading">
     <div class="form-group">
       <label for="email">email</label>
       <input type="email" class="form-control" id="email" formControlName="email" aria-describedby="emailHelp" placeholder="Enter Title" [attr.disabled]="emailEditable?null:'disabled'">
@@ -28,6 +28,14 @@
           <option *ngFor="let item of permissionLists" [value]="item">{{item}}</option>
         </select>
     </div>
+
+    <div class="form-group">
+        <label for="storeId">Select Store:</label>
+        <select formControlName="storeId" id="storeId" name="storeId" class="form-control">
+          <option *ngFor="let item of storeLists" [value]="item.id">{{item.storeName}}</option>
+        </select>
+    </div>
+
     <div class="form-group mt-3">
         <button type="submit" class="btn btn-sm btn-primary mr-1" [disabled]="!form.valid?'disabled':''">Submit</button>
         <button class="btn btn-sm btn-warning" (click)="onCancel()">Cancel</button>

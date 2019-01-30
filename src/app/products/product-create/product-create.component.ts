@@ -6,6 +6,10 @@ import { Product } from '../product.model';
 import { mineType } from './mine-type.validator';
 import { Subscription } from 'rxjs';
 import { AuthService } from 'src/app/auth/auth.service';
+import { Supplier } from 'src/app/suppliers/supplier.model';
+import { SuppliersService } from 'src/app/suppliers/suppliers.service';
+import { Category } from 'src/app/categories/category.model';
+import { CategoriesService } from 'src/app/categories/categories.service';
 
 @Component({
   selector: 'app-product-create',
@@ -19,6 +23,8 @@ export class ProductCreateComponent implements OnInit, OnDestroy {
   private productId: string;
   private authStatusSub: Subscription;
   public product: Product;
+  public supplierLists: Supplier[] = [];
+  public categoryLists: Category[] = [];
   isLoading = false;
   form: FormGroup;
   imagePreview: string;
@@ -27,7 +33,9 @@ export class ProductCreateComponent implements OnInit, OnDestroy {
   constructor(
       public productsService: ProductsService,
       public route: ActivatedRoute,
-      private authService: AuthService
+      private authService: AuthService,
+      private suppliersService: SuppliersService,
+      private categoriesService: CategoriesService
     ) {}
   ngOnInit() {
     this.authStatusSub = this.authService
@@ -35,11 +43,19 @@ export class ProductCreateComponent implements OnInit, OnDestroy {
       .subscribe(authStatus => {
         this.isLoading = false;
       });
+    this.categoriesService.getAllCategoriesOutside().subscribe(result => {
+      this.categoryLists = result.categories;
+    });
+    this.suppliersService.getAllSuppliersOutside().subscribe((result) => {
+      this.supplierLists = result.suppliers;
+    });
+
     this.form = new FormGroup({
       'productSku': new FormControl(null, [ Validators.required, Validators.minLength(13)]),
       'productName': new FormControl(null, [Validators.required, Validators.minLength(3)]),
       'productDetails': new FormControl(null, [ Validators.required]),
       'productCategory': new FormControl(null, [Validators.required]),
+      'productSupplier': new FormControl(null, [Validators.required]),
       'image': new FormControl(null, Validators.required, mineType)
     });
     this.route.paramMap.subscribe((paramMap: ParamMap) => {
@@ -57,6 +73,7 @@ export class ProductCreateComponent implements OnInit, OnDestroy {
               productName: productData.productName,
               productDetails: productData.productDetails,
               productCategory: productData.productCategory,
+              productSupplier: productData.productSupplier,
               imagePath: productData.imagePath,
               creator: productData.creator
             };
@@ -65,6 +82,7 @@ export class ProductCreateComponent implements OnInit, OnDestroy {
               'productName': this.product.productName,
               'productDetails': this.product.productDetails,
               'productCategory': this.product.productCategory,
+              'productSupplier': this.product.productSupplier,
               'image': this.product.imagePath
             });
             this.imagePreview = productData.imagePath; // แสดงรูปตอนแก้ไข
@@ -87,6 +105,7 @@ export class ProductCreateComponent implements OnInit, OnDestroy {
         this.form.value.productName,
         this.form.value.productDetails,
         this.form.value.productCategory,
+        this.form.value.productSupplier,
         this.form.value.image
       );
     } else {
@@ -96,6 +115,7 @@ export class ProductCreateComponent implements OnInit, OnDestroy {
         this.form.value.productName,
         this.form.value.productDetails,
         this.form.value.productCategory,
+        this.form.value.productSupplier,
         this.form.value.image
       );
     }

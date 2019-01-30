@@ -5,6 +5,10 @@ import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { User } from '../user.model';
 import { Subscription } from 'rxjs';
 import { AuthService } from 'src/app/auth/auth.service';
+import { StoresService } from 'src/app/stores/stores.service';
+import { Store } from 'src/app/stores/store.model';
+import { SuppliersService } from 'src/app/suppliers/suppliers.service';
+import { Supplier } from 'src/app/suppliers/supplier.model';
 
 @Component({
   selector: 'app-user-create',
@@ -20,18 +24,25 @@ export class UserCreateComponent implements OnInit, OnDestroy {
   private authStatusSub: Subscription;
   public user: User;
   public permissionLists = ['DH Staff', 'Chauffeur', 'Storage Manager', 'Manager', 'Admin'];
-  private router: Router;
+  public storeLists: Store[] = [];
+
   isLoading = false;
   form: FormGroup;
-  imagePreview: string;
+  // imagePreview: string;
   // spinning = 'giphy.gif';
 
   constructor(
       public usersService: UsersService,
       public route: ActivatedRoute,
-      private authService: AuthService
+      private authService: AuthService,
+      private router: Router,
+      private storesService: StoresService
     ) {}
   ngOnInit() {
+    this.storesService.getAllCurrentStoresOutside().subscribe((result) => {
+      this.storeLists = result.stores;
+    });
+
     this.authStatusSub = this.authService
       .getAuthStatusListener()
       .subscribe(authStatus => {
@@ -42,6 +53,7 @@ export class UserCreateComponent implements OnInit, OnDestroy {
       'password': new FormControl(null, [ Validators.required, Validators.minLength(3)]),
       'content': new FormControl(null),
       'permission': new FormControl(null, Validators.required),
+      'storeId': new FormControl(null, Validators.required),
       'status': new FormControl(false)
 
     });
@@ -61,6 +73,7 @@ export class UserCreateComponent implements OnInit, OnDestroy {
               content: userData.content,
               password: userData.password,
               permission: userData.permission,
+              storeId: userData.storeId,
               status: userData.status
             };
             this.form.setValue({
@@ -68,6 +81,7 @@ export class UserCreateComponent implements OnInit, OnDestroy {
               'content': this.user.content,
               'password': this.user.password,
               'permission': this.user.permission,
+              'storeId': this.user.storeId,
               'status': this.user.status
             });
           }, error => {
@@ -92,6 +106,7 @@ export class UserCreateComponent implements OnInit, OnDestroy {
         this.form.value.content,
         this.form.value.password,
         this.form.value.permission,
+        this.form.value.storeId,
         this.form.value.status
       );
     } else {
@@ -101,6 +116,7 @@ export class UserCreateComponent implements OnInit, OnDestroy {
         this.form.value.content,
         this.form.value.password,
         this.form.value.permission,
+        this.form.value.storeId,
         this.form.value.status
       );
     }
@@ -108,7 +124,7 @@ export class UserCreateComponent implements OnInit, OnDestroy {
     this.isLoading = false;
   }
   onCancel() {
-    this.router.navigate(['/']);
+    this.router.navigate(['/users']);
   }
   ngOnDestroy() {
     this.authStatusSub.unsubscribe();

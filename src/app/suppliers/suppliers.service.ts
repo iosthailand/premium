@@ -102,4 +102,21 @@ export class SuppliersService {
   deleteSupplier(supplierId: string) {
     return this.http.delete(BACKEND_URL + supplierId);
   }
+
+  getAllSuppliersOutside() {
+    return this.http
+      .get<{message: string, suppliers: any[]}>(BACKEND_URL)
+      .pipe(map((supplierData) => {  // map result only get supplier content not include message
+        return { suppliers: supplierData.suppliers.map((supplier) => { // map _id from database to id same as in model
+          return {
+            id: supplier._id,
+            supplierName: supplier.supplierName,
+            supplierDetails: supplier.supplierDetails,
+            imagePath: supplier.imagePath,
+            creator: supplier.creator
+          };
+        })};
+      }));
+  }
+
 }
