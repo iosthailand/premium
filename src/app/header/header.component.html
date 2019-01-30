@@ -1,7 +1,6 @@
 <div class="row" *ngIf="userIsAuthenticated">
     <div [class]="userType == 'Admin'?'alert-danger col-12 text-center p-3':'alert-success col-12 text-center p-3'">{{ userType }}</div>
 </div>
-
  <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <a class="navbar-brand" routerLink="/">Logo</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -59,9 +58,13 @@
         <li class="nav-item" *ngIf="userIsAuthenticated">
           <a class="nav-link" class="nav-link mr-2" (click)="onLogout()" style="cursor: pointer;">logout</a>
         </li>
-        <li class="nav-item" *ngIf="userIsAuthenticated">
-            <div>{{ productsCounter }} </div>
+        <li id="cart" class="mr-3 pt-1">
+            <span class="p1 fa-stack fa-1x has-badge" [attr.data-count]="productsCounter">
+              <i class="p2 fa fa-circle fa-stack-2x"></i>
+              <i class="p3 fa fa-car fa-stack-1x fa-inverse" [attr.data-count]="productsCounter"></i>
+            </span>
         </li>
+
       </ul>
       <form [formGroup]="searchForm" class="form-inline my-2 my-lg-0">
         <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" formControlName="search">

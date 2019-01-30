@@ -35,7 +35,13 @@
       <td class="col-sm-1"><a class="btn btn-sm btn-primary mr-1" (click)="onAddToTransaction(product.id, quantityItem.value)">Add</a></td>
     </tr>
   </table>
-  <mat-paginator [length]="totalProducts" [pageSize]="productsPerPage" [pageSizeOptions]="pageSizeOptions" (page)="onChangedPage($event)" *ngIf="products.length > 0"></mat-paginator>
+  <mat-paginator
+  [length]="totalProducts"
+  [pageSize]="productsPerPage"
+  [pageSizeOptions]="pageSizeOptions"
+  (page)="onChangedPage($event)"
+  *ngIf="products.length > 0 && (userType === 'Storage Manager' || userType == 'DH Staff')">
+  </mat-paginator>
   <div class="row" *ngIf="products.length <= 0 && !isLoading">
     <div class="col"><div class="text-center alert-warning mt-1 pt-5 pb-5">ไม่มีรายการสินค้าในระบบ</div></div>
   </div>
