@@ -15,9 +15,10 @@ import { StoreListComponent } from './stores/store-list/store-list.component';
 import { StoreCreateComponent } from './stores/store-create/store-create.component';
 
 const routes: Routes = [
-  { path: '', component: PostListComponent },
-  { path: 'create', component: PostCreateComponent, canActivate: [AuthGuard] },
-  { path: 'edit/:postId', component: PostCreateComponent, canActivate: [AuthGuard] },
+  { path: '', component: StoreListComponent },
+  { path: 'dummys', component: PostListComponent },
+  { path: 'dummys/create', component: PostCreateComponent, canActivate: [AuthGuard] },
+  { path: 'dummys/edit/:postId', component: PostCreateComponent, canActivate: [AuthGuard] },
   { path: 'auth', loadChildren: './auth/auth.module#AuthModule'},
   { path: 'users', component: UserListComponent },
   { path: 'users/create', component: UserCreateComponent },

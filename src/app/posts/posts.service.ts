@@ -70,7 +70,7 @@ export class PostsService {
       postData
       )
     .subscribe((responseData) => {
-      this.router.navigate(['/']);
+      this.router.navigate(['dummys']);
     });
   }
 
@@ -94,7 +94,7 @@ export class PostsService {
     this.http
       .put(BACKEND_URL + id, postData)
       .subscribe((response) => {
-          this.router.navigate(['/']);
+          this.router.navigate(['dummys']);
       });
   }
   deletePost(postId: string) {

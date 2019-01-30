@@ -1,11 +1,7 @@
 .card-header {
   cursor: pointer;
 }
+.img-product {
+  width: 80%;
+}
 
-.post-image {
-  width: 30%;
-  margin: 1em 0;
-}
-.post-image img {
-  width: 100%;
-}

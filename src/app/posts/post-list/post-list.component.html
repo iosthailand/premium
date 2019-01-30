@@ -16,7 +16,7 @@
                 </div>
                 <div class="row" *ngIf="userIsAuthenticated && userId == post.creator">
                   <div class="col-12">
-                      <a class="btn btn-sm btn-primary mr-1" [routerLink]="['/edit', post.id]" routerLinkActive="router-link-active">EDIT</a>
+                      <a class="btn btn-sm btn-primary mr-1" [routerLink]="['/dummys/edit', post.id]" routerLinkActive="router-link-active">EDIT</a>
                       <button class="btn btn-sm btn-warning"  (click)="onDelete(post.id)">DELETE</button>
                   </div>
                 </div>

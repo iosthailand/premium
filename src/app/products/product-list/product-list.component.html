@@ -1,5 +1,5 @@
   <div *ngIf="isLoading" class="text-center"><img src="../../../assets/spinner.gif"></div>
-  <div *ngIf="!isLoading">
+  <div *ngIf="!isLoading && (userType === 'Storage Manager' || userType == 'DH Staff') && isTransactionMode">
     <div class="row mt-1" *ngFor="let product of products" >
       <div class="col-12">
           <div class="card round-0">
@@ -26,6 +26,15 @@
       </div>
     </div>
   </div>
+  <table class="table table-stribe" *ngIf="userType === 'Storage Manager' || userType == 'DH Staff' && !isTransactionMode">
+    <tr class="row" *ngFor="let product of products">
+      <td class="col-sm-2">{{product.productSku }}</td>
+      <td class="col-sm-3"><img class="img img-thumbnail img-product" [src]="product.imagePath"></td>
+      <td class="col-sm-3">{{ product.productName }}</td>
+      <td class="col-sm-2"><input type="number" class="form-control" name="quantity" #quantityItem min="1" step="1" value="1"></td>
+      <td class="col-sm-1"><a class="btn btn-sm btn-primary mr-1" (click)="onAddToTransaction(product.id, quantityItem.value)">Add</a></td>
+    </tr>
+  </table>
   <mat-paginator [length]="totalProducts" [pageSize]="productsPerPage" [pageSizeOptions]="pageSizeOptions" (page)="onChangedPage($event)" *ngIf="products.length > 0"></mat-paginator>
   <div class="row" *ngIf="products.length <= 0 && !isLoading">
     <div class="col"><div class="text-center alert-warning mt-1 pt-5 pb-5">ไม่มีรายการสินค้าในระบบ</div></div>

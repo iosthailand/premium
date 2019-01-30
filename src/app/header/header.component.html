@@ -10,10 +10,10 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav mr-auto">
         <li class="nav-item" *ngIf="userType === 'Storage Manager' || userType == 'DH Staff' || userType == 'Chauffeur' ">
-          <a class="nav-link" routerLink="/" routerLinkActive="">All Transactions</a>
+          <a class="nav-link" routerLink="/dummys" routerLinkActive="">All Transactions</a>
         </li>
         <li class="nav-item" *ngIf="userType === 'Storage Manager' || userType == 'DH Staff' || userType == 'Chauffeur' ">
-          <a class="nav-link" routerLink="/create" routerLinkActive="" *ngIf="userIsAuthenticated">Add Transaction</a>
+          <a class="nav-link" routerLink="/dummys/create" routerLinkActive="" *ngIf="userIsAuthenticated">Add Transaction</a>
         </li>
         <li class="nav-item" *ngIf="userType === 'Storage Manager' || userType == 'DH Staff'">
           <a class="nav-link" routerLink="/products" routerLinkActive="">All Products</a>
@@ -58,6 +58,9 @@
         </li>
         <li class="nav-item" *ngIf="userIsAuthenticated">
           <a class="nav-link" class="nav-link mr-2" (click)="onLogout()" style="cursor: pointer;">logout</a>
+        </li>
+        <li class="nav-item" *ngIf="userIsAuthenticated">
+            <div>{{ productsCounter }} </div>
         </li>
       </ul>
       <form [formGroup]="searchForm" class="form-inline my-2 my-lg-0">

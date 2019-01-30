@@ -6,14 +6,17 @@ import { Product } from './product.model';
 import { Router } from '@angular/router';
 
 import { environment } from '../../environments/environment';
+import { ProductItem } from './product-item.model';
 const BACKEND_URL = environment.apiUrl + '/products/';
 
 
 @Injectable({providedIn: 'root'})
 export class ProductsService {
+  private transactionMode = false;
   private products: Product[] = [];
+  private productsTransaction: ProductItem[] = [];
   private productsUpdated = new Subject<{products: Product[], productCounts: number} >();
-
+  private productsCounted = new Subject<number>();
   constructor(private http: HttpClient, private router: Router) {}
 
   getProducts(pageSize: number, currentPage: number) {
@@ -48,6 +51,22 @@ export class ProductsService {
     return this.productsUpdated.asObservable();
   }
 
+  getProductCountListener() {
+    return this.productsCounted.asObservable();
+  }
+  getTransactionMode() {
+    return this.transactionMode;
+  }
+  setTransactionMode(mode: boolean) {
+    this.transactionMode = mode;
+  }
+
+  clearProductTransaction() {
+    this.productsTransaction = [];
+  }
+  getProductsTransaction() {
+    return this.productsTransaction;
+  }
   getProduct(id: string) {
     // return {...this.products.find(product => product.id === id)};
     return this.http.get<{
@@ -111,5 +130,33 @@ export class ProductsService {
   }
   deleteProduct(productId: string) {
     return this.http.delete(BACKEND_URL + productId);
+  }
+  addTransaction(productId: string, quantity: number, userId: string) {
+    let transaction: ProductItem;
+    const oldProductInTransaction = this.productsTransaction.filter(element => element.productId === productId);
+
+    // check array length for find old item exiting
+    if (oldProductInTransaction.length === 1) {
+      const qty = +oldProductInTransaction[0].quantity;
+      const index = this.productsTransaction.indexOf(oldProductInTransaction[0], 0);
+      if (index > -1) {
+        transaction = {
+          productId: productId,
+          quantity: +quantity + qty,
+          userId: userId
+        };
+        this.productsTransaction[index] = transaction;
+        // this.productsTransaction.splice(index, 1);
+      }
+    } else {
+      transaction = {
+        productId: productId,
+        quantity: +quantity,
+        userId: userId
+      };
+      this.productsTransaction.push(transaction);
+    }
+    console.log(this.productsTransaction);
+    this.productsCounted.next(this.productsTransaction.length);
   }
 }

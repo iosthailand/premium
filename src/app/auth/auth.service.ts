@@ -37,7 +37,7 @@ export class AuthService {
     return this.userPermission;
   }
   // get user type
-  getStatus() {
+  getStatusListener() {
     return this.userStatusListener.asObservable();
   }
   getAuthStatusListener() {

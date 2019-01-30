@@ -1,0 +1,26 @@
+<div *ngIf="isLoading" class="text-center"><img src="../../../assets/spinner.gif"></div>
+<form [formGroup]="form" (ngSubmit)="onSaveTransaction()">
+    <div class="form-group">
+      <label for="transactionName">Transaction Name</label>
+      <input type="text" class="form-control" id="transactionName" formControlName="transactionName" aria-describedby="transactionNameHelp" placeholder="Fill the transaction Name here">
+      <small
+      *ngIf="!form.get('transactionName').valid && form.get('transactionName').touched"
+      id="transactionNameHelp" class="form-text text-muted">please fill Transaction Name</small>
+    </div>
+    <div class="form-group">
+      <label for="transactionDetails">Transaction Details</label>
+      <input type="text" class="form-control" id="transactionDetails" formControlName="transactionDetails" aria-describedby="transactionDetailsHelp" placeholder="Enter Transaction Detail">
+      <small
+        *ngIf="!form.get('transactionDetails').valid && form.get('transactionDetails').touched"
+        id="transactionDetailsHelp" class="form-text text-muted">please fill Transaction Details at least 3 characters</small>
+    </div>
+    <div class="form-group">
+      <label for="permission">Select Transportor:</label>
+      <select formControlName="transportorId" id="transportorId" name="transportorId" class="form-control">
+        <option *ngFor="let item of transportorId" [value]="item">{{item}}</option>
+      </select>
+  </div>
+    <div class="form-group mt-3">
+        <button type="submit" class="btn btn-primary" [disabled]="!form.valid?'disabled':''">Submit</button>
+    </div>
+  </form>

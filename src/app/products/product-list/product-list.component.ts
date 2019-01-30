@@ -6,6 +6,7 @@ import { ProductsService } from '../products.service';
 import 'hammerjs'; // use for mat-paginator
 import { PageEvent } from '@angular/material';
 import { AuthService } from 'src/app/auth/auth.service';
+import { HeaderService } from 'src/app/header/hearder.service';
 
 @Component({
   selector: 'app-product-list',
@@ -20,16 +21,18 @@ export class ProductListComponent implements OnInit, OnDestroy {
   // ];
   products: Product[] = [];
   isLoading = false;
+  isTransactionMode = this.productsService.getTransactionMode();
   totalProducts = 0;
   productsPerPage = 5;
   currentPage = 1;
   pageSizeOptions = [5, 10, 15];
   userIsAuthenticated = false;
   userId: string;
+  userType: string;
   private productsSub: Subscription;
   private authStatusSub: Subscription;
 
-  constructor(public productsService: ProductsService, private authService: AuthService) {}
+  constructor(public productsService: ProductsService, private authService: AuthService, private headerService: HeaderService) {}
 
   ngOnInit() {
     // this.products = this.productsService.getProducts();
@@ -50,6 +53,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
         this.userIsAuthenticated = isAuthenticated; // การเปลี่ยนแปลงเมื่อผู้ใช้ล็อกอิน
         this.userId = this.authService.getUserId();
       });
+    this.userType = this.headerService.getUserType();
   }
 
   onDelete(productId: string) {
@@ -69,5 +73,10 @@ export class ProductListComponent implements OnInit, OnDestroy {
     this.currentPage = pageData.pageIndex + 1;
     this.productsPerPage = pageData.pageSize;
     this.productsService.getProducts(this.productsPerPage, this.currentPage);
+  }
+
+  onAddToTransaction(id: string, qty: number) {
+    this.productsService.addTransaction(id, qty, this.userId);
+    // console.log(this.productsService.getProductsTransaction);
   }
 }
