@@ -9,7 +9,7 @@ const productRoutes = require('./routes/products');
 const categoryRoutes = require('./routes/categories');
 const supplierRoutes = require('./routes/suppliers');
 const storeRoutes = require('./routes/stores');
-
+const transactionRoutes = require('./routes/transactions');
 const app = express();
 mongoose.connect('mongodb+srv://tsubasa:' + process.env.MONGO_ATLAS_PW + '@jeerawuth007-5duea.mongodb.net/node-angular?retryWrites=true', { useNewUrlParser: true, useCreateIndex: true })
 .then(() => {
@@ -18,7 +18,6 @@ mongoose.connect('mongodb+srv://tsubasa:' + process.env.MONGO_ATLAS_PW + '@jeera
   .catch(() => {
     console.log('Can not Connect to Database!!!!');
   });
-
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use('/images', express.static(path.join('images')));
@@ -34,7 +33,6 @@ app.use((req, res, next) => {
   );
   next();
 });
-
 app.use('/api/posts', postRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/products', productRoutes);
@@ -42,5 +40,6 @@ app.use('/api/categories', categoryRoutes);
 app.use('/api/suppliers', supplierRoutes);
 app.use('/api/stores', storeRoutes);
 app.use('/api/auth', authRoutes);
-
+app.use('/api/transactions', transactionRoutes);
+process.setMaxListeners(0); // prevent MaxListenersExceededWarning
 module.exports = app;

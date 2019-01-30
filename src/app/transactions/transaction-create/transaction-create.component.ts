@@ -3,7 +3,6 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { TransactionsService } from '../transactions.service';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { Transaction } from '../transaction.model';
-import { mineType } from './mine-type.validator';
 import { Subscription } from 'rxjs';
 import { AuthService } from 'src/app/auth/auth.service';
 
@@ -21,8 +20,6 @@ export class TransactionCreateComponent implements OnInit, OnDestroy {
   public transaction: Transaction;
   isLoading = false;
   form: FormGroup;
-  imagePreview: string;
-  // spinning = 'giphy.gif';
 
   constructor(
       public transactionsService: TransactionsService,
@@ -37,8 +34,15 @@ export class TransactionCreateComponent implements OnInit, OnDestroy {
       });
     this.form = new FormGroup({
       'transactionName': new FormControl(null, [Validators.required, Validators.minLength(3)]),
-      'transactionDetails': new FormControl(null, [ Validators.required]),
-      'image': new FormControl(null, Validators.required, mineType)
+      'managerId': new FormControl(null, Validators.required),
+      'transportorId': new FormControl(null, [Validators.required]),
+      'dhStaffId': new FormControl(null, Validators.required),
+      'dataTime': new FormControl(null, [Validators.required]),
+      'departureStoreId': new FormControl(null, [Validators.required]),
+      'destinationStoreId': new FormControl(null, [Validators.required]),
+      'productLists': new FormControl(null, [Validators.required]),
+      'transactionStatus': new FormControl(null, [Validators.required]),
+      'remark': new FormControl(null)
     });
     this.route.paramMap.subscribe((paramMap: ParamMap) => {
       if (paramMap.has('transactionId')) {
@@ -55,6 +59,7 @@ export class TransactionCreateComponent implements OnInit, OnDestroy {
               transportorId: transactionData.transportorId,
               dhStaffId: transactionData.dhStaffId,
               dataTime: new Date(),
+              departureStoreId: transactionData.departureStoreId,
               destinationStoreId: transactionData.destinationStoreId,
               productLists: transactionData.productLists,
               transactionStatus: transactionData.transactionStatus,
@@ -65,6 +70,7 @@ export class TransactionCreateComponent implements OnInit, OnDestroy {
               'transportorId': this.transaction.transportorId,
               'dhStaffId': this.transaction.dhStaffId,
               'dataTime': this.transaction.dataTime,
+              'departureStoreId': this.transaction.departureStoreId,
               'destinationStoreId': this.transaction.destinationStoreId,
               'productLists': this.transaction.productLists,
               'transactionStatus': this.transaction.transactionStatus,
@@ -88,6 +94,7 @@ export class TransactionCreateComponent implements OnInit, OnDestroy {
         this.form.value.managerId,
         this.form.value.transportorId,
         this.form.value.dhStaffId,
+        this.form.value.departureStoreId,
         this.form.value.destinationStoreId,
         this.form.value.productLists,
         this.form.value.transactionStatus,
@@ -99,6 +106,7 @@ export class TransactionCreateComponent implements OnInit, OnDestroy {
         this.form.value.managerId,
         this.form.value.transportorId,
         this.form.value.dhStaffId,
+        this.form.value.departureStoreId,
         this.form.value.destinationStoreId,
         this.form.value.productLists,
         this.form.value.transactionStatus,
@@ -109,18 +117,6 @@ export class TransactionCreateComponent implements OnInit, OnDestroy {
     this.form.reset();
   }
 
-  onImagePicked(event: Event) {
-    const file = (event.target as HTMLInputElement).files[0];
-    if (file !== null) { // ตรวจสอบว่า มีการยกเลิกตอนเลือกไฟล์หรือไม่
-      this.form.patchValue({image: file}); // กำหนดค่าให้กับ formControl
-      this.form.get('image').updateValueAndValidity(); // อัพเดทค่าให้กับ fromControl
-      const reader = new FileReader();
-      reader.onload = () => {
-        this.imagePreview = reader.result as string;
-      };
-      reader.readAsDataURL(file);
-    }
-  }
 
   ngOnDestroy() {
     this.authStatusSub.unsubscribe();

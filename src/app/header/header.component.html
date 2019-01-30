@@ -9,12 +9,58 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav mr-auto">
         <li class="nav-item" *ngIf="userType === 'Storage Manager' || userType == 'DH Staff' || userType == 'Chauffeur' ">
-          <a class="nav-link" routerLink="/dummys" routerLinkActive="">All Transactions</a>
+          <a class="nav-link" routerLink="/transactions" routerLinkActive="">รายการส่งสินค้า</a>
         </li>
-        <li class="nav-item" *ngIf="userType === 'Storage Manager' || userType == 'DH Staff' || userType == 'Chauffeur' ">
-          <a class="nav-link" routerLink="/dummys/create" routerLinkActive="" *ngIf="userIsAuthenticated">Add Transaction</a>
+
+
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              สินค้า
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <a class="nav-link" routerLink="/products" routerLinkActive="">สินค้าทั้งหมด</a>
+              <a class="nav-link" routerLink="/products/create" routerLinkActive="" *ngIf="userIsAuthenticated">เพิ่มสินค้า</a>
+            </div>
         </li>
-        <li class="nav-item" *ngIf="userType === 'Storage Manager' || userType == 'DH Staff'">
+
+
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              ประเภทสินค้า
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <a class="nav-link" routerLink="/categories" routerLinkActive="">ประเภทสินค้าทั้งหมด</a>
+              <a class="nav-link" routerLink="/categories/create" routerLinkActive="" *ngIf="userIsAuthenticated">เพิ่มประเภทสินค้า</a>
+            </div>
+        </li>
+
+
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              Suppliers
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <a class="nav-link" routerLink="/suppliers" routerLinkActive="">ผู้จัดจำหน่าย</a>
+              <a class="nav-link" routerLink="/suppliers/create" routerLinkActive="" *ngIf="userIsAuthenticated">เพิ่มผู้จัดจำหน่าย</a>
+            </div>
+        </li>
+
+
+        <!-- <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              Products
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <a class="nav-link" routerLink="/products" routerLinkActive="">All Products</a>
+              <a class="nav-link" routerLink="/categories" routerLinkActive="">All Categories</a>
+              <a class="nav-link" routerLink="/suppliers" routerLinkActive="">All Suppliers</a>
+              <div class="dropdown-divider"></div>
+              <a class="nav-link" routerLink="/products/create" routerLinkActive="" *ngIf="userIsAuthenticated">Add Product</a>
+              <a class="nav-link" routerLink="/categories/create" routerLinkActive="" *ngIf="userIsAuthenticated">Add Category</a>
+              <a class="nav-link" routerLink="/suppliers/create" routerLinkActive="" *ngIf="userIsAuthenticated">Add Supplier</a>
+            </div>
+        </li> -->
+        <!-- <li class="nav-item" *ngIf="userType === 'Storage Manager' || userType == 'DH Staff'">
           <a class="nav-link" routerLink="/products" routerLinkActive="">All Products</a>
         </li>
         <li class="nav-item" *ngIf="userType === 'Storage Manager'">
@@ -31,7 +77,7 @@
         </li>
         <li class="nav-item" *ngIf="userType === 'Storage Manager'">
           <a class="nav-link" routerLink="/suppliers/create" routerLinkActive="" *ngIf="userIsAuthenticated">Add Supplier</a>
-        </li>
+        </li> -->
         <li class="nav-item" *ngIf="userType === 'Admin'">
           <a class="nav-link" routerLink="/stores" routerLinkActive="" *ngIf="userIsAuthenticated">All Stores</a>
         </li>
@@ -58,11 +104,13 @@
         <li class="nav-item" *ngIf="userIsAuthenticated">
           <a class="nav-link" class="nav-link mr-2" (click)="onLogout()" style="cursor: pointer;">logout</a>
         </li>
-        <li id="cart" class="mr-3 pt-1">
-            <span class="p1 fa-stack fa-1x has-badge" [attr.data-count]="productsCounter">
-              <i class="p2 fa fa-circle fa-stack-2x"></i>
-              <i class="p3 fa fa-car fa-stack-1x fa-inverse" [attr.data-count]="productsCounter"></i>
-            </span>
+        <li id="cart" class="mr-3" *ngIf="userType === 'Storage Manager' || userType == 'DH Staff'">
+            <a class="nav-link" routerLink="/transactions/create" routerLinkActive="" *ngIf="userIsAuthenticated">
+              <span class="p1 fa-stack fa-1x has-badge" [attr.data-count]="productsCounter">
+                  <i class="p2 fa fa-circle fa-stack-2x"></i>
+                  <i class="p3 fa fa-car fa-stack-1x fa-inverse" [attr.data-count]="productsCounter"></i>
+                </span>
+            </a>
         </li>
 
       </ul>

@@ -1,10 +1,21 @@
   <div *ngIf="isLoading" class="text-center"><img src="../../../assets/spinner.gif"></div>
-  <div *ngIf="!isLoading && (userType === 'Storage Manager' || userType == 'DH Staff') && isTransactionMode">
+
+
+  <!-- <div> This is edit mode for stock manager </div> -->
+  <div *ngIf="!isLoading && (userType === 'Storage Manager' || userType == 'DH Staff') && !isTransactionMode">
     <div class="row mt-1" *ngFor="let product of products" >
       <div class="col-12">
           <div class="card round-0">
-            <div class="card-header" data-toggle="collapse" [attr.data-target]="'#p-'+product.id" aria-expanded="false" [attr.aria-controls]="product.id">
-              {{ product.productSku }}
+            <div class="card-header">
+              <div *ngIf="!(userType === 'Storage Manager' || userType == 'DH Staff' && isTransactionMode)"> {{ product.productSku }} </div>
+              <div class="row" *ngIf="userType === 'Storage Manager' || userType == 'DH Staff' && isTransactionMode">
+
+                    <div class="col-sm-2">{{ product.productSku }}</div>
+                    <div class="col-sm-5" id="product-name" data-toggle="collapse" [attr.data-target]="'#p-'+product.id" aria-expanded="false" [attr.aria-controls]="product.id">{{ product.productName }}</div>
+                    <div class="col-sm-3"><input type="number" class="form-control" name="quantity" #quantityItem min="1" step="1" value="1"></div>
+                    <div class="col-sm-2"><button class="btn btn-sm btn-primary mr-1 pl-2 pr-2" (click)="onAddToTransaction(product.id, quantityItem.value)">Add</button></div>
+
+              </div>
             </div>
             <ul class="list-group list-group-flush collapse" [id]="'p-'+product.id">
               <li class="list-group-item">
@@ -26,15 +37,7 @@
       </div>
     </div>
   </div>
-  <table class="table table-stribe" *ngIf="userType === 'Storage Manager' || userType == 'DH Staff' && !isTransactionMode">
-    <tr class="row" *ngFor="let product of products">
-      <td class="col-sm-2">{{product.productSku }}</td>
-      <td class="col-sm-3"><img class="img img-thumbnail img-product" [src]="product.imagePath"></td>
-      <td class="col-sm-3">{{ product.productName }}</td>
-      <td class="col-sm-2"><input type="number" class="form-control" name="quantity" #quantityItem min="1" step="1" value="1"></td>
-      <td class="col-sm-1"><a class="btn btn-sm btn-primary mr-1" (click)="onAddToTransaction(product.id, quantityItem.value)">Add</a></td>
-    </tr>
-  </table>
+
   <mat-paginator
   [length]="totalProducts"
   [pageSize]="productsPerPage"

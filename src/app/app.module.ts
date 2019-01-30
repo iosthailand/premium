@@ -16,6 +16,7 @@ import { ProductsModule } from './products/products.module';
 import { CategoriesModule } from './categories/categories.module';
 import { SuppliersModule } from './suppliers/suppliers.module';
 import { StoresModule } from './stores/stores.module';
+import { TransactionsModule } from './transactions/transactions.module';
 
 @NgModule({
   declarations: [
@@ -35,7 +36,8 @@ import { StoresModule } from './stores/stores.module';
     ProductsModule,
     CategoriesModule,
     SuppliersModule,
-    StoresModule
+    StoresModule,
+    TransactionsModule
   ],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true},

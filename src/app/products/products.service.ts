@@ -17,6 +17,7 @@ export class ProductsService {
   private productsTransaction: ProductItem[] = [];
   private productsUpdated = new Subject<{products: Product[], productCounts: number} >();
   private productsCounted = new Subject<number>();
+  private productsTransactionSub = new Subject<ProductItem[]>();
   constructor(private http: HttpClient, private router: Router) {}
 
   getProducts(pageSize: number, currentPage: number) {
@@ -53,6 +54,9 @@ export class ProductsService {
 
   getProductCountListener() {
     return this.productsCounted.asObservable();
+  }
+  getProductsTransactionListener() {
+    return this.productsTransactionSub.asObservable();
   }
   getTransactionMode() {
     return this.transactionMode;
@@ -157,6 +161,7 @@ export class ProductsService {
       this.productsTransaction.push(transaction);
     }
     console.log(this.productsTransaction);
-    this.productsCounted.next(this.productsTransaction.length);
+    this.productsCounted.next(this.productsTransaction.length); // แสดงตัวเลขที่ตะกร้าสินค้า โดยการบังคับส่งค่าด้วย next() ใน Subject
+    this.productsTransactionSub.next(this.productsTransaction); // นำเอารายการสินค้าและจำนวนที่อยู่ในตะกร้า Transaction ไปใช้งาน
   }
 }

@@ -1,25 +1,37 @@
 <div *ngIf="isLoading" class="text-center"><img src="../../../assets/spinner.gif"></div>
 <form [formGroup]="form" (ngSubmit)="onSaveTransaction()">
     <div class="form-group">
-      <label for="transactionName">Transaction Name</label>
-      <input type="text" class="form-control" id="transactionName" formControlName="transactionName" aria-describedby="transactionNameHelp" placeholder="Fill the transaction Name here">
+      <label for="remark">ข้อมูลการส่งสินค้า</label>
+      <input type="text" class="form-control" id="remark" formControlName="remark" aria-describedby="remarkHelp" placeholder="กรอกข้อมูลเกี่ยวกับการส่งสินค้า">
       <small
-      *ngIf="!form.get('transactionName').valid && form.get('transactionName').touched"
-      id="transactionNameHelp" class="form-text text-muted">please fill Transaction Name</small>
+      *ngIf="!form.get('remark').valid && form.get('remark').touched"
+      id="remarkHelp" class="form-text text-muted">please fill Transaction Name</small>
     </div>
     <div class="form-group">
-      <label for="transactionDetails">Transaction Details</label>
-      <input type="text" class="form-control" id="transactionDetails" formControlName="transactionDetails" aria-describedby="transactionDetailsHelp" placeholder="Enter Transaction Detail">
-      <small
-        *ngIf="!form.get('transactionDetails').valid && form.get('transactionDetails').touched"
-        id="transactionDetailsHelp" class="form-text text-muted">please fill Transaction Details at least 3 characters</small>
-    </div>
-    <div class="form-group">
-      <label for="permission">Select Transportor:</label>
-      <select formControlName="transportorId" id="transportorId" name="transportorId" class="form-control">
-        <option *ngFor="let item of transportorId" [value]="item">{{item}}</option>
+      <label for="permission">สาขาของผู้ส่ง:</label>
+      <select formControlName="departureStoreId" id="departureStoreId" name="departureStoreId" class="form-control">
+        <option *ngFor="let item of allStoreLists" [value]="item">{{item}}</option>
       </select>
-  </div>
+    </div>
+    <div class="form-group">
+        <label for="permission">สาขาของผู้รับ:</label>
+        <select formControlName="destinationStoreId" id="destinationStoreId" name="destinationStoreId" class="form-control">
+          <option *ngFor="let item of allStoreLists" [value]="item">{{item}}</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="permission">คนขับรถส่งของ:</label>
+        <select formControlName="transportorId" id="transportorId" name="transportorId" class="form-control">
+          <option *ngFor="let item of allTransportorLists" [value]="item">{{item}}</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="permission">ผู้รับสินค้า:</label>
+        <select formControlName="dhStaffId" id="dhStaffId" name="dhStaffId" class="form-control">
+          <option *ngFor="let item of allDhStaffLists" [value]="item">{{item}}</option>
+        </select>
+    </div>
+    <input type="hidden" id="transactionStatus" formControlName="transactionStatus" value="">
     <div class="form-group mt-3">
         <button type="submit" class="btn btn-primary" [disabled]="!form.valid?'disabled':''">Submit</button>
     </div>
