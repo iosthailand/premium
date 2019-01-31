@@ -7,6 +7,7 @@ import { AuthData } from './auth-data.model';
 // import { errorHandler } from '@angular/platform-browser/src/browser';
 
 import { environment } from '../../environments/environment';
+import { ProductsService } from '../products/products.service';
 const BACKEND_URL = environment.apiUrl + '/auth';
 
 @Injectable({ providedIn: 'root'})
@@ -19,7 +20,7 @@ export class AuthService {
   private isAuthenticated = false;
   private authStatusListener = new Subject<boolean>();
   private userStatusListener = new Subject<string>();
-  constructor(private http: HttpClient, private router: Router) {}
+  constructor(private http: HttpClient, private router: Router, private productsService: ProductsService) {}
 
   getToken() {
     return this.token;
@@ -111,6 +112,7 @@ export class AuthService {
     this.userPermission = null;
     clearTimeout(this.tokenTimer);
     this.clearAuthData();
+    this.productsService.clearProductTransaction();
     this.router.navigate(['/']);
   }
 

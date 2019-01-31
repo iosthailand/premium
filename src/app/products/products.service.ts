@@ -14,7 +14,7 @@ const BACKEND_URL = environment.apiUrl + '/products/';
 export class ProductsService {
   private transactionMode = false;
   private products: Product[] = [];
-  private productsTransaction: ProductItem[];
+  private productsTransaction: ProductItem[] = [];
   private productsUpdated = new Subject<{products: Product[], productCounts: number} >();
   private productsCounted = new Subject<number>();
   private productsTransactionSub = new Subject<ProductItem[]>();
@@ -68,6 +68,8 @@ export class ProductsService {
 
   clearProductTransaction() {
     this.productsTransaction = [];
+    this.productsCounted.next(this.productsTransaction.length); // แสดงตัวเลขที่ตะกร้าสินค้า โดยการบังคับส่งค่าด้วย next() ใน Subject
+    this.productsTransactionSub.next(this.productsTransaction);
   }
   getProductsTransaction() {
     return this.productsTransaction;

@@ -1,6 +1,6 @@
 <div *ngIf="isLoading" class="text-center"><img src="../../../assets/spinner.gif"></div>
 <form [formGroup]="form" (ngSubmit)="onSaveTransaction()">
-    <div class="form-group">
+    <!-- <div class="form-group">
       <label for="remark">ข้อมูลการส่งสินค้า</label>
       <input type="text" class="form-control" id="remark" formControlName="remark" aria-describedby="remarkHelp" placeholder="กรอกข้อมูลเกี่ยวกับการส่งสินค้า">
       <small
@@ -10,28 +10,67 @@
     <div class="form-group">
       <label for="permission">สาขาของผู้ส่ง:</label>
       <select formControlName="departureStoreId" id="departureStoreId" name="departureStoreId" class="form-control">
-        <option *ngFor="let item of allStoreLists" [value]="item">{{item}}</option>
+        <option value=""></option>
+        <option *ngFor="let item of allStoreLists" [value]="item.id">{{item.storeName}}</option>
       </select>
     </div>
     <div class="form-group">
         <label for="permission">สาขาของผู้รับ:</label>
         <select formControlName="destinationStoreId" id="destinationStoreId" name="destinationStoreId" class="form-control">
-          <option *ngFor="let item of allStoreLists" [value]="item">{{item}}</option>
+          <option value=""></option>
+          <option *ngFor="let item of allStoreLists" [value]="item.id">{{item.storeName}}</option>
         </select>
     </div>
     <div class="form-group">
         <label for="permission">คนขับรถส่งของ:</label>
         <select formControlName="transportorId" id="transportorId" name="transportorId" class="form-control">
-          <option *ngFor="let item of allTransportorLists" [value]="item">{{item}}</option>
+          <option value=""></option>
+          <option *ngFor="let item of allTransportorLists" [value]="item.id">{{item.email}}</option>
         </select>
-    </div>
-    <div class="form-group">
+    </div> -->
+    <!-- <div class="form-group">
         <label for="permission">ผู้รับสินค้า:</label>
         <select formControlName="dhStaffId" id="dhStaffId" name="dhStaffId" class="form-control">
-          <option *ngFor="let item of allDhStaffLists" [value]="item">{{item}}</option>
+          <option value=""></option>
+          <option *ngFor="let item of allDhStaffLists" [value]="item.id">{{item.content}}</option>
         </select>
-    </div>
-    <input type="hidden" id="transactionStatus" formControlName="transactionStatus" value="">
+    </div> -->
+
+
+    <mat-form-field>
+      <mat-select formControlName="managerId" placeholder="เลือกผู้จัดส่งสินค้า" [attr.noEntriesFoundLabel]="'no matching bank found'" #singleSelect>
+        <mat-option>
+          <ngx-mat-select-search formControlName="managerFilterCtrl"></ngx-mat-select-search>
+        </mat-option>
+        <mat-option *ngFor="let item of filteredManagers | async" [value]="item.id">
+          {{item.content}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-select formControlName="transportorId" placeholder="เลือกพนักงานขับรถ" [attr.noEntriesFoundLabel]="'no matching bank found'" #singleSelect>
+        <mat-option>
+          <ngx-mat-select-search formControlName="transportorFilterCtrl"></ngx-mat-select-search>
+        </mat-option>
+        <mat-option *ngFor="let item of filteredTransportors | async" [value]="item.id">
+          {{item.content}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-select formControlName="staffId" placeholder="Staff" [attr.noEntriesFoundLabel]="'no matching bank found'" #singleSelect>
+        <mat-option>
+          <ngx-mat-select-search formControlName="staffFilterCtrl"></ngx-mat-select-search>
+        </mat-option>
+        <mat-option *ngFor="let item of filteredStaffs | async" [value]="item.id">
+          {{item.content}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <!-- <input type="hidden" id="transactionStatus" formControlName="transactionStatus" value=""> -->
     <div class="form-group mt-3">
         <button type="submit" class="btn btn-primary" [disabled]="!form.valid?'disabled':''">Submit</button>
     </div>

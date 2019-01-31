@@ -17,7 +17,7 @@ import { TransactionListComponent } from './transactions/transaction-list/transa
 import { TransactionCreateComponent } from './transactions/transaction-create/transaction-create.component';
 
 const routes: Routes = [
-  { path: '', component: StoreListComponent },
+  { path: '', component: ProductListComponent },
   { path: 'dummys', component: PostListComponent },
   { path: 'dummys/create', component: PostCreateComponent, canActivate: [AuthGuard] },
   { path: 'dummys/edit/:postId', component: PostCreateComponent, canActivate: [AuthGuard] },

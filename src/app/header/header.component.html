@@ -104,7 +104,7 @@
         <li class="nav-item" *ngIf="userIsAuthenticated">
           <a class="nav-link" class="nav-link mr-2" (click)="onLogout()" style="cursor: pointer;">logout</a>
         </li>
-        <li id="cart" class="mr-3" *ngIf="userType === 'Storage Manager' || userType == 'DH Staff'">
+        <li id="cart" class="mr-3" *ngIf="(userType === 'Storage Manager' || userType == 'DH Staff') && productsCounter > 0">
             <a class="nav-link" routerLink="/transactions/create" routerLinkActive="" *ngIf="userIsAuthenticated">
               <span class="p1 fa-stack fa-1x has-badge" [attr.data-count]="productsCounter">
                   <i class="p2 fa fa-circle fa-stack-2x"></i>

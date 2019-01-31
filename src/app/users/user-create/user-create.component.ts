@@ -23,7 +23,7 @@ export class UserCreateComponent implements OnInit, OnDestroy {
   private userId: string;
   private authStatusSub: Subscription;
   public user: User;
-  public permissionLists = ['DH Staff', 'Chauffeur', 'Storage Manager', 'Manager', 'Admin'];
+  public permissionLists = ['DH Staff', 'Transportor', 'Storage Manager', 'Manager', 'Admin'];
   public storeLists: Store[] = [];
 
   isLoading = false;

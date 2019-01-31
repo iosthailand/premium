@@ -102,4 +102,87 @@ export class UsersService {
   deleteUser(userId: string) {
     return this.http.delete(BACKEND_URL + userId);
   }
+  getAllUsersOutSide() {
+    return this.http
+      .get<{message: string, users: any, maxUsers: number}>(BACKEND_URL)
+      .pipe(map((userData) => {  // map result only get user content not include message
+        return { users: userData.users.map((user) => { // map _id from database to id same as in model
+          return {
+            id: user._id,
+            email: user.email,
+            content: user.content,
+            password: user.password,
+            permission: user.permission,
+            storeId: user.storeId,
+            status: user.status
+          };
+        })};
+      })
+    );
+  }
+
+  getAllStaffOutSide() {
+    return this.http
+      .get<{message: string, users: any, maxUsers: number}>(BACKEND_URL)
+      .pipe(map((userData) => {  // map result only get user content not include message
+        return { users: userData.users.map((user) => { // map _id from database to id same as in model
+          if (user.permission === 'DH Staff') {
+            return {
+              id: user._id,
+              email: user.email,
+              content: user.content,
+              password: user.password,
+              permission: user.permission,
+              storeId: user.storeId,
+              status: user.status
+            };
+          }
+        })};
+      })
+    );
+  }
+  getAllManagerOutSide() {
+    return this.http
+      .get<{message: string, users: any, maxUsers: number}>(BACKEND_URL)
+      .pipe(map((userData) => {  // map result only get user content not include message
+        return { users: userData.users.map((user) => { // map _id from database to id same as in model
+          if (user.permission === 'Storage Manager') {
+            return {
+              id: user._id,
+              email: user.email,
+              content: user.content,
+              password: user.password,
+              permission: user.permission,
+              storeId: user.storeId,
+              status: user.status
+            };
+          }
+        })};
+      })
+    );
+  }
+
+  getAllTransportorOutSide() {
+    return this.http
+      .get<{message: string, users: any, maxUsers: number}>(BACKEND_URL)
+      .pipe(map((userData) => {  // map result only get user content not include message
+        return { users: userData.users.map((user) => { // map _id from database to id same as in model
+          if (user.permission === 'Transportor') {
+            return {
+              id: user._id,
+              email: user.email,
+              content: user.content,
+              password: user.password,
+              permission: user.permission,
+              storeId: user.storeId,
+              status: user.status
+            };
+          }
+        })};
+      })
+    );
+  }
+
+
+
 }
