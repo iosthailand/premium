@@ -12,6 +12,7 @@ import { User } from 'src/app/users/user.model';
 import { MatSelect } from '@angular/material';
 import { take, takeUntil } from 'rxjs/operators';
 import { ProductItem } from 'src/app/products/product-item.model';
+import { ProductsService } from 'src/app/products/products.service';
 
 @Component({
   selector: 'app-transaction-create',
@@ -24,16 +25,19 @@ export class TransactionCreateComponent implements OnInit, OnDestroy, AfterViewI
   private mode = 'create';
   private transactionId: string;
   private authStatusSub: Subscription;
+
   public transaction: Transaction;
+  productItemLists: ProductItem[];
   isLoading = false;
   form: FormGroup;
+  private items = new Array;
   protected stores: Store[];
   protected staffs: User[];
   protected senders: User[];
   protected transportors: User[];
+  private transactionStatus = ['Created', 'Send', 'Transporting', 'Received', 'Restore'];
   userId: string;
   userStoreId: string;
-  productItemLists: ProductItem[];
   // for show search dropdown
   @ViewChild('storeSelect') storeSelect: MatSelect;
   @ViewChild('staffSelect') staffSelect: MatSelect;
@@ -48,13 +52,15 @@ export class TransactionCreateComponent implements OnInit, OnDestroy, AfterViewI
   public filteredStaffs: ReplaySubject<User[]> = new ReplaySubject<User[]>(1);
   public filteredTransportors: ReplaySubject<User[]> = new ReplaySubject<User[]>(1);
   public filteredSenders: ReplaySubject<User[]> = new ReplaySubject<User[]>(1);
-
+  private productsCountListenerSubs: Subscription;
+  productCounters: number;
   constructor(
       public transactionsService: TransactionsService,
       public route: ActivatedRoute,
       private authService: AuthService,
       private usersService: UsersService,
-      private storesServeice: StoresService
+      private storesServeice: StoresService,
+      private productsService: ProductsService
     ) {}
   ngOnInit() {
     this.userId = this.authService.getUserId();
@@ -123,6 +129,14 @@ export class TransactionCreateComponent implements OnInit, OnDestroy, AfterViewI
       .subscribe(authStatus => {
         this.isLoading = false;
       });
+    // สำหรับอัพเดทจำนวนสินค้าในตะกร้า
+    this.productsCountListenerSubs = this.productsService.getProductCountListener()
+    .subscribe( (result) => {
+      this.productCounters = result;
+    });
+
+
+
     this.route.paramMap.subscribe((paramMap: ParamMap) => {
       if (paramMap.has('transactionId')) {
         this.mode = 'edit';
@@ -140,7 +154,7 @@ export class TransactionCreateComponent implements OnInit, OnDestroy, AfterViewI
               dataTime: transactionData.dataTime,
               departureStoreId: transactionData.departureStoreId,
               destinationStoreId: transactionData.destinationStoreId,
-              productLists: transactionData.productLists,
+              productLists: this.items,
               transactionStatus: transactionData.transactionStatus,
               remark: transactionData.remark
             };
@@ -169,17 +183,27 @@ export class TransactionCreateComponent implements OnInit, OnDestroy, AfterViewI
     if (this.form.invalid) {
       return;
     }
+    this.productItemLists = this.productsService.getProductsTransaction();
+    this.productItemLists.forEach(element => {
+       const b = {
+        productId: element.productId,
+        productQuantity: element.quantity
+      };
+      this.items.push(b);
+    });
+
     this.isLoading = true;
+
     if (this.mode === 'create') {
       this.transactionsService.addTransaction(
         this.userId,
         this.form.value.transportorId,
         this.form.value.receiverId,
         this.form.value.departureStoreId,
-        // dateTime
+        // dateTime ไม่ใส่เพราะใช้เวลาปัจจุบัน
         this.form.value.destinationStoreId,
-        this.productItemLists,
-        this.form.value.transactionStatus,
+        this.items,
+        'Created',
         this.form.value.remark
       );
     } else {
@@ -191,13 +215,14 @@ export class TransactionCreateComponent implements OnInit, OnDestroy, AfterViewI
         this.form.value.departureStoreId,
         // DateTime
         this.form.value.destinationStoreId,
-        this.productItemLists,
+        this.items,
         this.form.value.transactionStatus,
         this.form.value.remark
       );
     }
     this.isLoading = false;
     this.form.reset();
+    this.productsService.clearProductTransaction(); // ลบจำนวนสินค้าในตะกร้าออก
   }
   ngAfterViewInit() {
     // this.setInitialValue();

@@ -1,13 +1,14 @@
 const mongoose = require('mongoose');
 const transactionSchema = mongoose.Schema({
-  managerId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
-  senderId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: false },
+
+  senderId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
   receiverId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: false },
-  dataTime: { type: Date, required: true },
+  transportorId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: false },
+  dateTime: { type: Date, default: Date.now },
   departureStoreId: { type: mongoose.Schema.Types.ObjectId, ref: 'Store', required: true },
   destinationStoreId: { type: mongoose.Schema.Types.ObjectId, ref: 'Store', required: true },
-  productLists: [ { type: mongoose.Schema.Types.ObjectId, ref: 'Product', required: true } ],
-  transactionStatus: { type: String, required: true },
+  productLists:  [{ productId: String, productQuantity: Number }],
+  transactionStatus: { type: String, required: false },
   remark: { type: String, required: false }
 });
 module.exports = mongoose.model('Transaction', transactionSchema);

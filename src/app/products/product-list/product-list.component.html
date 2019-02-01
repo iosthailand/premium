@@ -14,7 +14,7 @@
                     <div class="col-sm-2">{{ product.productSku }}</div>
                     <div class="col-sm-5" id="product-name" data-toggle="collapse" [attr.data-target]="'#p-'+product.id" aria-expanded="false" [attr.aria-controls]="product.id">{{ product.productName }}</div>
                     <div class="col-sm-3"><input type="number" class="form-control" name="quantity" #quantityItem min="1" step="1" value="1"></div>
-                    <div class="col-sm-2"><button class="btn btn-sm btn-primary mr-1 pl-2 pr-2" (click)="onAddToTransaction(product.id, quantityItem.value)">Add</button></div>
+                    <div class="col-sm-2"><button class="btn btn-sm btn-primary mr-1 pl-2 pr-2" (click)="onAddToTransaction(product.id, quantityItem.value, product)">Add</button></div>
 
               </div>
             </div>

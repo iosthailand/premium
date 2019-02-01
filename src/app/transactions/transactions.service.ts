@@ -6,7 +6,6 @@ import { Transaction } from './transaction.model';
 import { Router } from '@angular/router';
 
 import { environment } from '../../environments/environment';
-import { ProductItem } from './../products/product-item.model';
 
 const BACKEND_URL = environment.apiUrl + '/transactions/';
 
@@ -26,7 +25,7 @@ export class TransactionsService {
             id: transaction._id,
             senderId: transaction.senderId,
             transportorId: transaction.transportorId,
-            dhStaffId: transaction.dhStaffId,
+            receiverId: transaction.receiverId,
             dataTime: transaction.dataTime,
             departureStoreId: transaction.departureStoreId,
             destinationStoreId: transaction.destinationStoreId,
@@ -61,7 +60,7 @@ export class TransactionsService {
       dataTime: Date,
       departureStoreId: string,
       destinationStoreId: string,
-      productLists: ProductItem[],
+      productLists: any,
       transactionStatus: 'stockOut' | 'transporting' | 'storeIn' | null,
       remark: string,
     }>(BACKEND_URL + id);
@@ -72,18 +71,18 @@ export class TransactionsService {
   addTransaction(
     senderId: string,
     transportorId: string,
-    dhStaffId: string,
+    receiverId: string,
     // dataTime: Date,
     departureStoreId: string,
     destinationStoreId: string,
-    productLists: ProductItem[],
-    transactionStatus: 'stockOut' | 'transporting' | 'storeIn' | null,
+    productLists: any,
+    transactionStatus: 'Created' | 'Send' | 'Transporting' | 'Received' | 'Restore' | null,
     remark: string
   ) {
     const transactionData = {
       senderId: senderId,
       transportorId: transportorId,
-      dhStaffId: dhStaffId,
+      receiverId: receiverId,
       dataTime: new Date(),
       departureStoreId: departureStoreId,
       destinationStoreId: destinationStoreId,
@@ -91,13 +90,16 @@ export class TransactionsService {
       transactionStatus: transactionStatus,
       remark: remark
     };
-
+    // console.log('---start----transactionData-----');
+    // console.log(transactionData);
+    // console.log('---end----transactionData-----');
     this.http
       .post<{ message: string, transaction: Transaction }>(
       BACKEND_URL,
       transactionData
       )
     .subscribe((responseData) => {
+
       this.router.navigate(['/transactions']);
     });
   }
@@ -110,7 +112,7 @@ export class TransactionsService {
     // dataTime: Date,
     departureStoreId: string,
     destinationStoreId: string,
-    productLists: ProductItem[],
+    productLists: any,
     transactionStatus: 'stockOut' | 'transporting' | 'storeIn' | null,
     remark: string
   ) {

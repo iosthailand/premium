@@ -5,13 +5,18 @@ exports.createTransaction = (req, res, next) => {
   const url = req.protocol + '://' + req.get('host');
   // userData {email, userId} เป็นข้อมูลที่ส่งมาจาก checkAuth Middleware
   const transaction = new Transaction({
-    transactionSku: req.body.transactionSku,
-    transactionName: req.body.transactionName,
-    transactionDetails: req.body.transactionDetails,
-    transactionCategory: req.body.transactionCategory,
-    imagePath: url + '/images/' + req.file.filename,
-    creator: req.userData.userId
+    senderId: req.body.senderId,
+    transportorId: req.body.transportorId,
+    receiverId: req.body.receiverId,
+    // dataTime: new Date(),
+    departureStoreId: req.body.departureStoreId,
+    destinationStoreId: req.body.destinationStoreId,
+    productLists: req.body.productLists,
+    transactionStatus: req.body.transactionStatus,
+    remark: req.body.remark
   });
+
+
   transaction.save().then((createdTransaction) => {
     res.status(201);
     res.json({
@@ -21,7 +26,7 @@ exports.createTransaction = (req, res, next) => {
         senderId: createdTransaction.senderId,
         transportorId: createdTransaction.transportorId,
         receiverId: createdTransaction.receiverId,
-        dataTime: new Date(),
+        // dataTime: new Date(),
         departureStoreId: createdTransaction.departureStoreId,
         destinationStoreId: createdTransaction.destinationStoreId,
         productLists: createdTransaction.productLists,
@@ -53,7 +58,7 @@ exports.editTransaction =   (req, res, next) => {
       senderId: req.body.senderId,
       transportorId: req.body.transportorId,
       receiverId: req.body.receiverId,
-      dataTime: new Date(),
+      dataTime: Date.now,
       departureStoreId: req.body.departureStoreId,
       destinationStoreId: req.body.destinationStoreId,
       productLists: req.body.productLists,

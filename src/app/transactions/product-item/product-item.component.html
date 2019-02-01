@@ -28,7 +28,7 @@
 
 
 
-<div >
+<div *ngIf="productItemLists.length > 0">
   <div class="row mt-1" *ngFor="let item of productItemLists; let i = index" >
     <div class="col-12">
         <div class="card round-0">
@@ -37,7 +37,7 @@
                 <div class="col-1 text-left">{{ i + 1 }}</div>
                 <div class="col-1 text-right">SKU</div>
                 <div class="col-3 text-left">{{ item.productId }}</div>
-                <div class="col-4 text-center">ชื่อสินค้า</div>
+                <div class="col-4 text-center">{{ item.product.productName }}</div>
                 <div class="col-2 text-left">{{ item.quantity }}</div>
                 <div class="col-1 text-left">ชิ้น</div>
             </div>
@@ -45,12 +45,18 @@
           <ul class="list-group list-group-flush collapse" [id]="'p-'+item.productId">
             <li class="list-group-item">
               <div class="row mt-3">
-                    <div class="col-8">รูปภาพสินค้า</div>
+                    <div class="col-8">
+
+                      <div class="product-image">
+                        <img [src]="item.product.imagePath" [alt]="item.product.title" class="img-thumbnail">
+                      </div>
+
+                    </div>
                     <div class="col-2">
                         <input type="number" min="1" step="1" #productId class="form-control" [value]="item.quantity">
                     </div>
                     <div class="col-2 text-left">
-                        <button class="btn btn-sm btn-primary mr-2 text-right" (click)="onEditProduct(item.productId, productId.value)">แก้ไข</button>
+                        <button class="btn btn-sm btn-primary mr-2 text-right" (click)="onEditProduct(item.productId, productId.value, item.product)">แก้ไข</button>
                         <button class="btn btn-sm btn-warning" (click)="onDeleteProduct(item.productId)">ลบ</button>
                     </div>
               </div>
@@ -59,4 +65,7 @@
         </div>
     </div>
   </div>
+</div>
+<div *ngIf="productItemLists.length <= 0">
+  <div class="text-center alert-warning mt-1 pt-5 pb-5">ยังไม่มีรายการสินค้าที่จะจัดส่ง</div>
 </div>

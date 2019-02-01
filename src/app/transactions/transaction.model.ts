@@ -8,7 +8,7 @@ export interface Transaction {
   dataTime?: Date;
   departureStoreId: string;
   destinationStoreId: string;
-  productLists: ProductItem[];
+  productLists: any;
   transactionStatus: 'stockOut' | 'transporting' | 'storeIn' | null;
   remark?: string;
 }

@@ -75,8 +75,8 @@ export class ProductListComponent implements OnInit, OnDestroy {
     this.productsService.getProducts(this.productsPerPage, this.currentPage);
   }
 
-  onAddToTransaction(id: string, qty: number) {
-    this.productsService.addTransaction(id, qty, this.userId);
+  onAddToTransaction(id: string, qty: number, product: Product) {
+    this.productsService.addTransaction(id, qty, this.userId, product);
     // console.log(this.productsService.getProductsTransaction);
   }
 }

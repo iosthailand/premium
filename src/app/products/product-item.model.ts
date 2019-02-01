@@ -1,3 +1,4 @@
+import { Product } from './product.model';
 
 export class ProductItem {
 
@@ -5,5 +6,6 @@ export class ProductItem {
     quantity: number;
     editingMode: boolean;
     userId: string;
+    product: Product;
 
 }

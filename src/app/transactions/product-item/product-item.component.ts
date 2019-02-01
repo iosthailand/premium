@@ -12,6 +12,7 @@ import { ProductItem } from '../../products/product-item.model';
 export class ProductItemComponent implements OnInit {
   productItemLists: ProductItem[];
   constructor(private productsService: ProductsService) {}
+
   ngOnInit() {
     this.productItemLists = this.productsService.getProductsTransaction();
     console.log(this.productItemLists);
@@ -21,8 +22,9 @@ export class ProductItemComponent implements OnInit {
     this.productsService.delelteTransaction(productId);
     this.productItemLists = this.productsService.getProductsTransaction();
   }
-  onEditProduct(productId: string, qty: number) {
-    const quantity = Math.round(qty) > 0 ? qty : 1;
-    this.productsService.editTransaction(productId, quantity);
+  onEditProduct(productId: string, qty: number, product: Product) {
+    const quantity = Math.round(qty);
+    const productQtyUpdate = quantity > 0 ? qty : 1;
+    this.productsService.editTransaction(productId, productQtyUpdate, product);
   }
 }

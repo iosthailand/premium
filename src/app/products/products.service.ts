@@ -144,7 +144,7 @@ export class ProductsService {
   deleteProduct(productId: string) {
     return this.http.delete(BACKEND_URL + productId);
   }
-  addTransaction(productId: string, quantity: number, userId: string) {
+  addTransaction(productId: string, quantity: number, userId: string, product: Product) {
     let transaction: ProductItem;
     const oldProductInTransaction = this.productsTransaction.filter(element => element.productId === productId);
 
@@ -157,7 +157,8 @@ export class ProductsService {
           productId: productId,
           quantity: +quantity + qty,
           userId: userId,
-          editingMode: false
+          editingMode: false,
+          product: product
         };
         this.productsTransaction[index] = transaction;
         // this.productsTransaction.splice(index, 1);
@@ -167,7 +168,8 @@ export class ProductsService {
         productId: productId,
         quantity: +quantity,
         userId: userId,
-        editingMode: false
+        editingMode: false,
+        product: product
       };
       this.productsTransaction.push(transaction);
     }
@@ -186,7 +188,7 @@ export class ProductsService {
       }
     }
   }
-  editTransaction(productId: string, quantity: number) {
+  editTransaction(productId: string, quantity: number, product: Product) {
     const oldProductInTransaction = this.productsTransaction.filter(element => element.productId === productId);
     if (oldProductInTransaction.length === 1) {
       const index = this.productsTransaction.indexOf(oldProductInTransaction[0], 0);
@@ -197,7 +199,8 @@ export class ProductsService {
           productId: productId,
           quantity: +quantity,
           userId: userId,
-          editingMode: false
+          editingMode: false,
+          product: product
         };
         console.log(this.productsTransaction);
         this.productsCounted.next(this.productsTransaction.length); // แสดงตัวเลขที่ตะกร้าสินค้า โดยการบังคับส่งค่าด้วย next() ใน Subject

@@ -84,7 +84,7 @@
     <app-product-item></app-product-item>
     <hr class="mt-3 mb-3">
     <div class="form-group mt-3">
-        <button type="submit" class="btn btn-primary" [disabled]="!form.valid?'disabled':''">Submit</button>
+        <button type="submit" class="btn btn-primary" [disabled]="!form.valid || (productCounters <= 0)?'disabled':''">Submit</button>
     </div>
   </form>
 
