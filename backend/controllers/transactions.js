@@ -18,9 +18,9 @@ exports.createTransaction = (req, res, next) => {
       messages: 'Transaction added Successfully',
       transaction: {
         id: createdTransaction._id,
-        managerId: createdTransaction.managerId,
+        senderId: createdTransaction.senderId,
         transportorId: createdTransaction.transportorId,
-        dhStaffId: createdTransaction.dhStaffId,
+        receiverId: createdTransaction.receiverId,
         dataTime: new Date(),
         departureStoreId: createdTransaction.departureStoreId,
         destinationStoreId: createdTransaction.destinationStoreId,
@@ -50,9 +50,9 @@ exports.editTransaction =   (req, res, next) => {
   const transaction = new Transaction(
     {
       _id: req.body.id,
-      managerId: req.body.managerId,
+      senderId: req.body.senderId,
       transportorId: req.body.transportorId,
-      dhStaffId: req.body.dhStaffId,
+      receiverId: req.body.receiverId,
       dataTime: new Date(),
       departureStoreId: req.body.departureStoreId,
       destinationStoreId: req.body.destinationStoreId,

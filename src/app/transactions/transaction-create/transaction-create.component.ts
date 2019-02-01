@@ -11,6 +11,7 @@ import { Store } from 'src/app/stores/store.model';
 import { User } from 'src/app/users/user.model';
 import { MatSelect } from '@angular/material';
 import { take, takeUntil } from 'rxjs/operators';
+import { ProductItem } from 'src/app/products/product-item.model';
 
 @Component({
   selector: 'app-transaction-create',
@@ -26,27 +27,27 @@ export class TransactionCreateComponent implements OnInit, OnDestroy, AfterViewI
   public transaction: Transaction;
   isLoading = false;
   form: FormGroup;
-  /** list of users */
   protected stores: Store[];
-  protected users: User[];
   protected staffs: User[];
-  protected managers: User[];
+  protected senders: User[];
   protected transportors: User[];
   userId: string;
-
-  @ViewChild('singleSelect') singleSelect: MatSelect;
+  userStoreId: string;
+  productItemLists: ProductItem[];
+  // for show search dropdown
+  @ViewChild('storeSelect') storeSelect: MatSelect;
   @ViewChild('staffSelect') staffSelect: MatSelect;
-  @ViewChild('managerSelect') managerSelect: MatSelect;
+  @ViewChild('senderSelect') senderSelect: MatSelect;
   @ViewChild('transportorSelect') transportorSelect: MatSelect;
 
   /** Subject that emits when the component has been destroyed. */
   protected _onDestroy = new Subject<void>();
   // -----
   /** list of banks filtered by search keyword */
-  public filteredUsers: ReplaySubject<User[]> = new ReplaySubject<User[]>(1);
+  public filteredStores: ReplaySubject<Store[]> = new ReplaySubject<Store[]>(1);
   public filteredStaffs: ReplaySubject<User[]> = new ReplaySubject<User[]>(1);
   public filteredTransportors: ReplaySubject<User[]> = new ReplaySubject<User[]>(1);
-  public filteredManagers: ReplaySubject<User[]> = new ReplaySubject<User[]>(1);
+  public filteredSenders: ReplaySubject<User[]> = new ReplaySubject<User[]>(1);
 
   constructor(
       public transactionsService: TransactionsService,
@@ -57,38 +58,39 @@ export class TransactionCreateComponent implements OnInit, OnDestroy, AfterViewI
     ) {}
   ngOnInit() {
     this.userId = this.authService.getUserId();
+    this.userStoreId = this.authService.getUserStoreId();
     this.form = new FormGroup({
       // 'transactionId': new FormControl(null, [Validators.required]),
-      'managerId': new FormControl(),
+      'senderId': new FormControl(this.userId),
       'transportorId': new FormControl(),
-      'staffId': new FormControl(),
+      'receiverId': new FormControl(),
       'dataTime': new FormControl(null),
-      'departureStoreId': new FormControl(null),
+      'departureStoreId': new FormControl(this.userStoreId),
       'destinationStoreId': new FormControl(null),
       'productLists': new FormControl(null),
       'transactionStatus': new FormControl(null),
       'remark': new FormControl(null),
+      'storeFilterCtrl': new FormControl(null),
       'staffFilterCtrl': new FormControl(),
       'transportorFilterCtrl': new FormControl(),
-      'managerFilterCtrl': new FormControl()
+      'senderFilterCtrl': new FormControl()
 
     });
     this.storesServeice.getAllCurrentStoresOutside().subscribe(result => {
-      this.stores = result.stores;
+      // ไม่แสดงรายชื่อสาขาที่ใช้ปัจจุบัน
+      const stores = result.stores.filter( item => {
+        return item.id !== this.userStoreId;
+      });
+      this.stores = stores;
+      this.filteredStores.next(stores);
     });
     this.usersService.getAllStaffOutSide().subscribe(result => {
+      // แสดงเฉพาะ DH Staff โดยตัดเอาอาร์เรย์ที่เป็น null ออกไป
       const staffs = result.users.filter( item => {
         return item != null;
       });
       this.staffs = staffs;
       this.filteredStaffs.next(staffs);
-    });
-    this.usersService.getAllManagerOutSide().subscribe(result => {
-      const managers = result.users.filter( item => {
-        return item != null;
-      });
-      this.managers = managers;
-      this.filteredManagers.next(managers);
     });
     this.usersService.getAllTransportorOutSide().subscribe(result => {
       const transportors = result.users.filter( item => {
@@ -98,10 +100,10 @@ export class TransactionCreateComponent implements OnInit, OnDestroy, AfterViewI
       this.filteredTransportors.next(transportors);
     });
     this.usersService.getAllUsersOutSide().subscribe(result => {
-      // set all user lists
-      this.users = result.users;
+     //  set all user lists
+      this.senders = result.users;
       // set user initial selection
-      this.filteredUsers.next(result.users);
+      this.filteredSenders.next(result.users);
     });
 
 
@@ -109,10 +111,9 @@ export class TransactionCreateComponent implements OnInit, OnDestroy, AfterViewI
     this.form.valueChanges
       .pipe(takeUntil(this._onDestroy))
       .subscribe(() => {
-
         this.filterStaffs();
-        this.filterUsers();
-        this.filterManagers();
+        this.filterStores();
+        this.filterSenders();
         this.filterTransportors();
       });
 
@@ -130,23 +131,25 @@ export class TransactionCreateComponent implements OnInit, OnDestroy, AfterViewI
         this.transactionsService.getTransaction(this.transactionId)
           .subscribe(transactionData => {
             this.isLoading = false;
-            // console.log(transactionData);
+            console.log(transactionData);
             this.transaction = {
               id: transactionData._id,
-              managerId: this.userId,
+              senderId: transactionData.senderId,
               transportorId: transactionData.transportorId,
-              dhStaffId: transactionData.dhStaffId,
-              dataTime: new Date(),
+              receiverId: transactionData.receiverId,
+              dataTime: transactionData.dataTime,
               departureStoreId: transactionData.departureStoreId,
               destinationStoreId: transactionData.destinationStoreId,
               productLists: transactionData.productLists,
               transactionStatus: transactionData.transactionStatus,
               remark: transactionData.remark
             };
+
+            console.log(this.transaction);
             this.form.setValue({
-              'managerId': this.transaction.managerId,
+              'senderId': this.transaction.senderId,
               'transportorId': this.transaction.transportorId,
-              'dhStaffId': this.transaction.dhStaffId,
+              'receiverId': this.transaction.receiverId,
               'dataTime': this.transaction.dataTime,
               'departureStoreId': this.transaction.departureStoreId,
               'destinationStoreId': this.transaction.destinationStoreId,
@@ -163,37 +166,38 @@ export class TransactionCreateComponent implements OnInit, OnDestroy, AfterViewI
   }
 
   onSaveTransaction() {
-    console.log(this.form.value);
-    // if (this.form.invalid) {
-    //   return;
-    // }
-    // this.isLoading = true;
-    // if (this.mode === 'create') {
-    //   this.transactionsService.addTransaction(
-    //     this.userId,
-    //     this.form.value.transportorId,
-    //     this.form.value.dhStaffId,
-    //     this.form.value.departureStoreId,
-    //     this.form.value.destinationStoreId,
-    //     this.form.value.productLists,
-    //     this.form.value.transactionStatus,
-    //     this.form.value.remark
-    //   );
-    // } else {
-    //   this.transactionsService.updateTransaction(
-    //     this.transactionId,
-    //     this.userId,
-    //     this.form.value.transportorId,
-    //     this.form.value.dhStaffId,
-    //     this.form.value.departureStoreId,
-    //     this.form.value.destinationStoreId,
-    //     this.form.value.productLists,
-    //     this.form.value.transactionStatus,
-    //     this.form.value.remark
-    //   );
-    // }
-    // this.isLoading = false;
-    // this.form.reset();
+    if (this.form.invalid) {
+      return;
+    }
+    this.isLoading = true;
+    if (this.mode === 'create') {
+      this.transactionsService.addTransaction(
+        this.userId,
+        this.form.value.transportorId,
+        this.form.value.receiverId,
+        this.form.value.departureStoreId,
+        // dateTime
+        this.form.value.destinationStoreId,
+        this.productItemLists,
+        this.form.value.transactionStatus,
+        this.form.value.remark
+      );
+    } else {
+      this.transactionsService.updateTransaction(
+        this.transactionId,
+        this.userId,
+        this.form.value.transportorId,
+        this.form.value.receiverId,
+        this.form.value.departureStoreId,
+        // DateTime
+        this.form.value.destinationStoreId,
+        this.productItemLists,
+        this.form.value.transactionStatus,
+        this.form.value.remark
+      );
+    }
+    this.isLoading = false;
+    this.form.reset();
   }
   ngAfterViewInit() {
     // this.setInitialValue();
@@ -204,7 +208,7 @@ export class TransactionCreateComponent implements OnInit, OnDestroy, AfterViewI
     this._onDestroy.complete();
   }
   protected setInitialValue() {
-    this.filteredUsers
+    this.filteredStores
       .pipe(take(1), takeUntil(this._onDestroy))
       .subscribe(() => {
         // setting the compareWith property to a comparison function
@@ -212,7 +216,7 @@ export class TransactionCreateComponent implements OnInit, OnDestroy, AfterViewI
         // the form control (i.e. _initializeSelection())
         // this needs to be done after the filteredUsers are loaded initially
         // and after the mat-option elements are available
-        this.singleSelect.compareWith = (a: User, b: User) => a && b && a.id === b.id;
+        this.storeSelect.compareWith = (a: Store, b: Store) => a && b && a.id === b.id;
       });
 
     this.filteredStaffs
@@ -220,10 +224,10 @@ export class TransactionCreateComponent implements OnInit, OnDestroy, AfterViewI
       .subscribe(() => {
         this.staffSelect.compareWith = (a: User, b: User) => a && b && a.id === b.id;
       });
-    this.filteredManagers
+    this.filteredSenders
       .pipe(take(1), takeUntil(this._onDestroy))
       .subscribe(() => {
-        this.managerSelect.compareWith = (a: User, b: User) => a && b && a.id === b.id;
+        this.senderSelect.compareWith = (a: User, b: User) => a && b && a.id === b.id;
       });
     this.filteredTransportors
       .pipe(take(1), takeUntil(this._onDestroy))
@@ -232,21 +236,21 @@ export class TransactionCreateComponent implements OnInit, OnDestroy, AfterViewI
       });
 
   }
-  protected filterUsers() {
-    if (!this.users) {
+  protected filterStores() {
+    if (!this.stores) {
       return;
     }
     // get the search keyword
     let search = this.form.value.userFilterCtrl;
     if (!search) {
-      this.filteredUsers.next(this.users.slice());
+      this.filteredStores.next(this.stores.slice());
       return;
     } else {
       search = search.toLowerCase();
     }
-    // filter the users
-    this.filteredUsers.next(
-      this.users.filter(user => user.content.toLowerCase().indexOf(search) > -1)
+    // filter the stores
+    this.filteredStores.next(
+      this.stores.filter(store => store.storeName.toLowerCase().indexOf(search) > -1)
     );
   }
 
@@ -269,21 +273,21 @@ export class TransactionCreateComponent implements OnInit, OnDestroy, AfterViewI
   }
 
 
-  protected filterManagers() {
-    if (!this.managers) {
+  protected filterSenders() {
+    if (!this.senders) {
       return;
     }
     // get the search keyword
-    let search = this.form.value.managerFilterCtrl;
+    let search = this.form.value.senderFilterCtrl;
     if (!search) {
-      this.filteredManagers.next(this.managers.slice());
+      this.filteredSenders.next(this.senders.slice());
       return;
     } else {
       search = search.toLowerCase();
     }
     // filter the users
-    this.filteredManagers.next(
-      this.managers.filter(manager => manager.content.toLowerCase().indexOf(search) > -1)
+    this.filteredSenders.next(
+      this.senders.filter(sender => sender.content.toLowerCase().indexOf(search) > -1)
     );
   }
 

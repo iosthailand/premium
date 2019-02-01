@@ -5,11 +5,13 @@ import { TransactionCreateComponent } from './transaction-create/transaction-cre
 import { TransactionListComponent } from './transaction-list/transaction-list.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MyAngularMaterialModule } from '../my-angular-material.module';
+import { ProductItemComponent } from './product-item/product-item.component';
 
 @NgModule({
   declarations: [
     TransactionCreateComponent,
     TransactionListComponent,
+    ProductItemComponent
   ],
   imports: [
     CommonModule,

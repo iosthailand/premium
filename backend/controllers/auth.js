@@ -11,7 +11,8 @@ exports.createUser = (req, res, next) => {
       email: req.body.email,
       content: '',
       password: hash,
-      permission: 'DH staff',
+      permission: 'DH Staff',
+      storeId: null,
       status: false
     });
     user.save()
@@ -53,7 +54,7 @@ exports.userLogin = (req, res, next) => {
       bcrypt.hash(fetchedUser.permission, 10).then((permissionHash) => {
         // jwt.sign จะต้องผ่านพารามิเตอร์ 3 ค่าเข้าไป
         const token = jwt.sign(
-          { email: fetchedUser.email, userId: fetchedUser._id, userPermission: permissionHash },
+          { email: fetchedUser.email, userId: fetchedUser._id, userPermission: permissionHash, userStoreId: fetchedUser.storeId },
           process.env.JWT_KEY,
           { expiresIn: '1h'}
         );
@@ -62,7 +63,9 @@ exports.userLogin = (req, res, next) => {
           expiresIn: 3600,
           userId: fetchedUser._id,
           userPermission: permissionHash,
-          userType: fetchedUser.permission
+          userType: fetchedUser.permission,
+          userStoreId: fetchedUser.storeId,
+          userStatus: fetchedUser.status,
         });
       });
 

@@ -1,8 +1,8 @@
 const mongoose = require('mongoose');
 const transactionSchema = mongoose.Schema({
   managerId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
-  transportorId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: false },
-  dhStaffId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: false },
+  senderId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: false },
+  receiverId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: false },
   dataTime: { type: Date, required: true },
   departureStoreId: { type: mongoose.Schema.Types.ObjectId, ref: 'Store', required: true },
   destinationStoreId: { type: mongoose.Schema.Types.ObjectId, ref: 'Store', required: true },

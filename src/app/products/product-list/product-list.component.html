@@ -7,8 +7,8 @@
       <div class="col-12">
           <div class="card round-0">
             <div class="card-header">
-              <div *ngIf="!(userType === 'Storage Manager' || userType == 'DH Staff' && isTransactionMode)"> {{ product.productSku }} </div>
-              <div class="row" *ngIf="userType === 'Storage Manager' || userType == 'DH Staff' && isTransactionMode">
+              <div *ngIf="!(userType === 'Storage Manager' || userType == 'DH Staff')"> {{ product.productSku }} </div>
+              <div class="row" *ngIf="(userType === 'Storage Manager' || userType == 'DH Staff') && !isTransactionMode">
 
                     <div class="col-sm-2">{{ product.productSku }}</div>
                     <div class="col-sm-5" id="product-name" data-toggle="collapse" [attr.data-target]="'#p-'+product.id" aria-expanded="false" [attr.aria-controls]="product.id">{{ product.productName }}</div>

@@ -1,0 +1,21 @@
+
+
+
+<table class="table table-striped">
+
+      <tr>
+        <th scope="ลำดับ">ลำดับ</th>
+        <th scope="รหัสสินค้า">รหัสสินค้า</th>
+        <th scope="ชื่อสินค้า">ชื่อสินค้า</th>
+        <th scope="จำนวน">จำนวน</th>
+        <th scope=""></th>
+      </tr>
+
+      <tr *ngFor="let item of productItemLists; let i = index">
+        <td>{{ i }}</td>
+        <td>{{ item.productId }}</td>
+        <td>ชื่อสินค้า</td>
+        <td>{{ item.quantity }}</td>
+        <td><a class="btn btn-sm btn-warning" (click)="onDeleteProduct(item.productId)">ลบ</a></td>
+      </tr>
+</table>

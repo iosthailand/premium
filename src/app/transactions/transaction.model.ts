@@ -2,9 +2,9 @@ import { ProductItem } from './../products/product-item.model';
 
 export interface Transaction {
   id: string;
-  managerId: string;
+  senderId: string;
   transportorId?: string;
-  dhStaffId?: string;
+  receiverId?: string;
   dataTime?: Date;
   departureStoreId: string;
   destinationStoreId: string;

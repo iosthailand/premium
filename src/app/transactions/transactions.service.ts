@@ -24,7 +24,7 @@ export class TransactionsService {
         return { transactions: transactionData.transactions.map((transaction) => { // map _id from database to id same as in model
           return {
             id: transaction._id,
-            managerId: transaction.managerId,
+            senderId: transaction.senderId,
             transportorId: transaction.transportorId,
             dhStaffId: transaction.dhStaffId,
             dataTime: transaction.dataTime,
@@ -55,9 +55,9 @@ export class TransactionsService {
     // return {...this.transactions.find(transaction => transaction.id === id)};
     return this.http.get<{
       _id: string,
-      managerId: string,
+      senderId: string,
       transportorId: string,
-      dhStaffId: string,
+      receiverId: string,
       dataTime: Date,
       departureStoreId: string,
       destinationStoreId: string,
@@ -70,7 +70,7 @@ export class TransactionsService {
 // mongodb+srv://tsubasa:DBkesa_m007@jeerawuth007-5duea.mongodb.net/test?retryWrites=true
 
   addTransaction(
-    managerId: string,
+    senderId: string,
     transportorId: string,
     dhStaffId: string,
     // dataTime: Date,
@@ -81,7 +81,7 @@ export class TransactionsService {
     remark: string
   ) {
     const transactionData = {
-      managerId: managerId,
+      senderId: senderId,
       transportorId: transportorId,
       dhStaffId: dhStaffId,
       dataTime: new Date(),
@@ -104,9 +104,9 @@ export class TransactionsService {
 
   updateTransaction(
     id: string,
-    managerId: string,
+    senderId: string,
     transportorId: string,
-    dhStaffId: string,
+    receiverId: string,
     // dataTime: Date,
     departureStoreId: string,
     destinationStoreId: string,
@@ -116,9 +116,9 @@ export class TransactionsService {
   ) {
     const transactionData: Transaction = {
         id: id,
-        managerId: managerId,
+        senderId: senderId,
         transportorId: transportorId,
-        dhStaffId: dhStaffId,
+        receiverId: receiverId,
         dataTime: new Date(),
         departureStoreId: departureStoreId,
         destinationStoreId: destinationStoreId,

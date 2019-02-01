@@ -173,4 +173,15 @@ export class ProductsService {
     this.productsCounted.next(this.productsTransaction.length); // แสดงตัวเลขที่ตะกร้าสินค้า โดยการบังคับส่งค่าด้วย next() ใน Subject
     this.productsTransactionSub.next(this.productsTransaction); // นำเอารายการสินค้าและจำนวนที่อยู่ในตะกร้า Transaction ไปใช้งาน
   }
+  delelteTransaction(productId: string) {
+    const oldProductInTransaction = this.productsTransaction.filter(element => element.productId === productId);
+    if (oldProductInTransaction.length === 1) {
+      const index = this.productsTransaction.indexOf(oldProductInTransaction[0], 0);
+      if (index > -1) {
+        this.productsTransaction.splice(index, 1);
+        this.productsCounted.next(this.productsTransaction.length); // แสดงตัวเลขที่ตะกร้าสินค้า โดยการบังคับส่งค่าด้วย next() ใน Subject
+        this.productsTransactionSub.next(this.productsTransaction); // นำเอารายการสินค้าและจำนวนที่อยู่ในตะกร้า Transaction ไปใช้งาน
+      }
+    }
+  }
 }

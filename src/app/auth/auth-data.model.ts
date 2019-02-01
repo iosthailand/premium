@@ -1,6 +1,8 @@
 export interface AuthData {
   email: string;
+  content?: string;
   password: string;
-  permission: string;
-  status: boolean;
+  permission?: string;
+  storeId?: string;
+  status?: boolean;
 }
