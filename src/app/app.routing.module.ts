@@ -39,7 +39,7 @@ const routes: Routes = [
   { path: 'stores/edit/:storeId', component: StoreCreateComponent, canActivate: [AuthGuard] },
   { path: 'transactions', component: TransactionListComponent },
   { path: 'transactions/create', component: TransactionCreateComponent },
-  { path: 'transactions/edit/:storeId', component: TransactionCreateComponent, canActivate: [AuthGuard] }
+  { path: 'transactions/edit/:transactionId', component: TransactionCreateComponent, canActivate: [AuthGuard] }
 ];
 
 @NgModule({

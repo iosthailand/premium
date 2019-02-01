@@ -1,31 +1,55 @@
   <div *ngIf="isLoading" class="text-center"><img src="../../../assets/spinner.gif"></div>
   <div *ngIf="!isLoading">
-    <div class="row mt-1" *ngFor="let transaction of transactions" >
-      <div class="col-12">
-          <div class="card round-0">
-            <div class="card-header" data-toggle="collapse" [attr.data-target]="'#p-'+transaction.id" aria-expanded="false" [attr.aria-controls]="transaction.id">
-              {{ transaction.id }}  ขนส่งจาก {{ transaction.departureStoreId }}  ไปยังสาขา {{ transaction.destinationStoreId }}
-            </div>
-            <ul class="list-group list-group-flush collapse" [id]="'p-'+transaction.id">
-              <li class="list-group-item">
-                <table class="table table-stripe row">
-                    <tr *ngFor="let item of transaction.productLists">
-                      <td>{{ item.productId }}</td>
-                      <td>{{ item.productQuantity}}</td>
-                    </tr>
-                </table>
-                <!-- <div class="transaction-image">
-                  <img [src]="transaction.imagePath" [alt]="transaction.title" class="img-thumbnail">
-                </div> -->
-                <div class="row mt-3" *ngIf="userIsAuthenticated">
-                  <div class="col-12">
-                      <a class="btn btn-sm btn-primary mr-1" [routerLink]="['edit', transaction.id]" routerLinkActive="router-link-active">EDIT</a>
-                      <button class="btn btn-sm btn-warning"  (click)="onDelete(transaction.id)">DELETE</button>
+    <div class="row mt-1" *ngFor="let transaction of transactions; let i = index;">
+      <div class="col-12" *ngIf="userId === transaction.senderId">
+            <div class="card round-0">
+                <div class="card-header" data-toggle="collapse" [attr.data-target]="'#p-'+transaction.id" aria-expanded="false" [attr.aria-controls]="transaction.id">
+
+                  <div class="row">
+                    <div class="col-3">
+                        ขนส่งจาก {{ transaction.departureStoreId }}
+                    </div>
+                    <div class="col-3">
+                        ไปยังสาขา {{ transaction.destinationStoreId }}
+                    </div>
+                    <div class="col-3">
+                        ผู้ส่งสินค้า {{ transaction.senderId }}
+                    </div>
+                    <div class="col-3 text-right">
+                        <div *ngIf="userIsAuthenticated && userId === transaction.senderId && transaction.transactionStatus === 'Created'" class="mt-2">
+                            <button class="btn btn-sm btn-outline-success mr-1"  (click)="onConfirm(transaction.id)">ยืนยัน</button>
+                            <a class="btn btn-sm btn-primary mr-1 " [routerLink]="['edit', transaction.id]" routerLinkActive="router-link-active">แก้ไข</a>
+                            <button class="btn btn-sm btn-warning"  (click)="onDelete(transaction.id)">ลบ</button>
+                        </div>
+                    </div>
                   </div>
+
+
+
                 </div>
-              </li>
-            </ul>
-          </div>
+                <ul class="list-group list-group-flush collapse" [id]="'p-'+transaction.id">
+                  <li class="list-group-item">
+                    <table class="table table-stripe">
+                      <tr>
+                        <td></td>
+                        <td>รหัส SKU</td>
+                        <td>ชื่อสินค้า</td>
+                        <td>จำนวน</td>
+                      </tr>
+                      <tr *ngFor="let item of transaction.productLists">
+                        <td>
+                            <div class="transaction-image">
+                              <img [src]="item.imagePath" [alt]="item.productSku" class="img-thumbnail" style="width:30%;">
+                            </div>
+                        </td>
+                        <td>{{ item.productSku }}</td>
+                        <td>{{ item.productName }}</td>
+                        <td>{{ item.productQuantity}}</td>
+                      </tr>
+                    </table>
+                  </li>
+                </ul>
+            </div>
       </div>
     </div>
   </div>

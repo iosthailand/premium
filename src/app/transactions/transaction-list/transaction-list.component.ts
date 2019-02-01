@@ -70,4 +70,9 @@ export class TransactionListComponent implements OnInit, OnDestroy {
     this.transactionsPerPage = pageData.pageSize;
     this.transactionsService.getTransactions(this.transactionsPerPage, this.currentPage);
   }
+
+  onConfirm(transactionId: string) {
+    // edit status of transaction
+  }
+
 }

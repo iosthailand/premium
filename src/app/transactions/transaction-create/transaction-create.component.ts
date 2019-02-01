@@ -13,6 +13,7 @@ import { MatSelect } from '@angular/material';
 import { take, takeUntil } from 'rxjs/operators';
 import { ProductItem } from 'src/app/products/product-item.model';
 import { ProductsService } from 'src/app/products/products.service';
+import { Product } from 'src/app/products/product.model';
 
 @Component({
   selector: 'app-transaction-create',
@@ -70,7 +71,7 @@ export class TransactionCreateComponent implements OnInit, OnDestroy, AfterViewI
       'senderId': new FormControl(this.userId, [Validators.required]),
       'transportorId': new FormControl(),
       'receiverId': new FormControl(),
-      'dataTime': new FormControl(null),
+      'dateTime': new FormControl(null),
       'departureStoreId': new FormControl(this.userStoreId, [Validators.required]),
       'destinationStoreId': new FormControl(null, [Validators.required]),
       'productLists': new FormControl(null),
@@ -151,25 +152,27 @@ export class TransactionCreateComponent implements OnInit, OnDestroy, AfterViewI
               senderId: transactionData.senderId,
               transportorId: transactionData.transportorId,
               receiverId: transactionData.receiverId,
-              dataTime: transactionData.dataTime,
+              // dateTime: transactionData.dateTime,
               departureStoreId: transactionData.departureStoreId,
               destinationStoreId: transactionData.destinationStoreId,
-              productLists: this.items,
+              productLists: transactionData.productLists,
               transactionStatus: transactionData.transactionStatus,
               remark: transactionData.remark
             };
-
-            console.log(this.transaction);
             this.form.setValue({
               'senderId': this.transaction.senderId,
               'transportorId': this.transaction.transportorId,
               'receiverId': this.transaction.receiverId,
-              'dataTime': this.transaction.dataTime,
+              'dateTime': this.currentDate(),
               'departureStoreId': this.transaction.departureStoreId,
               'destinationStoreId': this.transaction.destinationStoreId,
               'productLists': this.transaction.productLists,
               'transactionStatus': this.transaction.transactionStatus,
-              'remark': this.transaction.remark
+              'remark': this.transaction.remark,
+              'storeFilterCtrl': '',
+              'staffFilterCtrl': '',
+              'transportorFilterCtrl': '',
+              'senderFilterCtrl': ''
             });
           });
       } else {
@@ -179,17 +182,25 @@ export class TransactionCreateComponent implements OnInit, OnDestroy, AfterViewI
     });
   }
 
+  currentDate() {
+    const currentDate = new Date();
+    return currentDate.toISOString().substring(0, 10);
+  }
+
   onSaveTransaction() {
     if (this.form.invalid) {
       return;
     }
     this.productItemLists = this.productsService.getProductsTransaction();
     this.productItemLists.forEach(element => {
-       const b = {
+       const productItem = {
         productId: element.productId,
+        productSku: element.product.productSku,
+        productName: element.product.productName,
+        imagePath: element.product.imagePath,
         productQuantity: element.quantity
       };
-      this.items.push(b);
+      this.items.push(productItem);
     });
 
     this.isLoading = true;
@@ -331,5 +342,12 @@ export class TransactionCreateComponent implements OnInit, OnDestroy, AfterViewI
       this.transportors.filter(transportor => transportor.content.toLowerCase().indexOf(search) > -1)
     );
   }
+
+
+  onAddToTransaction(productId: string, productQuantity: number, product: Product) {
+    this.productsService.addTransaction(productId, productQuantity, this.userId, product);
+    // console.log(this.productsService.getProductsTransaction);
+  }
+
 
 }

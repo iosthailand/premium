@@ -15,10 +15,10 @@ export class ProductItemComponent implements OnInit {
 
   ngOnInit() {
     this.productItemLists = this.productsService.getProductsTransaction();
-    console.log(this.productItemLists);
+    // console.log(this.productItemLists);
   }
   onDeleteProduct(productId: string) {
-    console.log(productId);
+    // console.log(productId);
     this.productsService.delelteTransaction(productId);
     this.productItemLists = this.productsService.getProductsTransaction();
   }

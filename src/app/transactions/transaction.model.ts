@@ -5,10 +5,10 @@ export interface Transaction {
   senderId: string;
   transportorId?: string;
   receiverId?: string;
-  dataTime?: Date;
+  dateTime?: Date;
   departureStoreId: string;
   destinationStoreId: string;
   productLists: any;
-  transactionStatus: 'stockOut' | 'transporting' | 'storeIn' | null;
+  transactionStatus: 'Created' | 'Send' | 'Transporting' | 'Received' | 'Restore' | null;
   remark?: string;
 }

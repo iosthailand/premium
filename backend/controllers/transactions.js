@@ -45,13 +45,8 @@ exports.createTransaction = (req, res, next) => {
   });
 }
 
-exports.editTransaction =   (req, res, next) => {
-  console.log(req.file);
-  let imagePath = req.body.imagePath;
-  if(req.file) {
-    const url = req.protocol + "://" + req.get('host');
-    imagePath = url + '/images/' + req.file.filename
-  }
+exports.editTransaction = (req, res, next) => {
+
   const transaction = new Transaction(
     {
       _id: req.body.id,
@@ -112,11 +107,12 @@ exports.getTransactions = (req, res, next)=>{
   }
 
 exports.getTransaction = (req, res, next) => {
+  // console.log(req.params.id);
   Transaction.findById(req.params.id)
     .then(transaction => {
       if (transaction) {
         res.status(200).json(transaction);
-        //console.log(transaction);
+        // console.log(transaction);
       } else {
         res.status(404).json({ messages: 'Transaction not found'});
       }
@@ -129,7 +125,7 @@ exports.getTransaction = (req, res, next) => {
   }
 
 exports.deleteTransaction = (req, res, next) => {
-  Transaction.deleteOne({_id: req.params.id, creator: req.userData.userId })
+  Transaction.deleteOne({_id: req.params.id, senderId: req.userData.userId })
     .then((result) => {
       // console.log(result);
       // ตรวจสอบ n สำหรับ ลบ ตรวจสอบ nModified สำหรับการแก้ไข
