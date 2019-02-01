@@ -2,14 +2,15 @@
 
 
   <!-- <div> This is edit mode for stock manager </div> -->
-  <div *ngIf="!isLoading && (userType === 'Storage Manager' || userType == 'DH Staff') && !isTransactionMode">
+  <div *ngIf="!isLoading">
     <div class="row mt-1" *ngFor="let product of products" >
       <div class="col-12">
           <div class="card round-0">
             <div class="card-header">
-              <div *ngIf="!(userType === 'Storage Manager' || userType == 'DH Staff')"> {{ product.productSku }} </div>
-              <div class="row" *ngIf="(userType === 'Storage Manager' || userType == 'DH Staff') && !isTransactionMode">
-
+              <div *ngIf="!(userType === 'Storage Manager' || userType == 'DH Staff')">
+                  <div class="col-sm-5" id="product-name" data-toggle="collapse" [attr.data-target]="'#p-'+product.id" aria-expanded="false" [attr.aria-controls]="product.id">{{ product.productName }}</div>
+              </div>
+              <div class="row" *ngIf="(userType === 'Storage Manager' || userType == 'DH Staff')">
                     <div class="col-sm-2">{{ product.productSku }}</div>
                     <div class="col-sm-5" id="product-name" data-toggle="collapse" [attr.data-target]="'#p-'+product.id" aria-expanded="false" [attr.aria-controls]="product.id">{{ product.productName }}</div>
                     <div class="col-sm-3"><input type="number" class="form-control" name="quantity" #quantityItem min="1" step="1" value="1"></div>
@@ -20,7 +21,7 @@
             <ul class="list-group list-group-flush collapse" [id]="'p-'+product.id">
               <li class="list-group-item">
                 <div class="row">
-                    <div class="col-12"> {{ product.productName }} </div>
+                    <div class="col-12"> {{ product.content }} </div>
                 </div>
                 <div class="product-image">
                   <img [src]="product.imagePath" [alt]="product.title" class="img-thumbnail">

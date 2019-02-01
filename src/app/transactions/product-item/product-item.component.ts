@@ -21,4 +21,8 @@ export class ProductItemComponent implements OnInit {
     this.productsService.delelteTransaction(productId);
     this.productItemLists = this.productsService.getProductsTransaction();
   }
+  onEditProduct(productId: string, qty: number) {
+    const quantity = Math.round(qty) > 0 ? qty : 1;
+    this.productsService.editTransaction(productId, quantity);
+  }
 }

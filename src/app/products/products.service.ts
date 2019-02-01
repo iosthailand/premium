@@ -156,7 +156,8 @@ export class ProductsService {
         transaction = {
           productId: productId,
           quantity: +quantity + qty,
-          userId: userId
+          userId: userId,
+          editingMode: false
         };
         this.productsTransaction[index] = transaction;
         // this.productsTransaction.splice(index, 1);
@@ -165,7 +166,8 @@ export class ProductsService {
       transaction = {
         productId: productId,
         quantity: +quantity,
-        userId: userId
+        userId: userId,
+        editingMode: false
       };
       this.productsTransaction.push(transaction);
     }
@@ -179,6 +181,25 @@ export class ProductsService {
       const index = this.productsTransaction.indexOf(oldProductInTransaction[0], 0);
       if (index > -1) {
         this.productsTransaction.splice(index, 1);
+        this.productsCounted.next(this.productsTransaction.length); // แสดงตัวเลขที่ตะกร้าสินค้า โดยการบังคับส่งค่าด้วย next() ใน Subject
+        this.productsTransactionSub.next(this.productsTransaction); // นำเอารายการสินค้าและจำนวนที่อยู่ในตะกร้า Transaction ไปใช้งาน
+      }
+    }
+  }
+  editTransaction(productId: string, quantity: number) {
+    const oldProductInTransaction = this.productsTransaction.filter(element => element.productId === productId);
+    if (oldProductInTransaction.length === 1) {
+      const index = this.productsTransaction.indexOf(oldProductInTransaction[0], 0);
+      console.log(this.productsTransaction);
+      if (index > -1) {
+        const userId = this.productsTransaction[index].userId;
+        this.productsTransaction[index] = {
+          productId: productId,
+          quantity: +quantity,
+          userId: userId,
+          editingMode: false
+        };
+        console.log(this.productsTransaction);
         this.productsCounted.next(this.productsTransaction.length); // แสดงตัวเลขที่ตะกร้าสินค้า โดยการบังคับส่งค่าด้วย next() ใน Subject
         this.productsTransactionSub.next(this.productsTransaction); // นำเอารายการสินค้าและจำนวนที่อยู่ในตะกร้า Transaction ไปใช้งาน
       }

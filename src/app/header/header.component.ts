@@ -38,13 +38,14 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.productsCountListenerSubs = this.productsService.getProductCountListener()
     .subscribe( (result) => {
       this.productsCounter = result;
-      console.log('------');
-      console.log('จำนวนสินค้าในตะกร้า : ' + result);
+      // console.log('------');
+      // console.log('จำนวนสินค้าในตะกร้า : ' + result);
     });
   }
   ngOnDestroy() {
     this.authListenerSubs.unsubscribe();
     this.userListenerSubs.unsubscribe();
+    this.productsCountListenerSubs.unsubscribe();
   }
   onLogout() {
     this.productsService.clearProductTransaction();  // clear product in cart when logout

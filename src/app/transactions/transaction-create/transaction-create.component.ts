@@ -61,12 +61,12 @@ export class TransactionCreateComponent implements OnInit, OnDestroy, AfterViewI
     this.userStoreId = this.authService.getUserStoreId();
     this.form = new FormGroup({
       // 'transactionId': new FormControl(null, [Validators.required]),
-      'senderId': new FormControl(this.userId),
+      'senderId': new FormControl(this.userId, [Validators.required]),
       'transportorId': new FormControl(),
       'receiverId': new FormControl(),
       'dataTime': new FormControl(null),
-      'departureStoreId': new FormControl(this.userStoreId),
-      'destinationStoreId': new FormControl(null),
+      'departureStoreId': new FormControl(this.userStoreId, [Validators.required]),
+      'destinationStoreId': new FormControl(null, [Validators.required]),
       'productLists': new FormControl(null),
       'transactionStatus': new FormControl(null),
       'remark': new FormControl(null),
