@@ -137,4 +137,52 @@ export class TransactionsService {
   deleteTransaction(transactionId: string) {
     return this.http.delete(BACKEND_URL + transactionId);
   }
+
+  changeTransactionStatus(
+    transactionId: string,
+    senderId: string,
+    transportorId: string,
+    receiverId: string,
+    transectionStatus: 'Created' | 'Send' | 'Transporting' | 'Received' | 'Restore' | null
+    ) {
+
+    const transactionData = {
+      id: transactionId,
+      senderId: senderId,
+      transportorId: transportorId,
+      receiverId: receiverId,
+      transactionStatus: transectionStatus
+    };
+
+
+    switch (transectionStatus) {
+      case 'Created':
+      transactionData.transactionStatus = 'Send';
+        this.http
+        .put(BACKEND_URL + 'change/' + transactionId, transactionData)
+        .subscribe((response) => {
+          this.router.navigate(['/']);
+        });
+        break;
+      case 'Send':
+      transactionData.transactionStatus = 'Transporting';
+        this.http
+        .put(BACKEND_URL + 'change/' + transactionId, transactionData)
+        .subscribe((response) => {
+          this.router.navigate(['/']);
+        });
+        break;
+      case 'Transporting':
+      transactionData.transactionStatus = 'Received';
+        this.http
+        .put(BACKEND_URL + 'change/' + transactionId, transactionData)
+        .subscribe((response) => {
+          this.router.navigate(['/']);
+        });
+        break;
+      default:
+        this.router.navigate(['/']);
+        break;
+    }
+  }
 }

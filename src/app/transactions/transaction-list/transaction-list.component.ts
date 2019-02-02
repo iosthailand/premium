@@ -6,6 +6,7 @@ import { TransactionsService } from '../transactions.service';
 import 'hammerjs'; // use for mat-paginator
 import { PageEvent } from '@angular/material';
 import { AuthService } from 'src/app/auth/auth.service';
+import { HeaderService } from 'src/app/header/hearder.service';
 
 @Component({
   selector: 'app-transaction-list',
@@ -26,13 +27,16 @@ export class TransactionListComponent implements OnInit, OnDestroy {
   pageSizeOptions = [5, 10, 15];
   userIsAuthenticated = false;
   userId: string;
+  userType: string;
   private transactionsSub: Subscription;
   private authStatusSub: Subscription;
 
-  constructor(public transactionsService: TransactionsService, private authService: AuthService) {}
+  constructor(public transactionsService: TransactionsService, private authService: AuthService, private headerService: HeaderService) {}
 
   ngOnInit() {
     // this.transactions = this.transactionsService.getTransactions();
+    this.userType = this.headerService.getUserType();
+
     this.isLoading = true;
     this.transactionsService.getTransactions(this.transactionsPerPage, this.currentPage);
     this.userId = this.authService.getUserId();
@@ -71,8 +75,44 @@ export class TransactionListComponent implements OnInit, OnDestroy {
     this.transactionsService.getTransactions(this.transactionsPerPage, this.currentPage);
   }
 
-  onConfirm(transactionId: string) {
+  onSenderConfirm(
+    transactionId: string,
+    senderId: string,
+    transportorId: string,
+    receiverId: string,
+    transectionStatus: string
+  ) {
     // edit status of transaction
+    if (transectionStatus === 'Created' ) {
+      this.transactionsService.changeTransactionStatus(transactionId, senderId, transportorId, receiverId, transectionStatus);
+    }
   }
+
+  onTransportorConfirm(
+    transactionId: string,
+    senderId: string,
+    transportorId: string,
+    receiverId: string,
+    transectionStatus: string
+  ) {
+    // edit status of transaction
+    if (transectionStatus === 'Send' ) {
+      this.transactionsService.changeTransactionStatus(transactionId, senderId, transportorId, receiverId, transectionStatus);
+    }
+  }
+
+  onReceiverConfirm(
+    transactionId: string,
+    senderId: string,
+    transportorId: string,
+    receiverId: string,
+    transectionStatus: string
+  ) {
+    // edit status of transaction
+    if (transectionStatus === 'Transporting' ) {
+      this.transactionsService.changeTransactionStatus(transactionId, senderId, transportorId, receiverId, transectionStatus);
+    }
+  }
+
 
 }

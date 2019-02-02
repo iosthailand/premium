@@ -28,11 +28,11 @@
 
 
 
-<div *ngIf="productItemLists.length > 0">
-  <div class="row mt-1" *ngFor="let item of productItemLists; let i = index" >
+<div *ngIf="productItemLists.length > 0" data-spy="scroll" [attr.data-target]="'product-container'" style="overflow-y: scroll; height: 300px; position:relative;">
+  <div class="row mt-1" *ngFor="let item of productItemLists; let i = index" id="product-container" >
     <div class="col-12">
         <div class="card round-0">
-          <div class="card-header" data-toggle="collapse" [attr.data-target]="'#p-'+item.productId" aria-expanded="false" [attr.aria-controls]="item.productId">
+          <div class="card-header" data-offset="0"  data-toggle="collapse" [attr.data-target]="'#p-'+item.productId" aria-expanded="false" [attr.aria-controls]="item.productId">
             <div class="row">
                 <div class="col-1 text-left">{{ i + 1 }}</div>
                 <div class="col-1 text-right">SKU</div>

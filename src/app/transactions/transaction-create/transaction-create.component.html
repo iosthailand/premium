@@ -39,10 +39,10 @@
 
     <div class="form-group" *ngIf="mode === 'edit'">
         <label for="permission">วันที่</label>
-        <input type="date" formControlName="dateTime" id="dateTime" class="form-control" [disabled]="disabled">
+        <input type="date" formControlName="dateTime" id="dateTime" class="form-control" [attr.disabled]="true">
     </div>
 
-    <mat-form-field>
+    <!-- <mat-form-field>
       <mat-select formControlName="senderId" placeholder="เลือกผู้จัดส่งสินค้า" [attr.noEntriesFoundLabel]="'no matching bank found'" #singleSelect>
         <mat-option>
           <ngx-mat-select-search formControlName="senderFilterCtrl"></ngx-mat-select-search>
@@ -51,7 +51,7 @@
           {{item.content}}
         </mat-option>
       </mat-select>
-    </mat-form-field>
+    </mat-form-field> -->
 
 
     <mat-form-field>

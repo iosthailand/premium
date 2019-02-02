@@ -62,7 +62,7 @@ exports.editTransaction = (req, res, next) => {
     }
   );
   //console.log(transaction);
-  Transaction.updateOne({ _id: req.params.id, creator: req.userData.userId }, transaction)
+  Transaction.updateOne({ _id: req.params.id, creator: req.userData.senderId }, transaction)
     .then(result => {
       if (result.n > 0 ) { // ตรวจสอบสถานะการอัพเดท
         //console.log(result);
@@ -142,3 +142,30 @@ exports.deleteTransaction = (req, res, next) => {
       })
     });
 }
+
+exports.changeTransaction = (req, res, next) => {
+  Transaction.updateOne(
+      { _id: req.params.id },
+      {
+        senderId: req.body.senderId,
+        transportorId: req.body.transportorId,
+        receiverId: req.body.receiverId,
+        transactionStatus: req.body.transactionStatus,
+       }
+    )
+    .then(result => {
+      if (result.n > 0 ) { // ตรวจสอบสถานะการอัพเดท
+        //console.log(result);
+        res.status(200).json({ messages: 'Update Successfull'});
+      } else {
+        res.status(401).json({ messages: 'User Not Authorize edit other transactions'});
+      }
+    })
+    .catch(error => {
+      res.status(500).json({
+        messages: 'Could not update transaction'
+      })
+    });
+}
+
+

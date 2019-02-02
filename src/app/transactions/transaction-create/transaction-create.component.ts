@@ -69,18 +69,18 @@ export class TransactionCreateComponent implements OnInit, OnDestroy, AfterViewI
     this.form = new FormGroup({
       // 'transactionId': new FormControl(null, [Validators.required]),
       'senderId': new FormControl(this.userId, [Validators.required]),
-      'transportorId': new FormControl(),
-      'receiverId': new FormControl(),
-      'dateTime': new FormControl(null),
+      'transportorId': new FormControl(null),
+      'receiverId': new FormControl(null),
+      'dateTime': new FormControl(Date.now),
       'departureStoreId': new FormControl(this.userStoreId, [Validators.required]),
       'destinationStoreId': new FormControl(null, [Validators.required]),
       'productLists': new FormControl(null),
       'transactionStatus': new FormControl(null),
       'remark': new FormControl(null),
       'storeFilterCtrl': new FormControl(null),
-      'staffFilterCtrl': new FormControl(),
-      'transportorFilterCtrl': new FormControl(),
-      'senderFilterCtrl': new FormControl()
+      'staffFilterCtrl': new FormControl(null),
+      'transportorFilterCtrl': new FormControl(null),
+      'senderFilterCtrl': new FormControl(null)
 
     });
     this.storesServeice.getAllCurrentStoresOutside().subscribe(result => {

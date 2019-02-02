@@ -9,5 +9,5 @@ router.put('/:id', checkAuth, transactionsController.editTransaction);
 router.get('', transactionsController.getTransactions);
 router.get('/:id', transactionsController.getTransaction);
 router.delete('/:id', checkAuth, transactionsController.deleteTransaction );
-
+router.put('/change/:id', checkAuth, transactionsController.changeTransaction );
 module.exports = router;
