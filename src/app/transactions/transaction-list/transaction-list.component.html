@@ -54,9 +54,9 @@
     </div>
   </div>
   <mat-paginator [length]="totalTransactions" [pageSize]="transactionsPerPage" [pageSizeOptions]="pageSizeOptions" (page)="onChangedPage($event)" *ngIf="transactions.length > 0"></mat-paginator>
+
+
+  <!-- <div>ต้องแก้ ไม่แสดงข้อความเตือนเมื่อผู้ใช้คนปัจจุบันไม่มีรายการส่งสินค้า </div> -->
   <div class="row" *ngIf="transactions.length <= 0 && !isLoading">
-    <div class="col"><div class="text-center alert-warning mt-1 pt-5 pb-5">ไม่มีประเภทสินค้าอยู่ในระบบ</div></div>
+    <div class="col"><div class="text-center alert-warning mt-1 pt-5 pb-5">ไม่มีรายการสำหรับท่านในตอนนี้</div></div>
   </div>
-
-
-

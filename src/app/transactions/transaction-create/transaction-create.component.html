@@ -37,9 +37,9 @@
     </div> -->
 
 
-    <div class="form-group">
-        <label for="permission">ผู้รับสินค้า:</label>
-        <input type="date" formControlName="dateTime" id="dateTime" class="form-control">
+    <div class="form-group" *ngIf="mode === 'edit'">
+        <label for="permission">วันที่</label>
+        <input type="date" formControlName="dateTime" id="dateTime" class="form-control" [disabled]="disabled">
     </div>
 
     <mat-form-field>

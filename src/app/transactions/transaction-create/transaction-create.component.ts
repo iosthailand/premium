@@ -159,6 +159,23 @@ export class TransactionCreateComponent implements OnInit, OnDestroy, AfterViewI
               transactionStatus: transactionData.transactionStatus,
               remark: transactionData.remark
             };
+
+            if (transactionData.productLists.length > 0) {
+              transactionData.productLists.forEach(item => {
+                const product = {
+                  id: item.productId,
+                  productSku: item.productSku,
+                  productName: item.productName,
+                  productDetails: '',
+                  productCategory: '',
+                  productSupplier: '',
+                  imagePath: item.imagePath,
+                  creator: item.sender
+                };
+                // แปลงข้อมูลจากฐานข้อมูลให้อยู่ในรูปของ ProductItem Model แล้วค่อยเพืิ่มไปในตะกร้า (ใช้ตอนแก้ไข tranasaction)
+                this.productsService.addTransaction(item.productId, item.productQuantity, item.sender, product);
+              });
+            }
             this.form.setValue({
               'senderId': this.transaction.senderId,
               'transportorId': this.transaction.transportorId,
@@ -233,13 +250,14 @@ export class TransactionCreateComponent implements OnInit, OnDestroy, AfterViewI
     }
     this.isLoading = false;
     this.form.reset();
-    this.productsService.clearProductTransaction(); // ลบจำนวนสินค้าในตะกร้าออก
+    this.productsService.clearProductTransaction(); // ลบจำนวนสินค้าในตะกร้าออกเมื่อเซฟแล้ว
   }
   ngAfterViewInit() {
     // this.setInitialValue();
   }
   ngOnDestroy() {
     this.authStatusSub.unsubscribe();
+    this.productsService.clearProductTransaction(); // เคลียร์ตะกร้าเมื่อออกจากคอมโปเน้นนี้
     this._onDestroy.next();
     this._onDestroy.complete();
   }
