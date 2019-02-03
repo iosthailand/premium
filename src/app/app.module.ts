@@ -22,7 +22,7 @@ import { TransactionsModule } from './transactions/transactions.module';
   declarations: [
     AppComponent,
     HeaderComponent,
-    ErrorComponent
+    ErrorComponent,
   ],
   imports: [
     BrowserModule,

@@ -37,6 +37,7 @@ export class StoreCreateComponent implements OnInit, OnDestroy {
       });
     this.form = new FormGroup({
       'storeName': new FormControl(null, [Validators.required, Validators.minLength(3)]),
+      'storeCode': new FormControl(null, [ Validators.required]),
       'storeDetails': new FormControl(null, [ Validators.required]),
       'image': new FormControl(null, Validators.required, mineType)
     });
@@ -52,12 +53,14 @@ export class StoreCreateComponent implements OnInit, OnDestroy {
             this.store = {
               id: storeData._id,
               storeName: storeData.storeName,
+              storeCode: storeData.storeCode,
               storeDetails: storeData.storeDetails,
               imagePath: storeData.imagePath,
               creator: storeData.creator
             };
             this.form.setValue({
               'storeName': this.store.storeName,
+              'storeCode': this.store.storeCode,
               'storeDetails': this.store.storeDetails,
               'image': this.store.imagePath
             });
@@ -78,6 +81,7 @@ export class StoreCreateComponent implements OnInit, OnDestroy {
     if (this.mode === 'create') {
       this.storesService.addStore(
         this.form.value.storeName,
+        this.form.value.storeCode,
         this.form.value.storeDetails,
         this.form.value.image
       );
@@ -85,6 +89,7 @@ export class StoreCreateComponent implements OnInit, OnDestroy {
       this.storesService.updateStore(
         this.storeId,
         this.form.value.storeName,
+        this.form.value.storeCode,
         this.form.value.storeDetails,
         this.form.value.image
       );

@@ -295,7 +295,7 @@ export class TransactionCreateComponent implements OnInit, OnDestroy, AfterViewI
       return;
     }
     // get the search keyword
-    let search = this.form.value.userFilterCtrl;
+    let search = this.form.value.storeFilterCtrl;
     if (!search) {
       this.filteredStores.next(this.stores.slice());
       return;

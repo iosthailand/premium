@@ -24,10 +24,9 @@ export class StoresService {
         return { stores: storeData.stores.map((store) => { // map _id from database to id same as in model
           return {
             id: store._id,
-            storeSku: store.storeSku,
             storeName: store.storeName,
+            storeCode: store.storeCode,
             storeDetails: store.storeDetails,
-            storeStore: store.storeStore,
             imagePath: store.imagePath,
             creator: store.creator
           };
@@ -55,6 +54,7 @@ export class StoresService {
     return this.http.get<{
       _id: string,
       storeName: string,
+      storeCode: string,
       storeDetails: string,
       imagePath: string,
       creator: string
@@ -62,9 +62,10 @@ export class StoresService {
   }
 
 // mongodb+srv://tsubasa:DBkesa_m007@jeerawuth007-5duea.mongodb.net/test?retryWrites=true
-  addStore( storeName: string, storeDetails: string,  image: File) {
+  addStore( storeName: string, storeDetails: string, storeCode: string,  image: File) {
     const storeData = new FormData(); // แบบฟอร์มที่สามารถมีข้อความ และข้อมูลไฟล์ได้
     storeData.append('storeName', storeName);
+    storeData.append('storeCode', storeCode);
     storeData.append('storeDetails', storeDetails);
     storeData.append('image', image, storeName);
 
@@ -79,19 +80,21 @@ export class StoresService {
   }
 
   updateStore(
-    id: string, storeName: string, storeDetails: string, image: File | string
+    id: string, storeName: string, storeCode: string, storeDetails: string, image: File | string
     ) {
     let storeData: Store | FormData;
     if (typeof image === 'object') {
       storeData = new FormData();
       storeData.append('id', id);
       storeData.append('storeName', storeName);
+      storeData.append('storeCode', storeCode);
       storeData.append('storeDetails', storeDetails);
       storeData.append('image', image, storeName);
     } else {
       storeData = {
         id: id,
         storeName: storeName,
+        storeCode: storeCode,
         storeDetails: storeDetails,
         imagePath: image,
         creator: null
@@ -114,6 +117,7 @@ export class StoresService {
           return {
             id: store._id,
             storeName: store.storeName,
+            storeCode: store.storeCode,
             storeDetails: store.storeDetails,
             imagePath: store.imagePath,
             creator: store.creator
