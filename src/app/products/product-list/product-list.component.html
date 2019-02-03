@@ -1,7 +1,5 @@
   <div *ngIf="isLoading" class="text-center"><img src="../../../assets/spinner.gif"></div>
 
-  <app-product-search></app-product-search>
-
   <!-- <div> This is edit mode for stock manager </div> -->
   <div *ngIf="!isLoading">
     <div class="row mt-1" *ngFor="let product of products" >

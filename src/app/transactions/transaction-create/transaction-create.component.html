@@ -1,59 +1,10 @@
 <div *ngIf="isLoading" class="text-center"><img src="../../../assets/spinner.gif"></div>
 <form [formGroup]="form" (ngSubmit)="onSaveTransaction()">
-    <!-- <div class="form-group">
-      <label for="remark">ข้อมูลการส่งสินค้า</label>
-      <input type="text" class="form-control" id="remark" formControlName="remark" aria-describedby="remarkHelp" placeholder="กรอกข้อมูลเกี่ยวกับการส่งสินค้า">
-      <small
-      *ngIf="!form.get('remark').valid && form.get('remark').touched"
-      id="remarkHelp" class="form-text text-muted">please fill Transaction Name</small>
-    </div>
-    <div class="form-group">
-      <label for="permission">สาขาของผู้ส่ง:</label>
-      <select formControlName="departureStoreId" id="departureStoreId" name="departureStoreId" class="form-control">
-        <option value=""></option>
-        <option *ngFor="let item of allStoreLists" [value]="item.id">{{item.storeName}}</option>
-      </select>
-    </div>
-    <div class="form-group">
-        <label for="permission">สาขาของผู้รับ:</label>
-        <select formControlName="destinationStoreId" id="destinationStoreId" name="destinationStoreId" class="form-control">
-          <option value=""></option>
-          <option *ngFor="let item of allStoreLists" [value]="item.id">{{item.storeName}}</option>
-        </select>
-    </div>
-    <div class="form-group">
-        <label for="permission">คนขับรถส่งของ:</label>
-        <select formControlName="transportorId" id="transportorId" name="transportorId" class="form-control">
-          <option value=""></option>
-          <option *ngFor="let item of allTransportorLists" [value]="item.id">{{item.email}}</option>
-        </select>
-    </div> -->
-    <!-- <div class="form-group">
-        <label for="permission">ผู้รับสินค้า:</label>
-        <select formControlName="receiverId" id="receiverId" name="receiverId" class="form-control">
-          <option value=""></option>
-          <option *ngFor="let item of allDhStaffLists" [value]="item.id">{{item.content}}</option>
-        </select>
-    </div> -->
-
 
     <div class="form-group" *ngIf="mode === 'edit'">
         <label for="permission">วันที่</label>
         <input type="date" formControlName="dateTime" id="dateTime" class="form-control" [attr.disabled]="true">
     </div>
-
-    <!-- <mat-form-field>
-      <mat-select formControlName="senderId" placeholder="เลือกผู้จัดส่งสินค้า" [attr.noEntriesFoundLabel]="'no matching bank found'" #singleSelect>
-        <mat-option>
-          <ngx-mat-select-search formControlName="senderFilterCtrl"></ngx-mat-select-search>
-        </mat-option>
-        <mat-option *ngFor="let item of filteredSenders | async" [value]="item.id">
-          {{item.content}}
-        </mat-option>
-      </mat-select>
-    </mat-form-field> -->
-
-
     <mat-form-field>
       <mat-select formControlName="destinationStoreId" placeholder="เลือกสาขาปลายทาง" [attr.noEntriesFoundLabel]="'no matching bank found'" #singleSelect>
         <mat-option>
@@ -86,6 +37,7 @@
         </mat-option>
       </mat-select>
     </mat-form-field>
+    <app-product-search></app-product-search>
     <app-product-item></app-product-item>
     <hr class="mt-3 mb-3">
     <div class="form-group mt-3">

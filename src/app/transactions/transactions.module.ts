@@ -6,12 +6,16 @@ import { TransactionListComponent } from './transaction-list/transaction-list.co
 import { ReactiveFormsModule } from '@angular/forms';
 import { MyAngularMaterialModule } from '../my-angular-material.module';
 import { ProductItemComponent } from './product-item/product-item.component';
+import { ProductSearchComponent } from './product-search/product-search.component';
+import { ProductSearchPipe } from './product-search/product-search.pipe';
 
 @NgModule({
   declarations: [
     TransactionCreateComponent,
     TransactionListComponent,
-    ProductItemComponent
+    ProductItemComponent,
+    ProductSearchComponent,
+    ProductSearchPipe
   ],
   imports: [
     CommonModule,

@@ -5,15 +5,11 @@ import { ProductCreateComponent } from './product-create/product-create.componen
 import { ProductListComponent } from './product-list/product-list.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MyAngularMaterialModule } from '../my-angular-material.module';
-import { ProductSearchComponent } from './product-search/product-search.component';
-import { ProductSearchPipe } from './product-search/product-search.pipe';
 
 @NgModule({
   declarations: [
     ProductCreateComponent,
-    ProductListComponent,
-    ProductSearchComponent,
-    ProductSearchPipe
+    ProductListComponent
   ],
   imports: [
     CommonModule,

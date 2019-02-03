@@ -1,13 +1,15 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 
-import { Product } from '../product.model';
-import { ProductsService } from '../products.service';
-import 'hammerjs'; // use for mat-paginator
-import { PageEvent } from '@angular/material';
+
+import { Product } from 'src/app/products/product.model';
+
+// import 'hammerjs'; // use for mat-paginator
+
 import { AuthService } from 'src/app/auth/auth.service';
 import { HeaderService } from 'src/app/header/hearder.service';
-import { NgForm, FormGroup, FormControl } from '@angular/forms';
+
+import { ProductsService } from 'src/app/products/products.service';
 
 @Component({
   selector: 'app-product-search',
@@ -15,12 +17,6 @@ import { NgForm, FormGroup, FormControl } from '@angular/forms';
   styleUrls: ['./product-search.component.css']
 })
 export class ProductSearchComponent implements OnInit, OnDestroy {
-  // products = [
-  //   { title: "First Product", content: "This is the first product's content" },
-  //   { title: "Second Product", content: "This is the second product's content" },
-  //   { title: "Third Product", content: "This is the third product's content" }
-  // ];
-  // form: FormGroup;
   productSearchTxt: string;
   products: Product[] = [];
   isLoading = false;
@@ -35,12 +31,10 @@ export class ProductSearchComponent implements OnInit, OnDestroy {
   private productsSub: Subscription;
   private authStatusSub: Subscription;
 
-
   constructor(public productsService: ProductsService, private authService: AuthService, private headerService: HeaderService) {}
 
   ngOnInit() {
     // this.form = new FormGroup({
-    //   // 'transactionId': new FormControl(null, [Validators.required]),
     //   'productSearchTxt': new FormControl(null),
     // });
     // this.products = this.productsService.getProducts();
@@ -75,8 +69,8 @@ export class ProductSearchComponent implements OnInit, OnDestroy {
     // console.log(this.productsService.getProductsTransaction);
   }
 
-  onUpdateSearch(searchText: string) {
-    console.log(searchText);
-
+  onUpdateSearch() {
+    // console.log(searchText);
+    // ไม่ต้องทำอะไร เพียงแค่เรียกมา Pipe ก็จะอัพเดทค่าใน backend จึงสามารถตรวจดูค่าค้นหาได้
   }
 }
