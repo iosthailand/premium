@@ -37,7 +37,7 @@ export class StoreCreateComponent implements OnInit, OnDestroy {
       });
     this.form = new FormGroup({
       'storeName': new FormControl(null, [Validators.required, Validators.minLength(3)]),
-      'storeCode': new FormControl(null, [ Validators.required]),
+      'storeCode': new FormControl(null, [ Validators.required, Validators.minLength(4)]),
       'storeDetails': new FormControl(null, [ Validators.required]),
       'image': new FormControl(null, Validators.required, mineType)
     });

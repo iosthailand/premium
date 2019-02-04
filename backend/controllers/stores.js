@@ -6,6 +6,7 @@ exports.createStore = (req, res, next) => {
   // userData {email, userId} เป็นข้อมูลที่ส่งมาจาก checkAuth Middleware
   const store = new Store({
     storeName: req.body.storeName,
+    storeCode: req.body.storeCode,
     storeDetails: req.body.storeDetails,
     imagePath: url + '/images/' + req.file.filename,
     creator: req.userData.userId
@@ -17,6 +18,7 @@ exports.createStore = (req, res, next) => {
       store: {
         id: createdStore._id,
         storeName: createdStore.storeName,
+        storeCode: createdStore.storCode,
         storeDetails: createdStore.storeDetails,
         imagePath: createdStore.imagePath
       }
@@ -43,6 +45,7 @@ exports.editStore =   (req, res, next) => {
     {
       _id: req.body.id,
       storeName: req.body.storeName,
+      storeCode: req.body.storeCode,
       storeDetails: req.body.storeDetails,
       imagePath: imagePath,
       creator: req.userData.userId
