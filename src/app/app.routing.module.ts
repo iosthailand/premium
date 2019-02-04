@@ -15,9 +15,9 @@ import { StoreListComponent } from './stores/store-list/store-list.component';
 import { StoreCreateComponent } from './stores/store-create/store-create.component';
 import { TransactionListComponent } from './transactions/transaction-list/transaction-list.component';
 import { TransactionCreateComponent } from './transactions/transaction-create/transaction-create.component';
+import { AppComponent } from './app.component';
 
 const routes: Routes = [
-  { path: '', component: ProductListComponent },
   { path: 'dummys', component: PostListComponent },
   { path: 'dummys/create', component: PostCreateComponent, canActivate: [AuthGuard] },
   { path: 'dummys/edit/:postId', component: PostCreateComponent, canActivate: [AuthGuard] },
@@ -39,7 +39,13 @@ const routes: Routes = [
   { path: 'stores/edit/:storeId', component: StoreCreateComponent, canActivate: [AuthGuard] },
   { path: 'transactions', component: TransactionListComponent },
   { path: 'transactions/create', component: TransactionCreateComponent },
-  { path: 'transactions/edit/:transactionId', component: TransactionCreateComponent, canActivate: [AuthGuard] }
+  { path: 'transactions/edit/:transactionId', component: TransactionCreateComponent, canActivate: [AuthGuard] },
+  { path: '',
+    redirectTo: 'products',
+    pathMatch: 'full'
+  }
+  // { path: '**', component: PageNotFoundComponent }
+
 ];
 
 @NgModule({

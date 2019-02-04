@@ -39,7 +39,7 @@ exports.createProduct = (req, res, next) => {
 }
 
 exports.editProduct =   (req, res, next) => {
-  console.log(req.file);
+  // console.log(req.file);
   let imagePath = req.body.imagePath;
   if(req.file) {
     const url = req.protocol + "://" + req.get('host');
@@ -58,7 +58,8 @@ exports.editProduct =   (req, res, next) => {
     }
   );
   //console.log(product);
-  Product.updateOne({ _id: req.params.id, creator: req.userData.userId }, product)
+  // Product.updateOne({ _id: req.params.id, creator: req.userData.userId }, product) // สำหรับอัพเดทสินค้าได้เฉพาะคนที่สร้าง
+  Product.updateOne({ _id: req.params.id }, product)
     .then(result => {
       if (result.n > 0 ) { // ตรวจสอบสถานะการอัพเดท
         //console.log(result);

@@ -13,8 +13,10 @@ export class ProductSearchPipe implements PipeTransform {
     }
     const resultArray = [];
     for (const item of value) {
-      const myReg = new RegExp(searchString);
-      if ((myReg.test(item[propertyName1]) === true || myReg.test(item[propertyName2]) === true) && searchString.length >= 1) {
+      const myReg = new RegExp(searchString.toLowerCase());
+      const a = item[propertyName1].toLowerCase();
+      const b = item[propertyName2].toLowerCase();
+      if ((myReg.test(a) === true || myReg.test(b) === true) && searchString.length >= 4) {
         resultArray.push(item);
       }
     }
