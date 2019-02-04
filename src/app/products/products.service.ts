@@ -49,6 +49,35 @@ export class ProductsService {
       });
   }
 
+
+  getSearchProducts() {
+    this.http
+      .get<{message: string, products: any, maxProducts: number}>(BACKEND_URL)
+      .pipe(map((productData) => {  // map result only get product content not include message
+        return { products: productData.products.map((product) => { // map _id from database to id same as in model
+          return {
+            id: product._id,
+            productSku: product.productSku,
+            productName: product.productName,
+            productDetails: product.productDetails,
+            productCategory: product.productCategory,
+            productSupplier: product.productSupplier,
+            imagePath: product.imagePath,
+            creator: product.creator
+          };
+        }),
+        maxProducts: productData.maxProducts };
+      })
+      )
+      .subscribe((transformProduct) => {
+        this.products = transformProduct.products;  // Transform form { id, title, content } to { _id, title, content }
+        this.productsUpdated.next({
+          products: [...this.products],
+          productCounts: transformProduct.maxProducts
+        });
+      });
+  }
+
   getProductUpdateListener() {
     return this.productsUpdated.asObservable();
   }

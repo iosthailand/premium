@@ -80,7 +80,8 @@ export class TransactionCreateComponent implements OnInit, OnDestroy, AfterViewI
       'storeFilterCtrl': new FormControl(null),
       'staffFilterCtrl': new FormControl(null),
       'transportorFilterCtrl': new FormControl(null),
-      'senderFilterCtrl': new FormControl(null)
+      'senderFilterCtrl': new FormControl(null),
+      'confirm': new FormControl(null, Validators.requiredTrue)
 
     });
     this.storesServeice.getAllCurrentStoresOutside().subscribe(result => {
@@ -189,7 +190,8 @@ export class TransactionCreateComponent implements OnInit, OnDestroy, AfterViewI
               'storeFilterCtrl': '',
               'staffFilterCtrl': '',
               'transportorFilterCtrl': '',
-              'senderFilterCtrl': ''
+              'senderFilterCtrl': '',
+              'confirm': false
             });
           });
       } else {

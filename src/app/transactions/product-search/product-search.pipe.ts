@@ -14,7 +14,7 @@ export class ProductSearchPipe implements PipeTransform {
     const resultArray = [];
     for (const item of value) {
       const myReg = new RegExp(searchString);
-      if ((myReg.test(item[propertyName1]) === true || myReg.test(item[propertyName2]) === true) && searchString.length >= 3) {
+      if ((myReg.test(item[propertyName1]) === true || myReg.test(item[propertyName2]) === true) && searchString.length >= 1) {
         resultArray.push(item);
       }
     }

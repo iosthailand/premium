@@ -17,14 +17,11 @@ import { ProductsService } from 'src/app/products/products.service';
   styleUrls: ['./product-search.component.css']
 })
 export class ProductSearchComponent implements OnInit, OnDestroy {
-  productSearchTxt: string;
+  searchText: string;
   products: Product[] = [];
   isLoading = false;
   isTransactionMode = this.productsService.getTransactionMode();
   totalProducts = 0;
-  productsPerPage = 5;
-  currentPage = 1;
-  pageSizeOptions = [5, 10, 15];
   userIsAuthenticated = false;
   userId: string;
   userType: string;
@@ -34,12 +31,8 @@ export class ProductSearchComponent implements OnInit, OnDestroy {
   constructor(public productsService: ProductsService, private authService: AuthService, private headerService: HeaderService) {}
 
   ngOnInit() {
-    // this.form = new FormGroup({
-    //   'productSearchTxt': new FormControl(null),
-    // });
-    // this.products = this.productsService.getProducts();
     this.isLoading = true;
-    this.productsService.getProducts(this.productsPerPage, this.currentPage);
+    this.productsService.getSearchProducts();  // ไม่ระบุจำนวนสินค้าต่อหนึ่งหน้า
     this.userId = this.authService.getUserId();
     this.productsSub = this.productsService
       .getProductUpdateListener()
@@ -56,7 +49,7 @@ export class ProductSearchComponent implements OnInit, OnDestroy {
         this.userId = this.authService.getUserId();
       });
     this.userType = this.headerService.getUserType();
-    console.log(this.userType );
+    // console.log(this.userType );
   }
 
   ngOnDestroy() {
@@ -69,8 +62,7 @@ export class ProductSearchComponent implements OnInit, OnDestroy {
     // console.log(this.productsService.getProductsTransaction);
   }
 
-  onUpdateSearch() {
-    // console.log(searchText);
-    // ไม่ต้องทำอะไร เพียงแค่เรียกมา Pipe ก็จะอัพเดทค่าใน backend จึงสามารถตรวจดูค่าค้นหาได้
+  onUpdateSearch(e) {
+    // เมธอดนี้ไม่ได้ทำอะไร แต่ใช้เพื่อทริกให้เกิด keyup เพื่อตรวจสอบค่าที่อยู่ในช่องค้นหา
   }
 }
