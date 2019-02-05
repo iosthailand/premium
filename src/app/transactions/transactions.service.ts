@@ -180,13 +180,10 @@ export class TransactionsService {
         });
         break;
       case 'Transporting':
-      // transactionData.transactionStatus = 'Received';
-      this.getTransaction(transactionId).subscribe( response => {
+
+          this.getTransaction(transactionId).subscribe( response => {
           if (response.productLists.length > 0) {
             response.productLists.forEach(product => {
-
-
-
               const recordData = {
                 productId: product.productId,
                 storeId: transactionData.departureStoreId,
@@ -197,18 +194,17 @@ export class TransactionsService {
                 currentStock: 9999,
                 transactionId: response.transportorId
               };
-              console.log(recordData);
+
+              console.log(product.productId);
+              this.http
+                .put(BACKEND_URL + 'record/', recordData)
+                .subscribe((result) => {
+                  // transactionData.transactionStatus = 'Received'; // ต้องการเปลี่ยนจาก Transporting เป็น Received
+                  console.log(result);
+                  this.router.navigate(['/']);
+                });
             });
           }
-
-
-            // console.log(recordData);
-            // this.http
-            //   .put(BACKEND_URL + 'record/' + product.productId, recordData)
-            //   .subscribe((result) => {
-            //     this.router.navigate(['/']);
-            //   });
-            // });
 
         });
         break;
@@ -217,6 +213,4 @@ export class TransactionsService {
         break;
     }
   }
-
-
 }

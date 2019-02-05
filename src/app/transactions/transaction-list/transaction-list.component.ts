@@ -46,7 +46,7 @@ export class TransactionListComponent implements OnInit, OnDestroy {
         this.isLoading = false;
         this.totalTransactions = transactionData.transactionCounts;
         this.transactions = transactionData.transactions;
-        console.log(this.transactions);
+        // console.log(this.transactions);
       });
     this.userIsAuthenticated = this.authService.getIsAuth(); // กรณีเข้ามาครั้งแรกจะต้องทราบสถานะว่าล็อกอินอยู่หรือไม่
     this.authStatusSub = this.authService
