@@ -15,7 +15,6 @@ import { StoreListComponent } from './stores/store-list/store-list.component';
 import { StoreCreateComponent } from './stores/store-create/store-create.component';
 import { TransactionListComponent } from './transactions/transaction-list/transaction-list.component';
 import { TransactionCreateComponent } from './transactions/transaction-create/transaction-create.component';
-import { AppComponent } from './app.component';
 
 const routes: Routes = [
   { path: 'dummys', component: PostListComponent },

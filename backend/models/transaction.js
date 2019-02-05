@@ -9,7 +9,7 @@ const transactionSchema = mongoose.Schema({
   destinationStoreId: { type: mongoose.Schema.Types.ObjectId, ref: 'Store', required: true },
   productLists:  [
                     {
-                      productId: String,
+                      productId: { type: mongoose.Schema.Types.ObjectId, ref: 'Product', required: true },
                       productSku: String,
                       productName: String,
                       imagePath: String,

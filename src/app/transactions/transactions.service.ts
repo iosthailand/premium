@@ -6,6 +6,7 @@ import { Transaction } from './transaction.model';
 import { Router } from '@angular/router';
 
 import { environment } from '../../environments/environment';
+import { stringify } from 'querystring';
 
 const BACKEND_URL = environment.apiUrl + '/transactions/';
 
@@ -143,6 +144,9 @@ export class TransactionsService {
     senderId: string,
     transportorId: string,
     receiverId: string,
+    departureStoreId: string,
+    destinationStoreId: string,
+    productLists: any,
     transectionStatus: 'Created' | 'Send' | 'Transporting' | 'Received' | 'Restore' | null
     ) {
 
@@ -151,6 +155,9 @@ export class TransactionsService {
       senderId: senderId,
       transportorId: transportorId,
       receiverId: receiverId,
+      departureStoreId: departureStoreId,
+      destinationStoreId: destinationStoreId,
+      productLists: productLists,
       transactionStatus: transectionStatus
     };
 
@@ -173,11 +180,36 @@ export class TransactionsService {
         });
         break;
       case 'Transporting':
-      transactionData.transactionStatus = 'Received';
-        this.http
-        .put(BACKEND_URL + 'change/' + transactionId, transactionData)
-        .subscribe((response) => {
-          this.router.navigate(['/']);
+      // transactionData.transactionStatus = 'Received';
+      this.getTransaction(transactionId).subscribe( response => {
+          if (response.productLists.length > 0) {
+            response.productLists.forEach(product => {
+
+
+
+              const recordData = {
+                productId: product.productId,
+                storeId: transactionData.departureStoreId,
+                dateTime: new Date(),
+                code: 'SI',
+                stockIn: product.productQuantity,
+                stockOut: 0,
+                currentStock: 9999,
+                transactionId: response.transportorId
+              };
+              console.log(recordData);
+            });
+          }
+
+
+            // console.log(recordData);
+            // this.http
+            //   .put(BACKEND_URL + 'record/' + product.productId, recordData)
+            //   .subscribe((result) => {
+            //     this.router.navigate(['/']);
+            //   });
+            // });
+
         });
         break;
       default:
@@ -185,4 +217,6 @@ export class TransactionsService {
         break;
     }
   }
+
+
 }

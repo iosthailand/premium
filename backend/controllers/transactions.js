@@ -81,10 +81,13 @@ exports.editTransaction = (req, res, next) => {
 exports.getTransactions = (req, res, next)=>{
   const pageSize = +req.query.pagesize;
   const currentPage = +req.query.page;
-  const transactionQuery = Transaction.find();
+  // .find(conditon, return, sort by field -1 newest 1 oldest)
+  const transactionQuery = Transaction.find({}, {}, {sort:{ dateTime: -1 }});
   let fetchTransactions;
   if (pageSize && currentPage) {
     transactionQuery
+      .populate('departureStoreId')
+      .populate('destinationStoreId')
       .skip(pageSize * (currentPage - 1))
       .limit(pageSize);
   }
@@ -109,6 +112,7 @@ exports.getTransactions = (req, res, next)=>{
 exports.getTransaction = (req, res, next) => {
   // console.log(req.params.id);
   Transaction.findById(req.params.id)
+    .populate('productLists.productId')   // ดึงรายละเอียดสินค้าจาก productList
     .then(transaction => {
       if (transaction) {
         res.status(200).json(transaction);
@@ -144,28 +148,47 @@ exports.deleteTransaction = (req, res, next) => {
 }
 
 exports.changeTransaction = (req, res, next) => {
-  Transaction.updateOne(
+  Transaction.findOneAndUpdate(
       { _id: req.params.id },
       {
         senderId: req.body.senderId,
         transportorId: req.body.transportorId,
         receiverId: req.body.receiverId,
         transactionStatus: req.body.transactionStatus,
-       }
-    )
-    .then(result => {
-      if (result.n > 0 ) { // ตรวจสอบสถานะการอัพเดท
-        //console.log(result);
-        res.status(200).json({ messages: 'Update Successfull'});
-      } else {
-        res.status(401).json({ messages: 'User Not Authorize edit other transactions'});
-      }
-    })
-    .catch(error => {
-      res.status(500).json({
-        messages: 'Could not update transaction'
-      })
-    });
+       },
+       { new: true })
+      .then( response => {
+            if (response) {
+              res.status(200).json({ transaction: response });
+            } else {
+              res.status(404).json({ messages: 'Transaction not found'});
+            }
+      });
+    // .then(result => {
+    //   if (result.n > 0 ) { // ตรวจสอบสถานะการอัพเดท
+    //     Transaction.findById(req.params.id)
+    //       .then(response => {
+    //         if (response) {
+    //           res.status(200).json({ transaction: response.transaction });
+    //           //console.log(post);
+    //         } else {
+    //           res.status(404).json({ messages: 'Transaction not found'});
+    //         }
+    //     })
+    //     .catch((err) => {
+    //       res.status(500).json({
+    //         message: 'Fetching posts failed!'
+    //       })
+    //     });
+    //   } else {
+    //     res.status(401).json({ messages: 'User Not Authorize edit other transactions'});
+    //   }
+    // })
+    // .catch(error => {
+    //   res.status(500).json({
+    //     messages: 'Could not update transaction'
+    //   })
+    // });
 }
 
 

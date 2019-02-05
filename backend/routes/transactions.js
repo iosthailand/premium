@@ -1,7 +1,7 @@
 const express = require('express');
 const transactionsController = require('../controllers/transactions');
 const checkAuth = require('../middleware/check-auth');
-const extractFile = require('../middleware/file');
+// const extractFile = require('../middleware/file');
 const router = express.Router();
 
 router.post('', checkAuth, transactionsController.createTransaction);

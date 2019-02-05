@@ -46,6 +46,7 @@ export class TransactionListComponent implements OnInit, OnDestroy {
         this.isLoading = false;
         this.totalTransactions = transactionData.transactionCounts;
         this.transactions = transactionData.transactions;
+        console.log(this.transactions);
       });
     this.userIsAuthenticated = this.authService.getIsAuth(); // กรณีเข้ามาครั้งแรกจะต้องทราบสถานะว่าล็อกอินอยู่หรือไม่
     this.authStatusSub = this.authService
@@ -80,11 +81,16 @@ export class TransactionListComponent implements OnInit, OnDestroy {
     senderId: string,
     transportorId: string,
     receiverId: string,
+    departureStoreId: string,
+    destinationStoreId: string,
+    productLists: any,
     transectionStatus: string
   ) {
     // edit status of transaction
     if (transectionStatus === 'Created' ) {
-      this.transactionsService.changeTransactionStatus(transactionId, senderId, transportorId, receiverId, transectionStatus);
+      this.transactionsService.changeTransactionStatus(
+        transactionId, senderId, transportorId, receiverId, departureStoreId, destinationStoreId, productLists, transectionStatus
+      );
     }
   }
 
@@ -93,11 +99,16 @@ export class TransactionListComponent implements OnInit, OnDestroy {
     senderId: string,
     transportorId: string,
     receiverId: string,
+    departureStoreId: string,
+    destinationStoreId: string,
+    productLists: any,
     transectionStatus: string
   ) {
     // edit status of transaction
     if (transectionStatus === 'Send' ) {
-      this.transactionsService.changeTransactionStatus(transactionId, senderId, transportorId, receiverId, transectionStatus);
+      this.transactionsService.changeTransactionStatus(
+        transactionId, senderId, transportorId, receiverId, departureStoreId, destinationStoreId, productLists, transectionStatus
+      );
     }
   }
 
@@ -106,13 +117,17 @@ export class TransactionListComponent implements OnInit, OnDestroy {
     senderId: string,
     transportorId: string,
     receiverId: string,
+    departureStoreId: string,
+    destinationStoreId: string,
+    productLists: any,
     transectionStatus: string
   ) {
     // edit status of transaction
     if (transectionStatus === 'Transporting' ) {
-      this.transactionsService.changeTransactionStatus(transactionId, senderId, transportorId, receiverId, transectionStatus);
+      this.transactionsService.changeTransactionStatus(
+        transactionId, senderId, transportorId, receiverId, departureStoreId, destinationStoreId, productLists, transectionStatus
+      );
     }
   }
-
 
 }

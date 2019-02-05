@@ -5,7 +5,7 @@ module.exports = (req, res, next) => {
   try {
     const token = req.headers.authorization.split(' ')[1];  // เอาฝั่งขวาจาก Bearer "token"
     const decodedToken = jwt.verify(token, process.env.JWT_KEY);
-    console.log(decodedToken.userPermission);
+    // console.log(decodedToken.userPermission);
     bcrypt.compare('Storage Manager', decodedToken.userPermission)
       .then((result) => {
         if(!result) {

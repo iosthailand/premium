@@ -7,22 +7,23 @@
 
                   <div class="row">
                     <div class="col-3">
-                        ขนส่งจาก {{ transaction.departureStoreId }}
+                        ต้นทาง {{ transaction.departureStoreId.storeName }}
                     </div>
                     <div class="col-3">
-                        ไปยังสาขา {{ transaction.destinationStoreId }}
+                        ปลายทาง {{ transaction.destinationStoreId.storeName }}
                     </div>
                     <div class="col-3">
-                        <button class="btn btn-sm btn-outline-normal" disabled="disabled" *ngIf="userIsAuthenticated && userId === transaction.senderId && transaction.transactionStatus === 'Created'">รอการตรวจสอบ</button>
+                        <button class="btn btn-sm btn-outline-normal" disabled="disabled" *ngIf="userIsAuthenticated && userId === transaction.senderId && transaction.transactionStatus === 'Created'">รอการยืนยัน</button>
                         <button class="btn btn-sm btn-outline-warning" disabled="disabled" *ngIf="userIsAuthenticated && transaction.transactionStatus === 'Send'">เตรียมขนส่ง</button>
                         <button class="btn btn-sm btn-outline-primary" disabled="disabled" *ngIf="userIsAuthenticated && transaction.transactionStatus === 'Transporting'">กำลังขนส่ง</button>
                         <button class="btn btn-sm btn-outline-success" disabled="disabled" *ngIf="userIsAuthenticated && transaction.transactionStatus === 'Completed'">เสร็จสมบรูณ์แล้ว</button>
                     </div>
+
                     <div class="col-3 text-right">
                         <div *ngIf="userIsAuthenticated && userId === transaction.senderId && transaction.transactionStatus === 'Created'" class="mt-2">
                             <button
                               class="btn btn-sm btn-outline-success mr-1"
-                              (click)="onSenderConfirm(transaction.id, transaction.senderId, transaction.transportorId, transaction.receiverId, 'Created')"
+                              (click)="onSenderConfirm(transaction.id, transaction.senderId, transaction.transportorId, transaction.receiverId, transaction.departureStoreId, transaction.destinationStoreId, transaction.productLists, 'Created')"
                               *ngIf="(userType === 'Storage Manager' || userType == 'DH Staff')">ยืนยัน
                             </button>
                             <a class="btn btn-sm btn-primary mr-1 " [routerLink]="['edit', transaction.id]" routerLinkActive="router-link-active">แก้ไข</a>
@@ -31,14 +32,14 @@
                         <div *ngIf="userIsAuthenticated && transaction.transactionStatus === 'Send'" class="mt-2">
                           <button
                             class="btn btn-sm btn-outline-primary mr-1"
-                            (click)="onTransportorConfirm(transaction.id, transaction.senderId, userId, transaction.receiverId, 'Send')"
+                            (click)="onTransportorConfirm(transaction.id, transaction.senderId, userId, transaction.receiverId, transaction.departureStoreId, transaction.destinationStoreId, transaction.productLists, 'Send')"
                             *ngIf="userType === 'Transportor'">ยืนยัน
                           </button>
                         </div>
                         <div *ngIf="userIsAuthenticated && transaction.transactionStatus === 'Transporting'" class="mt-2">
                           <button
                             class="btn btn-sm btn-outline-success mr-1"
-                            (click)="onReceiverConfirm(transaction.id, transaction.senderId, transaction.transportorId, userId, 'Transporting')"
+                            (click)="onReceiverConfirm(transaction.id, transaction.senderId, transaction.transportorId, userId, transaction.departureStoreId, transaction.destinationStoreId, transaction.productLists, 'Transporting')"
                             *ngIf="(userType === 'Storage Manager' || userType == 'DH Staff')">ยืนยัน
                           </button>
                         </div>
