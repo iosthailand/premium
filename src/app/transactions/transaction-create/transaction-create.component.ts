@@ -23,7 +23,7 @@ import { Product } from 'src/app/products/product.model';
 export class TransactionCreateComponent implements OnInit, OnDestroy, AfterViewInit {
   enteredTitle = '';
   enteredContent = '';
-  private mode = 'create';
+  public mode = 'create';
   private transactionId: string;
   private authStatusSub: Subscription;
 

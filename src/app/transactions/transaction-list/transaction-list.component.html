@@ -7,10 +7,10 @@
 
                   <div class="row">
                     <div class="col-3">
-                        ต้นทาง {{ transaction.departureStoreId.storeName }}
+                        ต้นทาง {{ transaction.departureStoreId['storeName'] }}
                     </div>
                     <div class="col-3">
-                        ปลายทาง {{ transaction.destinationStoreId.storeName }}
+                        ปลายทาง {{ transaction.destinationStoreId['storeName'] }}
                     </div>
                     <div class="col-3">
                         <button class="btn btn-sm btn-outline-normal" disabled="disabled" *ngIf="userIsAuthenticated && userId === transaction.senderId && transaction.transactionStatus === 'Created'">รอการยืนยัน</button>

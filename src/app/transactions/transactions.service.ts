@@ -6,10 +6,10 @@ import { Transaction } from './transaction.model';
 import { Router } from '@angular/router';
 
 import { environment } from '../../environments/environment';
-import { stringify } from 'querystring';
+import { Stock } from 'untitled folder/src/app/transactions/stock.model';
 
 const BACKEND_URL = environment.apiUrl + '/transactions/';
-
+const BACKEND_URL_STOCK = environment.apiUrl + '/stocks/';
 
 @Injectable({providedIn: 'root'})
 export class TransactionsService {
@@ -161,7 +161,6 @@ export class TransactionsService {
       transactionStatus: transectionStatus
     };
 
-
     switch (transectionStatus) {
       case 'Created':
       transactionData.transactionStatus = 'Send';
@@ -180,32 +179,177 @@ export class TransactionsService {
         });
         break;
       case 'Transporting':
-
+      // console.log('Transporting');
+          const stockDataArray = Array();
           this.getTransaction(transactionId).subscribe( response => {
+          let counter = 0;
+          // เมื่อมีสินค้าที่จะถูกเพิ่มใน store
           if (response.productLists.length > 0) {
+            // วนเข้าไปยังสินค้าทุกๆ ตัวที่จะเพิ่มไปยังสโตว์
             response.productLists.forEach(product => {
-              const recordData = {
-                productId: product.productId,
-                storeId: transactionData.departureStoreId,
-                dateTime: new Date(),
-                code: 'SI',
-                stockIn: product.productQuantity,
-                stockOut: 0,
-                currentStock: 9999,
-                transactionId: response.transportorId
-              };
-
-              console.log(product.productId);
+            // ขั้นตอนที่ 1 เตรียมเขียนเข้าสต๊อกปลายทาง โดยค้นจำนวนสต๊อกปลายทาง
+              let destinationStock: number;
+              let departureStock: number;
+              const queryParams = `?productId=${product.productId._id}&storeId=${transactionData.destinationStoreId['_id']}`;
               this.http
-                .put(BACKEND_URL + 'record/', recordData)
-                .subscribe((result) => {
-                  // transactionData.transactionStatus = 'Received'; // ต้องการเปลี่ยนจาก Transporting เป็น Received
-                  console.log(result);
-                  this.router.navigate(['/']);
+              .get<{message: string, stock: Stock}>(BACKEND_URL_STOCK + queryParams)
+              .subscribe((resultFromDestinationStore) => {
+                destinationStock = resultFromDestinationStore.stock.currentStock;
+
+                const stockDataIn = {
+                  productId: product.productId._id,
+                  storeId: transactionData.destinationStoreId['_id'],  // ไม่มีข้อมูลสินค้าเดิมให้เพิ่มไปยัง store ปลายทาง
+                  // destinationStoreId: transactionData.destinationStoreId['_id'],
+                  dateTime: new Date(),
+                  code: 'SI',
+                  stockIn: product.productQuantity,
+                  stockOut: 0,
+                  currentStock: destinationStock + product.productQuantity,
+                  transactionId: response.transportorId
+                };
+                stockDataArray.push(stockDataIn);
+                console.log('current-stock----in');
+                console.log(resultFromDestinationStore.stock.currentStock);
+                console.log('stock--dataArray');
+                console.log(stockDataArray);
+
+                // ขั้นตอนที่ 2 เตรียมหักออกจากสต๊อกต้นทาง
+                const queryParamsOut = `?productId=${product.productId._id}&storeId=${transactionData.departureStoreId['_id']}`;
+                this.http
+                .get<{message: string, stock: Stock}>(BACKEND_URL_STOCK + queryParamsOut)
+                .subscribe((resultFromDepartureStock) => {
+                  departureStock = resultFromDepartureStock.stock.currentStock;
+                  const stockDataOut = {
+                    productId: product.productId._id,
+                    storeId: transactionData.departureStoreId['_id'],
+                    // destinationStoreId: transactionData.destinationStoreId['_id'],
+                    dateTime: new Date(),
+                    code: 'SO',
+                    stockIn: 0,
+                    stockOut: product.productQuantity,
+                    currentStock: departureStock - product.productQuantity,
+                    transactionId: response.transportorId
+                  };
+                  console.log('current-stock----out');
+                  console.log(resultFromDepartureStock.stock.currentStock);
+                  stockDataArray.push(stockDataOut);
+                  console.log('stock--dataArray--2');
+                  console.log(stockDataArray);
+
+                  console.log('product-couter');
+                  console.log(counter);
+
+                  console.log('product-list-length');
+                  console.log(response.productLists.length);
+                  // ดูว่าเป็นสินค้าที่จะเพิ่มลงในสโตร์เป็นรายการสุดท้ายหรือไม่
+                  if (response.productLists.length - 1 === counter) {
+                    console.log('stock--dataArray--3');
+                    console.log(stockDataArray);
+                    this.http
+                    .post<{message: string}>(BACKEND_URL_STOCK, stockDataArray)
+                    .subscribe((updateResponse) => {
+
+                      // หลังจากอัพเดทฐานข้อมูลแล้วต้องเปลี่ยนสถานะของ transaction
+                      transactionData.transactionStatus = 'Received'; // ต้องการเปลี่ยนจาก Transporting เป็น Received
+                      this.http
+                      .put(BACKEND_URL + 'change/' + transactionId, transactionData)
+                      .subscribe((finalResponse) => {
+                        this.router.navigate(['/']);
+                      });
+                    });
+                  }
+                  counter++;  // ตัวนับสำหรับตรวจสอบว่าเป็นสินค้ารายการสุดท้ายหรือไม่
                 });
+              });
+
             });
           }
 
+
+          //   response.productLists.forEach(product => {
+          //     const queryParams = `?productId=${product.productId._id}&storeId=${transactionData.departureStoreId['_id']}`;
+          //     this.http
+          //     .get<{message: string, stocks: Stock[]}>(BACKEND_URL_STOCK + queryParams)
+          //     .subscribe((result) => {
+
+          //       if (result.stocks.length <= 0 ) { // กรณีไม่พบสินค้าตัวเก่าในสต๊อก ให้เพิ่มเข้าไปเลย
+          //         const stockDataIn = {
+          //           productId: product.productId._id,
+          //           storeId: transactionData.destinationStoreId['_id'],  // ไม่มีข้อมูลสินค้าเดิมให้เพิ่มไปยัง store ปลายทาง
+          //           // destinationStoreId: transactionData.destinationStoreId['_id'],
+          //           dateTime: new Date(),
+          //           code: 'SI',
+          //           stockIn: product.productQuantity,
+          //           stockOut: 0,
+          //           currentStock: product.productQuantity,
+          //           transactionId: response.transportorId
+          //         };
+          //         stockDataArray.push(stockDataIn);
+          //         console.log(stockDataArray);
+          //         this.http
+          //         .post<{message: string}>(BACKEND_URL_STOCK, stockDataArray)
+          //         .subscribe((test) => {
+          //           // transactionData.transactionStatus = 'Received'; // ต้องการเปลี่ยนจาก Transporting เป็น Received
+          //           // console.log(result);
+          //           // this.router.navigate(['/']);
+          //         });
+          //       } else {  // กรณีที่พบสินค้าเก่าในสต๊อก
+          //         // transactionData.transactionStatus = 'Received'; // ต้องการเปลี่ยนจาก Transporting เป็น Received
+          //         console.log(result.stocks);
+          //         for (const stock of result.stocks) {
+          //           // ตรวจสอบ stock ทั้ง store ต้นทางและปลายทาง
+          //           if (transactionData.destinationStoreId['_id'] === stock.storeId
+          //           && transactionData.id !== stock.transactionId) {
+          //             const stockDataIn = {
+          //               productId: product.productId._id,
+          //               storeId: stock.storeId,
+          //               // destinationStoreId: transactionData.destinationStoreId['_id'],
+          //               dateTime: new Date(),
+          //               code: 'SI',
+          //               stockIn: product.productQuantity,
+          //               stockOut: 0,
+          //               currentStock: stock.currentStock + product.productQuantity,
+          //               transactionId: response.transportorId
+          //             };
+          //             console.log('current-stock----in');
+          //             console.log(stock.currentStock);
+          //             stockDataArray.push(stockDataIn);
+          //           }
+          //           if (transactionData.departureStoreId['_id'] === stock.storeId
+          //           && transactionData.id !== stock.transactionId) {
+          //             const stockDataOut = {
+          //               productId: product.productId._id,
+          //               storeId: stock.storeId,
+          //               destinationStoreId: transactionData.destinationStoreId['_id'],
+          //               dateTime: new Date(),
+          //               code: 'SO',
+          //               stockIn: 0,
+          //               stockOut: product.productQuantity,
+          //               currentStock: stock.currentStock - product.productQuantity,
+          //               transactionId: response.transportorId
+          //             };
+          //             console.log('current-stock----out');
+          //             console.log(stock.currentStock);
+          //             stockDataArray.push(stockDataOut);
+          //           }
+          //         }
+          //         // console.log(stockDataArray);
+          //         // ตรวจสอบว่าเป็นข้อมูลสุดท้ายหรือไม่
+          //         if (response.productLists.length - 1 === counter) {
+          //           // console.log(stockDataArray);
+          //           this.http
+          //           .post<{message: string}>(BACKEND_URL_STOCK, stockDataArray)
+          //           .subscribe((test) => {
+          //             // transactionData.transactionStatus = 'Received'; // ต้องการเปลี่ยนจาก Transporting เป็น Received
+          //             // console.log(result);
+          //             // this.router.navigate(['/']);
+          //           });
+          //         }
+          //         counter++;  // ตัวนับสำหรับตรวจสอบว่าเป็นสินค้ารายการสุดท้ายหรือไม่
+          //       }
+          //     });
+          //   });
+          // }
         });
         break;
       default:

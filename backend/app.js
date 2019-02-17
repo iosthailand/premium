@@ -10,7 +10,7 @@ const categoryRoutes = require('./routes/categories');
 const supplierRoutes = require('./routes/suppliers');
 const storeRoutes = require('./routes/stores');
 const transactionRoutes = require('./routes/transactions');
-const recordRoutes = require('./routes/records');
+const stockRoutes = require('./routes/stocks');
 const app = express();
 mongoose.connect('mongodb+srv://tsubasa:' + process.env.MONGO_ATLAS_PW + '@jeerawuth007-5duea.mongodb.net/node-angular?retryWrites=true', { useNewUrlParser: true, useCreateIndex: true })
 .then(() => {
@@ -42,6 +42,6 @@ app.use('/api/suppliers', supplierRoutes);
 app.use('/api/stores', storeRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/transactions', transactionRoutes);
-app.use('/api/records', recordRoutes);
+app.use('/api/stocks', stockRoutes);
 process.setMaxListeners(0); // prevent MaxListenersExceededWarning
 module.exports = app;
