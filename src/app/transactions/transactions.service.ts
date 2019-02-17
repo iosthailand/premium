@@ -6,7 +6,7 @@ import { Transaction } from './transaction.model';
 import { Router } from '@angular/router';
 
 import { environment } from '../../environments/environment';
-import { Stock } from 'untitled folder/src/app/transactions/stock.model';
+import { Stock } from './stock.model';
 
 const BACKEND_URL = environment.apiUrl + '/transactions/';
 const BACKEND_URL_STOCK = environment.apiUrl + '/stocks/';
